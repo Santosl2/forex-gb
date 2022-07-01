@@ -1,1 +1,2 @@
-export * from "./Header";
+export * from "./atoms";
+export * from "./templates";
