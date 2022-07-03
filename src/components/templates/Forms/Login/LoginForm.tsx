@@ -22,13 +22,10 @@ export function LoginForm() {
         />
       </div>
 
-      <button className="btn btn-wide w-full" type="submit">
+      <button className="btn w-full" type="submit">
         Login
       </button>
-      <button
-        className="btn btn-wide w-full btn-active btn-primary"
-        type="button"
-      >
+      <button className="btn  w-full btn-active btn-primary" type="button">
         Create an account
       </button>
     </form>
