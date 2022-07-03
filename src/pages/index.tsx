@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components";
+import { LoginForm } from "@/components/templates";
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 export default function Home() {

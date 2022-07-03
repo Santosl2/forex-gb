@@ -1,18 +1,20 @@
-import { Input } from "@/components/atoms";
+import Link from "next/link";
+
+import { Button, FormControl, Input } from "@/components/atoms";
 
 export function LoginForm() {
   return (
     <form className="flex flex-col gap-3 w-full max-w-md p-4">
-      <div className="form-control w-full items-center">
+      <FormControl>
         <Input
           name="email"
           id="email"
-          type="text"
+          type="email"
           label="E-mail"
           className="max-w-md"
         />
-      </div>
-      <div className="form-control w-full items-center">
+      </FormControl>
+      <FormControl>
         <Input
           name="password"
           id="password"
@@ -20,14 +22,14 @@ export function LoginForm() {
           label="Password"
           className="max-w-md"
         />
-      </div>
+      </FormControl>
 
-      <button className="btn w-full" type="submit">
-        Login
-      </button>
-      <button className="btn  w-full btn-active btn-primary" type="button">
-        Create an account
-      </button>
+      <Button type="button">Login</Button>
+      <Link href="/register">
+        <Button type="button" className="btn-primary">
+          Create an account
+        </Button>
+      </Link>
     </form>
   );
 }

@@ -65,6 +65,7 @@ module.exports = {
         caseSensitive: false,
       },
     ],
+    "react/jsx-props-no-spreading": "off",
     "@typescript-eslint/no-unused-vars": "off",
     // or "@typescript-eslint/no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
