@@ -1,8 +1,6 @@
 import Link from "next/link";
 
-import { Button } from "@/components/atoms/Button";
-import { FormControl } from "@/components/atoms/FormControl";
-import { Input } from "@/components/atoms/Input";
+import { Button, FormControl, Input } from "@/components/atoms";
 
 export function RegisterForm() {
   return (
