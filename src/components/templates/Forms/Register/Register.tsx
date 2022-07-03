@@ -7,20 +7,20 @@ export function RegisterForm() {
     <form className="flex flex-col gap-3 w-full max-w-md p-4">
       <FormControl>
         <Input
-          name="email"
-          id="email"
-          type="email"
-          label="E-mail"
+          name="username"
+          id="username"
+          type="text"
+          label="Username"
           className="max-w-md"
         />
       </FormControl>
 
       <FormControl>
         <Input
-          name="username"
-          id="username"
-          type="text"
-          label="Username"
+          name="email"
+          id="email"
+          type="email"
+          label="E-mail"
           className="max-w-md"
         />
       </FormControl>
