@@ -1,10 +1,16 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import { memo } from "react";
+
 import { LabelProps } from "./Label.types";
 
-export function Label({ title, htmlFor }: LabelProps) {
+function LabelBase({ title, htmlFor, hasError }: LabelProps) {
   return (
     <label className="label self-start" htmlFor={htmlFor}>
-      <span className="label-text">{title}</span>
+      <span className={`label-text ${hasError && "text-red-error"}	`}>
+        {title}
+      </span>
     </label>
   );
 }
+
+export const Label = memo(LabelBase);

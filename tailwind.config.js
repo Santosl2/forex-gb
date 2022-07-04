@@ -16,6 +16,10 @@ module.exports = {
           700: "#0D0D0D",
         },
 
+        red: {
+          error: "rgb(251 113 133)",
+        },
+
         purple: {
           300: "#8284FA",
           500: "#5360CE",

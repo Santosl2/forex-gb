@@ -7,7 +7,9 @@ const createJestConfig = nextJest({
 
 const customJestConfig = {
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  resolver: "<rootDir>/.jest/resolver.js",
 
+  transformIgnorePatterns: ["node_modules/(?!(@hookform/resolvers/yup)/)"],
   moduleNameMapper: {
     "@/(.*)": "<rootDir>/src/$1",
   },
