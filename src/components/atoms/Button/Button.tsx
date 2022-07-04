@@ -1,10 +1,28 @@
+/* eslint-disable react/function-component-definition */
 /* eslint-disable react/button-has-type */
+import { forwardRef, ForwardRefRenderFunction, useMemo } from "react";
+
+import { classNames } from "@/shared/utils/classNames";
+
 import { ButtonProps } from "./Button.types";
 
-export function Button({ children, ...props }: ButtonProps) {
+const ButtonBase: ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
+  { children, isLoading, ...props },
+  ref
+) => {
+  const buttonClasses = useMemo(() => {
+    return classNames({
+      btn: true,
+      "w-full": true,
+      loading: isLoading,
+    });
+  }, [isLoading]);
+
   return (
-    <button {...props} className={`btn w-full ${props.className}`}>
+    <button {...props} ref={ref} className={buttonClasses}>
       {children}
     </button>
   );
-}
+};
+
+export const Button = forwardRef(ButtonBase);

@@ -18,7 +18,10 @@ const registerSchema = yup
       .required("Username is required")
       .min(6, "Use 3 characters or more for your username")
       .max(24, "Username must be less than 24 characters")
-      .matches(/^[\w\s]+$/gi, "Don't use special character in your username."),
+      .matches(
+        /^[\w\s.-]+$/gi,
+        "Don't use special character in your username."
+      ),
     password: yup
       .string()
       .required("Password is required")

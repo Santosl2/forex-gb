@@ -20,7 +20,7 @@ describe("Register Component", () => {
     expect(btnBack).toBeInTheDocument();
   });
 
-  it("should be appear error when all fields are empty", async () => {
+  it("should NOT be able to register user when fields are empty", async () => {
     render(<RegisterForm />);
 
     const btnRegister = screen.getByText("Register");
@@ -35,7 +35,7 @@ describe("Register Component", () => {
     ).toBeInTheDocument();
   });
 
-  it("should not be able to register user when username and password is too short", async () => {
+  it("should NOT be able to register user when username and password is too short", async () => {
     render(<RegisterForm />);
 
     const inputEmail = screen.getByTestId("email");
@@ -59,7 +59,7 @@ describe("Register Component", () => {
     ).toBeInTheDocument();
   });
 
-  it("should not be able to register user when password is very easy", async () => {
+  it("should NOT be able to register user when password is very easy", async () => {
     render(<RegisterForm />);
 
     const inputEmail = screen.getByTestId("email");
@@ -82,7 +82,7 @@ describe("Register Component", () => {
     ).toBeInTheDocument();
   });
 
-  it("should not be able to register user when confirm password doesnt match password", async () => {
+  it("should NOT be able to register user when confirm password doesnt match password", async () => {
     render(<RegisterForm />);
 
     const inputEmail = screen.getByTestId("email");
@@ -103,7 +103,7 @@ describe("Register Component", () => {
     ).toBeInTheDocument();
   });
 
-  it("should not be able to register user when username contains special characters", async () => {
+  it("should NOT be able to register user when username contains special characters", async () => {
     render(<RegisterForm />);
 
     const inputEmail = screen.getByTestId("email");
@@ -112,7 +112,7 @@ describe("Register Component", () => {
     const inputConfirmPassword = screen.getByTestId("confirmPassword");
     const btnRegister = screen.getByText("Register");
 
-    fireEvent.change(inputUsername, { target: { value: "testelofi###" } });
+    fireEvent.change(inputUsername, { target: { value: "testelofi#@!&" } });
     fireEvent.change(inputEmail, { target: { value: "teste@gmail.com" } });
     fireEvent.change(inputPassword, { target: { value: "123456" } });
     fireEvent.change(inputConfirmPassword, { target: { value: "123456" } });
@@ -124,7 +124,7 @@ describe("Register Component", () => {
     ).toBeInTheDocument();
   });
 
-  it("should not be able to register user when password and username is too long", async () => {
+  it("should NOT be able to register user when password and username is too long", async () => {
     render(<RegisterForm />);
 
     const inputEmail = screen.getByTestId("email");
@@ -133,31 +133,26 @@ describe("Register Component", () => {
     const inputConfirmPassword = screen.getByTestId("confirmPassword");
     const btnRegister = screen.getByText("Register");
 
-    const failPassword = "1".repeat(34);
-    const failUsername = "fail".repeat(25);
+    const testLongUsername = "teste".repeat(10); // 50
+    const testLongPassword = "teste".repeat(10); // 50
 
-    fireEvent.change(inputUsername, {
-      target: { value: failUsername },
-    });
+    fireEvent.change(inputUsername, { target: { value: testLongUsername } });
     fireEvent.change(inputEmail, { target: { value: "teste@gmail.com" } });
-    fireEvent.change(inputPassword, {
-      target: { value: failPassword },
-    });
+    fireEvent.change(inputPassword, { target: { value: testLongPassword } });
     fireEvent.change(inputConfirmPassword, {
-      target: { value: failPassword },
+      target: { value: testLongPassword },
     });
 
     fireEvent.click(btnRegister);
 
     expect(
-      await screen.findByText("Username must be less than 24 characters")
-    ).toBeInTheDocument();
-
-    expect(
       await screen.findByText("Password must be less than 30 characters")
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText("Username must be less than 24 characters")
     ).toBeInTheDocument();
   });
 
-  it.todo("should not be able to register user when user already exists");
-  it.todo("should not be able to register user when email already exists");
+  it.todo("should NOT be able to register user when user already exists");
+  it.todo("should NOT be able to register user when email already exists");
 });
