@@ -1,7 +1,9 @@
 import { createMocks } from "node-mocks-http";
 import registerAPI from "@/pages/api/users/register";
 
-let size = 1;
+const mockRegisterEmails = ["teste@gmail.com"];
+const mockRegisterUsers = ["macacoo"];
+
 jest.mock("firebase/auth", () => ({
   getAuth: () => true,
   createUserWithEmailAndPassword: () => ({
@@ -13,11 +15,13 @@ jest.mock("firebase/auth", () => ({
 
 jest.mock("firebase/firestore", () => ({
   addDoc: () => true,
-  query: () => true,
-  getDocs: () => ({
-    size,
+  query: (e: string, email: string) => email,
+  getDocs: (data: string) => ({
+    size:
+      mockRegisterEmails.find((e) => e === data)?.length ||
+      mockRegisterUsers.find((e) => e === data)?.length,
   }),
-  where: () => true,
+  where: (column: string, operator: string, mail: string) => mail,
   getFirestore: () => true,
   collection: () => true,
 }));
@@ -208,13 +212,34 @@ describe("[API] Register ", () => {
     );
   });
 
-  it("should be able to register user", async () => {
-    size = 0;
+  it("should NOT be able to register user when username is already in use", async () => {
     const { req, res } = createMocks({
       method: "POST",
       body: {
         username: "macacoo",
-        email: "teste@gmail.com",
+        email: "teste7@gmail.com",
+        password: "1234@Az",
+        confirmPassword: "1234@Az",
+      },
+    });
+
+    await registerAPI(req, res);
+
+    expect(res._getStatusCode()).toBe(400);
+    expect(res._getData()).toBe(
+      JSON.stringify({
+        success: false,
+        message: "Username already in use",
+      })
+    );
+  });
+
+  it("should be able to register user", async () => {
+    const { req, res } = createMocks({
+      method: "POST",
+      body: {
+        username: "success",
+        email: "success@gmail.com",
         password: "1234@Az",
         confirmPassword: "1234@Az",
       },

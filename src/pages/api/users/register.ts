@@ -26,13 +26,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send(e.errors[0]);
     }
 
-    const q = query(dbInstanceUsers, where("email", "==", email));
-    const queryResult = await getDocs(q);
+    const queryEmail = query(dbInstanceUsers, where("email", "==", email));
+    const queryResult = await getDocs(queryEmail);
 
     if (queryResult.size > 0) {
       return res
         .status(400)
         .json({ success: false, message: "E-mail already in use" });
+    }
+
+    const queryUser = query(dbInstanceUsers, where("username", "==", username));
+    const queryResultUser = await getDocs(queryUser);
+
+    if (queryResultUser.size > 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Username already in use" });
     }
 
     try {
