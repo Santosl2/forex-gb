@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 
 import { Button, FormControl, Input } from "@/components/atoms";
+import { verifyRecaptcha } from "@/shared/utils/verifyRecaptcha";
 import { yup, yupResolver } from "@/shared/utils/yup";
 
 import { RegisterFormData } from "./Register.types";
@@ -44,7 +45,8 @@ export function RegisterForm() {
   });
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
-    console.log(data);
+    const recaptchaVerify = await verifyRecaptcha();
+    console.log(data, recaptchaVerify);
   };
 
   return (

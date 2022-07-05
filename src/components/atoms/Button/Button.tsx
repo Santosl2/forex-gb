@@ -11,12 +11,12 @@ const ButtonBase: ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
   ref
 ) => {
   const buttonClasses = useMemo(() => {
-    return classNames({
+    return `${classNames({
       btn: true,
       "w-full": true,
       loading: isLoading,
-    });
-  }, [isLoading]);
+    })} ${props.className}`;
+  }, [isLoading, props.className]);
 
   return (
     <button {...props} ref={ref} className={buttonClasses}>
