@@ -1,12 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable import/no-unresolved */
 import { useEffect } from "react";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 import { AnimatePresence } from "framer-motion";
 import type { AppProps } from "next/app";
 
 import "../styles/globals.scss";
 import { CAPTCHA_CLIENT_KEY } from "@/shared/constants";
+
+import { QueryClientProvider } from "react-query";
+
+import { queryClient } from "@/shared/services/queryClient";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   useEffect(() => {
@@ -37,9 +42,12 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   }, []);
 
   return (
-    <AnimatePresence exitBeforeEnter>
-      <Component {...pageProps} key={router.route} />
-    </AnimatePresence>
+    <QueryClientProvider client={queryClient}>
+      <AnimatePresence exitBeforeEnter>
+        <Component {...pageProps} key={router.route} />
+      </AnimatePresence>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
 }
 

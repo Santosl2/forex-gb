@@ -12,7 +12,11 @@ module.exports = (path, options) => {
       //
       // This workaround prevents Jest from considering @hookform/resolvers module-based exports at all;
       // it falls back to CommonJS+node "main" property.
-      if (pkg.name === "@hookform/resolvers") {
+      if (
+        pkg.name === "@hookform/resolvers" ||
+        pkg.name.includes("firebase") ||
+        pkg.name.includes("@firebase")
+      ) {
         delete pkg["exports"];
         delete pkg["module"];
       }
