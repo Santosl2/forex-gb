@@ -7,13 +7,16 @@ import { AnimatePresence } from "framer-motion";
 import type { AppProps } from "next/app";
 
 import "../styles/globals.scss";
-import { Toast } from "@/components/molecules";
 import { ToastContainer } from "@/components/organims/ToastContainer";
 import { CAPTCHA_CLIENT_KEY } from "@/shared/constants";
 
 import { QueryClientProvider } from "react-query";
 
 import { queryClient } from "@/shared/services/queryClient";
+
+import { Provider } from "react-redux";
+
+import { store } from "@/shared/store";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   useEffect(() => {
@@ -44,17 +47,16 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AnimatePresence exitBeforeEnter>
-        <Component {...pageProps} key={router.route} />
-      </AnimatePresence>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <AnimatePresence exitBeforeEnter>
+          <Component {...pageProps} key={router.route} />
+        </AnimatePresence>
 
-      <ToastContainer>
-        <Toast>Welcome to Black Investiments! fdsfdsfdsfdsf</Toast>
-        <Toast type="info">Welcome to Black Investiments! fdsfdsfdsfdsf</Toast>
-      </ToastContainer>
-      <ReactQueryDevtools />
-    </QueryClientProvider>
+        <ToastContainer />
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </Provider>
   );
 }
 

@@ -1,30 +1,23 @@
-import { LayoutGroup, motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 
-import { ToastContainerProps } from "./ToastContainer.types";
+import { Toast } from "@/components/molecules";
+import { useToast } from "@/shared/hooks/useToast";
 
-const toastContainerVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    transition: {
-      when: "afterChildren",
-    },
-  },
-  visible: {
-    opacity: 1,
-  },
-};
+export function ToastContainer() {
+  const toast = useToast();
 
-export function ToastContainer({ children }: ToastContainerProps) {
   return (
     <motion.div
       className="toastContainer sm:w-full lg:w-80"
-      variants={toastContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      layout
+      transition={{
+        layout: {
+          duration: 1,
+        },
+      }}
     >
-      <LayoutGroup>{children}</LayoutGroup>
+      {toast.map((t) => (
+        <Toast key={t.id} type={t.type} message={t.message} id={t.id} />
+      ))}
     </motion.div>
   );
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { Button, FormControl, Input } from "@/components/atoms";
 import { useMutationRegisterUser } from "@/shared/hooks/useMutation";
+import { useToastCreate } from "@/shared/hooks/useToast";
 import { registerSchema } from "@/shared/schemas/register";
 import { verifyRecaptcha } from "@/shared/utils/verifyRecaptcha";
 import { yupResolver } from "@/shared/utils/yup";
@@ -12,6 +13,7 @@ import { RegisterFormData } from "./Register.types";
 
 export function RegisterForm() {
   const registerUser = useMutationRegisterUser();
+  const toast = useToastCreate();
 
   const { register, handleSubmit, formState } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
@@ -21,10 +23,16 @@ export function RegisterForm() {
     const recaptchaVerify = await verifyRecaptcha();
 
     if (recaptchaVerify) {
-      await registerUser.mutateAsync({
-        ...data,
-        captchaToken: recaptchaVerify,
-      });
+      try {
+        await registerUser.mutateAsync({
+          ...data,
+          captchaToken: recaptchaVerify,
+        });
+      } catch (e: any) {
+        toast(e.response.data.message, {
+          type: "error",
+        });
+      }
     }
 
     console.log(data, recaptchaVerify);

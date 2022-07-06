@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import { motion, Variants } from "framer-motion";
 
 import { ToastSVG } from "@/components/atoms";
-
-import { ToastProps } from "./Toast.types";
+import { Toast } from "@/shared/interfaces/Toast";
+import { removeToast } from "@/shared/store/reducers/toast";
 
 const toastVariants: Variants = {
   hidden: {
@@ -24,13 +25,19 @@ const toastVariants: Variants = {
   },
 };
 
-export function Toast({ children, type = "success" }: ToastProps) {
+export function Toast({ id, type = "success", message }: Toast) {
   const [isVisible, setIsVisible] = useState(true);
+  const dispatch = useDispatch();
 
   if (!isVisible) return null;
 
   const setIsOpen = () => {
     setIsVisible(false);
+    dispatch(
+      removeToast({
+        id,
+      })
+    );
   };
 
   return (
@@ -38,14 +45,13 @@ export function Toast({ children, type = "success" }: ToastProps) {
       variants={toastVariants}
       initial="hidden"
       animate="visible"
-      exit="exit"
       className="flex items-center w-full max-w-xs p-4 mb-4 min-w-full bg-gray-800 rounded-md shadow text-gray-200"
       role="alert"
-      layoutId="toast"
+      layout="position"
     >
       <ToastSVG type={type} />
 
-      <div className="ml-3 text-sm font-normal">{children}</div>
+      <div className="ml-3 text-sm font-normal">{message}</div>
 
       <button
         type="button"
