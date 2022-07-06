@@ -7,6 +7,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { SignUpFormData } from "@/shared/interfaces/Forms";
 import { registerSchema } from "@/shared/schemas/register";
+import { verifyCaptcha } from "@/shared/services/auth/auth";
 import { auth, dbInstanceUsers } from "@/shared/services/firebase";
 import { hashPassword } from "@/shared/utils/hash";
 
@@ -24,6 +25,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
     } catch (e: any) {
       return res.status(400).send(e.errors[0]);
+    }
+
+    const validCaptcha = await verifyCaptcha(
+      captchaToken,
+      process.env.RECAPTCHA_SECRET_KEY ?? ""
+    );
+
+    if (!validCaptcha.data.success) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid recaptcha" });
     }
 
     const queryEmail = query(dbInstanceUsers, where("email", "==", email));

@@ -1,6 +1,10 @@
 import { createMocks } from "node-mocks-http";
 import registerAPI from "@/pages/api/users/register";
 
+import axios from "axios";
+
+jest.mock("axios");
+
 const mockRegisterEmails = ["teste@gmail.com"];
 const mockRegisterUsers = ["macacoo"];
 
@@ -33,6 +37,18 @@ const mockHashPassword = jest.spyOn(
 
 describe("[API] Register ", () => {
   const testLong = "teste".repeat(10); // 50
+
+  beforeEach(() => {
+    axios.post = jest.fn().mockResolvedValue({
+      data: {
+        success: true,
+      },
+    });
+  });
+
+  afterAll(() => {
+    (axios.post as jest.Mock).mockClear();
+  });
 
   it("should NOT be able to register user when fields are empty", async () => {
     const { req, res } = createMocks({
@@ -230,6 +246,34 @@ describe("[API] Register ", () => {
       JSON.stringify({
         success: false,
         message: "Username already in use",
+      })
+    );
+  });
+
+  it("should NOT be able to register user when captcha token is invalid", async () => {
+    axios.post = jest.fn().mockResolvedValue({
+      data: {
+        success: false,
+      },
+    });
+
+    const { req, res } = createMocks({
+      method: "POST",
+      body: {
+        username: "success",
+        email: "success@gmail.com",
+        password: "1234@Az",
+        confirmPassword: "1234@Az",
+      },
+    });
+
+    await registerAPI(req, res);
+
+    expect(res._getStatusCode()).toBe(400);
+    expect(res._getData()).toBe(
+      JSON.stringify({
+        success: false,
+        message: "Invalid recaptcha",
       })
     );
   });
