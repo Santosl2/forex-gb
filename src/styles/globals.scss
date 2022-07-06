@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.toastContainer {
+  @apply top-5;
+  @apply right-5;
+  @apply fixed;
+}

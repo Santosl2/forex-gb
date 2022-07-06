@@ -10,6 +10,19 @@ const mockRegisterUsers = ["macacoo"];
 
 jest.mock("firebase/auth", () => ({
   getAuth: () => true,
+  signInWithEmailAndPassword: () => ({
+    user: {
+      accessToken: "654321",
+      refreshToken: "123456",
+    },
+  }),
+  sendEmailVerification: async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve("");
+      }, 1000);
+    });
+  },
   createUserWithEmailAndPassword: () => ({
     user: {
       uid: "123",
@@ -336,6 +349,13 @@ describe("[API] Register ", () => {
     expect(res._getData()).toBe(
       JSON.stringify({
         success: true,
+        user: {
+          id: "123",
+          name: "success",
+          email: "success@gmail.com",
+        },
+        refreshToken: "123456",
+        accessToken: "654321",
       })
     );
   });

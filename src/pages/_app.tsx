@@ -7,6 +7,8 @@ import { AnimatePresence } from "framer-motion";
 import type { AppProps } from "next/app";
 
 import "../styles/globals.scss";
+import { Toast } from "@/components/molecules";
+import { ToastContainer } from "@/components/organims/ToastContainer";
 import { CAPTCHA_CLIENT_KEY } from "@/shared/constants";
 
 import { QueryClientProvider } from "react-query";
@@ -46,6 +48,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       <AnimatePresence exitBeforeEnter>
         <Component {...pageProps} key={router.route} />
       </AnimatePresence>
+
+      <ToastContainer>
+        <Toast>Welcome to Black Investiments! fdsfdsfdsfdsf</Toast>
+        <Toast type="info">Welcome to Black Investiments! fdsfdsfdsfdsf</Toast>
+      </ToastContainer>
       <ReactQueryDevtools />
     </QueryClientProvider>
   );

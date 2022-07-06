@@ -83,14 +83,9 @@ export function RegisterForm() {
         />
       </FormControl>
 
-      <Button>Register</Button>
+      <Button isLoading={registerUser.isLoading}>Register</Button>
       <Link href="/">
-        <Button
-          className="btn-link text-white"
-          isLoading={registerUser.isLoading}
-        >
-          Sign in instead
-        </Button>
+        <Button className="btn-link text-white">Sign in instead</Button>
       </Link>
     </form>
   );

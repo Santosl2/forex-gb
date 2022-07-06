@@ -1,11 +1,17 @@
 /* eslint-disable consistent-return */
 /* eslint-disable camelcase */
 /* eslint-disable unused-imports/no-unused-vars */
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  User,
+} from "firebase/auth";
 import { addDoc, getDocs, query, where } from "firebase/firestore";
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { SignUpFormData } from "@/shared/interfaces/Forms";
+import { UserType } from "@/shared/interfaces/User";
 import { registerSchema } from "@/shared/schemas/register";
 import { verifyCaptcha } from "@/shared/services/auth/captcha";
 import { auth, dbInstanceUsers } from "@/shared/services/firebase";
@@ -64,16 +70,36 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       );
 
       const hashedPassword = await hashPassword(password);
-
+      const userId = createUser.user.uid;
       addDoc(dbInstanceUsers, {
-        id: createUser.user.uid,
+        id: userId,
         username,
         email,
         password: hashedPassword,
-        authProvider: "local",
+        verifiedMail: false,
       });
 
-      return res.status(201).json({ success: true });
+      const {
+        user: { refreshToken, accessToken },
+      } = (await signInWithEmailAndPassword(auth, email, password)) as UserType;
+
+      const currentUser = auth.currentUser ?? ({} as User);
+
+      sendEmailVerification(currentUser).then(() => {
+        console.log(`E-mail sent successfuly to ${email}`);
+        auth.signOut();
+      });
+
+      return res.status(201).json({
+        success: true,
+        user: {
+          id: userId,
+          name: username,
+          email,
+        },
+        refreshToken,
+        accessToken,
+      });
     } catch (error) {
       console.log(error);
       return res.status(500).json({
