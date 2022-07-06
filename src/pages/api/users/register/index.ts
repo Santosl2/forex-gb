@@ -7,7 +7,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { SignUpFormData } from "@/shared/interfaces/Forms";
 import { registerSchema } from "@/shared/schemas/register";
-import { verifyCaptcha } from "@/shared/services/auth/auth";
+import { verifyCaptcha } from "@/shared/services/auth/captcha";
 import { auth, dbInstanceUsers } from "@/shared/services/firebase";
 import { hashPassword } from "@/shared/utils/hash";
 
@@ -24,7 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         confirmPassword,
       });
     } catch (e: any) {
-      return res.status(400).send(e.errors[0]);
+      return res.status(400).json({ success: false, message: e.errors[0] });
     }
 
     const validCaptcha = await verifyCaptcha(
@@ -75,6 +75,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       return res.status(201).json({ success: true });
     } catch (error) {
+      console.log(error);
       return res.status(500).json({
         success: false,
         message: "Error when try to register",

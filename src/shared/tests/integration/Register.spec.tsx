@@ -1,9 +1,10 @@
 import { RegisterForm } from "@/components/templates";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { customRender } from "../utils/customRender";
 
 describe("Register Component", () => {
-  it("should be render correctly", () => {
-    render(<RegisterForm />);
+  it("should be customRender correctly", () => {
+    customRender(<RegisterForm />);
 
     const inputEmail = screen.getByText("E-mail");
     const inputUsername = screen.getByText("Username");
@@ -21,7 +22,7 @@ describe("Register Component", () => {
   });
 
   it("should NOT be able to register user when fields are empty", async () => {
-    render(<RegisterForm />);
+    customRender(<RegisterForm />);
 
     const btnRegister = screen.getByText("Register");
 
@@ -36,7 +37,7 @@ describe("Register Component", () => {
   });
 
   it("should NOT be able to register user when username and password is too short", async () => {
-    render(<RegisterForm />);
+    customRender(<RegisterForm />);
 
     const inputEmail = screen.getByTestId("email");
     const inputUsername = screen.getByTestId("username");
@@ -60,7 +61,7 @@ describe("Register Component", () => {
   });
 
   it("should NOT be able to register user when password is very easy", async () => {
-    render(<RegisterForm />);
+    customRender(<RegisterForm />);
 
     const inputEmail = screen.getByTestId("email");
     const inputUsername = screen.getByTestId("username");
@@ -83,7 +84,7 @@ describe("Register Component", () => {
   });
 
   it("should NOT be able to register user when confirm password doesnt match password", async () => {
-    render(<RegisterForm />);
+    customRender(<RegisterForm />);
 
     const inputEmail = screen.getByTestId("email");
     const inputUsername = screen.getByTestId("username");
@@ -104,7 +105,7 @@ describe("Register Component", () => {
   });
 
   it("should NOT be able to register user when username contains special characters", async () => {
-    render(<RegisterForm />);
+    customRender(<RegisterForm />);
 
     const inputEmail = screen.getByTestId("email");
     const inputUsername = screen.getByTestId("username");
@@ -125,7 +126,7 @@ describe("Register Component", () => {
   });
 
   it("should NOT be able to register user when password and username is too long", async () => {
-    render(<RegisterForm />);
+    customRender(<RegisterForm />);
 
     const inputEmail = screen.getByTestId("email");
     const inputUsername = screen.getByTestId("username");

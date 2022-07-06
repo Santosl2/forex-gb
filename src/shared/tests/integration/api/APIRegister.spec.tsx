@@ -81,7 +81,11 @@ describe("[API] Register ", () => {
 
     expect(res._getStatusCode()).toBe(400);
     expect(res._getData()).toBe(
-      "Password must contain at least 6 characters, one uppercase, one number and one special case character"
+      JSON.stringify({
+        success: false,
+        message:
+          "Password must contain at least 6 characters, one uppercase, one number and one special case character",
+      })
     );
   });
 
@@ -99,7 +103,12 @@ describe("[API] Register ", () => {
     await registerAPI(req, res);
 
     expect(res._getStatusCode()).toBe(400);
-    expect(res._getData()).toBe("Password must be less than 30 characters");
+    expect(res._getData()).toBe(
+      JSON.stringify({
+        success: false,
+        message: "Password must be less than 30 characters",
+      })
+    );
   });
 
   it("should NOT be able to register user when password is too short", async () => {
@@ -116,7 +125,12 @@ describe("[API] Register ", () => {
     await registerAPI(req, res);
 
     expect(res._getStatusCode()).toBe(400);
-    expect(res._getData()).toBe("Use 6 characters or more for your password");
+    expect(res._getData()).toBe(
+      JSON.stringify({
+        success: false,
+        message: "Use 6 characters or more for your password",
+      })
+    );
   });
 
   it("should NOT be able to register user when confirm password doesnt match password", async () => {
@@ -133,7 +147,12 @@ describe("[API] Register ", () => {
     await registerAPI(req, res);
 
     expect(res._getStatusCode()).toBe(400);
-    expect(res._getData()).toBe("Those passwords didn’t match. Try again.");
+    expect(res._getData()).toBe(
+      JSON.stringify({
+        success: false,
+        message: "Those passwords didn’t match. Try again.",
+      })
+    );
   });
 
   it("should NOT be able to register user when username is too short", async () => {
@@ -150,7 +169,13 @@ describe("[API] Register ", () => {
     await registerAPI(req, res);
 
     expect(res._getStatusCode()).toBe(400);
-    expect(res._getData()).toBe("Use 3 characters or more for your username");
+
+    expect(res._getData()).toBe(
+      JSON.stringify({
+        success: false,
+        message: "Use 3 characters or more for your username",
+      })
+    );
   });
 
   it("should NOT be able to register user when username is too long", async () => {
@@ -167,7 +192,13 @@ describe("[API] Register ", () => {
     await registerAPI(req, res);
 
     expect(res._getStatusCode()).toBe(400);
-    expect(res._getData()).toBe("Username must be less than 24 characters");
+
+    expect(res._getData()).toBe(
+      JSON.stringify({
+        success: false,
+        message: "Username must be less than 24 characters",
+      })
+    );
   });
 
   it("should NOT be able to register user when username contains special characters", async () => {
@@ -185,7 +216,10 @@ describe("[API] Register ", () => {
 
     expect(res._getStatusCode()).toBe(400);
     expect(res._getData()).toBe(
-      "Don't use special character in your username."
+      JSON.stringify({
+        success: false,
+        message: "Don't use special character in your username.",
+      })
     );
   });
 
@@ -203,7 +237,13 @@ describe("[API] Register ", () => {
     await registerAPI(req, res);
 
     expect(res._getStatusCode()).toBe(400);
-    expect(res._getData()).toBe("Please insert a valid e-mail");
+
+    expect(res._getData()).toBe(
+      JSON.stringify({
+        success: false,
+        message: "Please insert a valid e-mail",
+      })
+    );
   });
 
   it("should NOT be able to register user when email is already in use", async () => {

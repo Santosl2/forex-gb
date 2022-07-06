@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 
 import { Button, FormControl, Input } from "@/components/atoms";
+import { useMutationRegisterUser } from "@/shared/hooks/useMutation";
 import { registerSchema } from "@/shared/schemas/register";
 import { verifyRecaptcha } from "@/shared/utils/verifyRecaptcha";
 import { yupResolver } from "@/shared/utils/yup";
@@ -10,12 +11,22 @@ import { yupResolver } from "@/shared/utils/yup";
 import { RegisterFormData } from "./Register.types";
 
 export function RegisterForm() {
+  const registerUser = useMutationRegisterUser();
+
   const { register, handleSubmit, formState } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
   });
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     const recaptchaVerify = await verifyRecaptcha();
+
+    if (recaptchaVerify) {
+      await registerUser.mutateAsync({
+        ...data,
+        captchaToken: recaptchaVerify,
+      });
+    }
+
     console.log(data, recaptchaVerify);
   };
 
@@ -74,7 +85,12 @@ export function RegisterForm() {
 
       <Button>Register</Button>
       <Link href="/">
-        <Button className="btn-link text-white">Sign in instead</Button>
+        <Button
+          className="btn-link text-white"
+          isLoading={registerUser.isLoading}
+        >
+          Sign in instead
+        </Button>
       </Link>
     </form>
   );

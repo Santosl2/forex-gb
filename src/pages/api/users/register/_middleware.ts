@@ -5,7 +5,7 @@ export function middleware(req: NextRequest) {
   const { headers } = req;
   const authHeader = headers.get("Authorization");
 
-  if (authHeader) {
+  if (!authHeader) {
     return NextResponse.next();
   }
 
