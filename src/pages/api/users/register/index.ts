@@ -76,7 +76,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         username,
         email,
         password: hashedPassword,
-        verifiedMail: false,
       });
 
       const {

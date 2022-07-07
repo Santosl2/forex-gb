@@ -78,7 +78,7 @@ export function LoginForm() {
         Login
       </Button>
       <Link href="/register">
-        <Button type="button" className="btn-primary">
+        <Button type="button" className="btn-link text-white">
           Create an account
         </Button>
       </Link>
