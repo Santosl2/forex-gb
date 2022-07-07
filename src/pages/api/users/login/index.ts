@@ -1,7 +1,80 @@
+/* eslint-disable consistent-return */
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { getDocs, query, where } from "firebase/firestore";
 import { NextApiRequest, NextApiResponse } from "next";
+
+import { SignInFormData } from "@/shared/interfaces/Forms";
+import { UserType } from "@/shared/interfaces/User";
+import { loginSchema } from "@/shared/schemas/login";
+import { auth, dbInstanceUsers } from "@/shared/services/firebase";
+import { verifyPassword } from "@/shared/utils/hash";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
-    console.log(res);
+    const { email, password } = req.body as SignInFormData;
+
+    try {
+      await loginSchema.validate({
+        email,
+        password,
+      });
+    } catch (e: any) {
+      return res.status(400).json({ success: false, message: e.errors[0] });
+    }
+
+    const q = query(dbInstanceUsers, where("email", "==", email));
+    const queryResult = await getDocs(q);
+
+    if (queryResult.size === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+
+    const doc = queryResult.docs[0];
+
+    try {
+      const { password: userPassword, name, id } = doc.data();
+      const verifyUserPassword = await verifyPassword(password, userPassword);
+
+      if (!verifyUserPassword) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid credentials",
+        });
+      }
+
+      const {
+        user: { refreshToken, accessToken, emailVerified },
+      } = (await signInWithEmailAndPassword(auth, email, password)) as UserType;
+
+      if (!emailVerified) {
+        return res.json({
+          success: false,
+          message:
+            "Your email is not verified, please verify your email to login.",
+        });
+      }
+
+      return res.json({
+        success: true,
+        user: {
+          id,
+          name,
+          email,
+        },
+        refreshToken,
+        accessToken,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Oops, an error occurred.",
+      });
+    }
   }
+
+  res.setHeader("Allow", "POST");
+  res.status(405).end("Method not allowed");
 };

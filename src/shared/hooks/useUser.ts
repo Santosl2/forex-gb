@@ -9,7 +9,6 @@ export function useUser(): UserData {
 }
 
 export function useUserLogin() {
-  const user = useUser();
   const dispatch = useDispatch();
 
   return (data: UserData) => {

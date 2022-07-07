@@ -9,7 +9,7 @@ export const registerSchema = yup
     username: yup
       .string()
       .required("Username is required")
-      .min(6, "Use 3 characters or more for your username")
+      .min(3, "Use 3 characters or more for your username")
       .max(24, "Username must be less than 24 characters")
       .matches(
         /^[\w\s.-]+$/gi,

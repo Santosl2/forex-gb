@@ -85,9 +85,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       const currentUser = auth.currentUser ?? ({} as User);
 
-      sendEmailVerification(currentUser).then(() => {
+      sendEmailVerification(currentUser).then(async () => {
         console.log(`E-mail sent successfuly to ${email}`);
-        auth.signOut();
+        await auth.signOut();
       });
 
       return res.status(201).json({

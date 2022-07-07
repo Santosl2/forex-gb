@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import Link from "next/link";
@@ -5,17 +6,17 @@ import Link from "next/link";
 import { Button, FormControl, Input } from "@/components/atoms";
 import { useMutationRegisterUser } from "@/shared/hooks/useMutation";
 import { useToastCreate } from "@/shared/hooks/useToast";
-import { useUserLogin } from "@/shared/hooks/useUser";
 import { registerSchema } from "@/shared/schemas/register";
 import { verifyRecaptcha } from "@/shared/utils/verifyRecaptcha";
 import { yupResolver } from "@/shared/utils/yup";
 
+import { EmailSent } from "../EmailSent";
 import { RegisterFormData } from "./Register.types";
 
 export function RegisterForm() {
+  const [emailSent, setEmailSent] = useState(false);
   const registerUser = useMutationRegisterUser();
   const toast = useToastCreate();
-  const userLogin = useUserLogin();
 
   const { register, handleSubmit, formState } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
@@ -26,21 +27,21 @@ export function RegisterForm() {
 
     if (recaptchaVerify) {
       try {
-        const userData = await registerUser.mutateAsync({
+        await registerUser.mutateAsync({
           ...data,
           captchaToken: recaptchaVerify,
         });
 
-        toast("Welcome to Black Capital! ", {
-          type: "success",
-        });
+        setEmailSent(true);
       } catch (e: any) {
-        toast(e.response.data.message, {
+        toast(e.response?.data?.message ?? "Internal server error", {
           type: "error",
         });
       }
     }
   };
+
+  if (emailSent) return <EmailSent />;
 
   return (
     <form

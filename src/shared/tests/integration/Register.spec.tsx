@@ -1,8 +1,46 @@
 import { RegisterForm } from "@/components/templates";
+import { CustomWindowType } from "@/shared/interfaces/Window";
 import { fireEvent, screen } from "@testing-library/react";
 import { customRender } from "../utils/customRender";
+import axios from "axios";
+import { act } from "react-dom/test-utils";
+
+jest.mock("axios");
+
+const mockMutation = jest.spyOn(
+  require("../../hooks/useMutation"),
+  "useMutationRegisterUser"
+);
 
 describe("Register Component", () => {
+  let mockPost = jest.fn();
+  let pushRouteMock = jest.fn();
+  let mockReady = jest.fn(async (e) => {
+    const resolvePromise = await Promise.resolve(e()).then((msg) => msg);
+
+    return resolvePromise;
+  });
+
+  beforeEach(() => {
+    const customWindow = window as any as CustomWindowType;
+    customWindow.grecaptcha = {
+      ready: mockReady,
+      execute: async () => "123456",
+    };
+
+    mockPost = jest.fn().mockReturnValue({
+      data: {
+        success: true,
+      },
+    });
+
+    axios.post = mockPost;
+  });
+
+  afterEach(() => {
+    (axios.post as jest.Mock).mockClear();
+  });
+
   it("should be customRender correctly", () => {
     customRender(<RegisterForm />);
 
@@ -154,6 +192,132 @@ describe("Register Component", () => {
     ).toBeInTheDocument();
   });
 
-  it.todo("should NOT be able to register user when user already exists");
-  it.todo("should NOT be able to register user when email already exists");
+  it("should NOT be able to register user when user already exists", async () => {
+    const error = {
+      success: false,
+      message: "Username already in use",
+    };
+
+    const mockPostUser = jest.fn().mockRejectedValue(error);
+
+    axios.post = mockPostUser;
+
+    mockMutation.mockImplementation(() => ({
+      isLoading: false,
+      mutateAsync: async () =>
+        Promise.reject({
+          response: {
+            data: {
+              message: error.message,
+            },
+          },
+        }),
+    }));
+
+    customRender(<RegisterForm />);
+
+    const inputEmail = screen.getByTestId("email");
+    const inputUsername = screen.getByTestId("username");
+    const inputPassword = screen.getByTestId("password");
+    const inputConfirmPassword = screen.getByTestId("confirmPassword");
+    const btnRegister = screen.getByText("Register");
+
+    fireEvent.change(inputUsername, { target: { value: "teste" } });
+    fireEvent.change(inputEmail, { target: { value: "teste@gmail.com" } });
+    fireEvent.change(inputPassword, { target: { value: "Teste@123" } });
+    fireEvent.change(inputConfirmPassword, {
+      target: { value: "Teste@123" },
+    });
+
+    await act(async () => {
+      fireEvent.click(btnRegister);
+    });
+
+    expect(pushRouteMock).not.toHaveBeenCalled();
+
+    expect(
+      await screen.findByText("Username already in use")
+    ).toBeInTheDocument();
+  });
+
+  it("should NOT be able to register user when email already exists", async () => {
+    const error = {
+      success: false,
+      message: "E-mail already in use",
+    };
+
+    const mockPostUser = jest.fn().mockRejectedValue(error);
+
+    axios.post = mockPostUser;
+
+    mockMutation.mockImplementation(() => ({
+      isLoading: false,
+      mutateAsync: async () =>
+        Promise.reject({
+          response: {
+            data: {
+              message: error.message,
+            },
+          },
+        }),
+    }));
+
+    customRender(<RegisterForm />);
+
+    const inputEmail = screen.getByTestId("email");
+    const inputUsername = screen.getByTestId("username");
+    const inputPassword = screen.getByTestId("password");
+    const inputConfirmPassword = screen.getByTestId("confirmPassword");
+    const btnRegister = screen.getByText("Register");
+
+    fireEvent.change(inputUsername, { target: { value: "teste" } });
+    fireEvent.change(inputEmail, { target: { value: "teste@gmail.com" } });
+    fireEvent.change(inputPassword, { target: { value: "Teste@123" } });
+    fireEvent.change(inputConfirmPassword, {
+      target: { value: "Teste@123" },
+    });
+
+    await act(async () => {
+      fireEvent.click(btnRegister);
+    });
+
+    expect(pushRouteMock).not.toHaveBeenCalled();
+
+    expect(
+      await screen.findByText("E-mail already in use")
+    ).toBeInTheDocument();
+  });
+
+  it("should be able to register user and send to verify email page", async () => {
+    const mutateMock = jest.fn(() => ({
+      success: true,
+    }));
+
+    mockMutation.mockImplementation(() => ({
+      isLoading: false,
+      mutateAsync: mutateMock,
+    }));
+
+    customRender(<RegisterForm />);
+
+    const inputEmail = screen.getByTestId("email");
+    const inputUsername = screen.getByTestId("username");
+    const inputPassword = screen.getByTestId("password");
+    const inputConfirmPassword = screen.getByTestId("confirmPassword");
+    const btnRegister = screen.getByText("Register");
+
+    fireEvent.change(inputUsername, { target: { value: "teste" } });
+    fireEvent.change(inputEmail, { target: { value: "teste@gmail.com" } });
+    fireEvent.change(inputPassword, { target: { value: "Teste@123" } });
+    fireEvent.change(inputConfirmPassword, {
+      target: { value: "Teste@123" },
+    });
+
+    await act(async () => {
+      fireEvent.click(btnRegister);
+    });
+
+    expect(mockPost().data.success).toBe(true);
+    expect(screen.getByText("Check your inbox!")).toBeInTheDocument();
+  });
 });

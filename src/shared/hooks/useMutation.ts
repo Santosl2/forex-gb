@@ -1,8 +1,12 @@
 import { useMutation } from "react-query";
 
-import { SignUpFormData } from "../interfaces/Forms";
-import { createUser } from "../services/auth/user";
+import { SignInFormData, SignUpFormData } from "../interfaces/Forms";
+import { createUser, loginUser } from "../services/auth/user";
 
 export function useMutationRegisterUser() {
   return useMutation(async (user: SignUpFormData) => createUser(user));
+}
+
+export function useMutationLoginUser() {
+  return useMutation(async (user: SignInFormData) => loginUser(user));
 }
