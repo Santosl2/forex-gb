@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button, FormControl, Input } from "@/components/atoms";
 import { useMutationRegisterUser } from "@/shared/hooks/useMutation";
 import { useToastCreate } from "@/shared/hooks/useToast";
+import { useUserLogin } from "@/shared/hooks/useUser";
 import { registerSchema } from "@/shared/schemas/register";
 import { verifyRecaptcha } from "@/shared/utils/verifyRecaptcha";
 import { yupResolver } from "@/shared/utils/yup";
@@ -14,6 +15,7 @@ import { RegisterFormData } from "./Register.types";
 export function RegisterForm() {
   const registerUser = useMutationRegisterUser();
   const toast = useToastCreate();
+  const userLogin = useUserLogin();
 
   const { register, handleSubmit, formState } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
@@ -24,9 +26,13 @@ export function RegisterForm() {
 
     if (recaptchaVerify) {
       try {
-        await registerUser.mutateAsync({
+        const userData = await registerUser.mutateAsync({
           ...data,
           captchaToken: recaptchaVerify,
+        });
+
+        toast("Welcome to Black Capital! ", {
+          type: "success",
         });
       } catch (e: any) {
         toast(e.response.data.message, {
@@ -34,8 +40,6 @@ export function RegisterForm() {
         });
       }
     }
-
-    console.log(data, recaptchaVerify);
   };
 
   return (

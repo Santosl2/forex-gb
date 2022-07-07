@@ -1,6 +1,7 @@
 import { motion, Variants } from "framer-motion";
 
 import { RegisterForm } from "@/components/templates";
+import { GuestSSR } from "@/shared/utils/auth/GuestSSR";
 
 const registerVariants: Variants = {
   initial: {
@@ -40,3 +41,9 @@ export default function Register() {
     </div>
   );
 }
+
+export const getServerSideProps = GuestSSR(async (ctx) => {
+  return {
+    props: {},
+  };
+});

@@ -1,11 +1,11 @@
 import { memo } from "react";
 
-import { ToastProps } from "@/components/molecules/Toast/Toast.types";
+import { Toast } from "@/shared/interfaces/Toast";
 
-function ToastBase({ type }: Pick<ToastProps, "type">) {
+function ToastBase({ type }: Pick<Toast, "type">) {
   const colors: any = {
     success: "green-200",
-    error: "red-300",
+    error: "red-200",
     info: "orange-200",
   };
 

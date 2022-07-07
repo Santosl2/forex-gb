@@ -16,7 +16,7 @@ import { queryClient } from "@/shared/services/queryClient";
 
 import { Provider } from "react-redux";
 
-import { store } from "@/shared/store";
+import { store, wrapper } from "@/shared/store";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   useEffect(() => {
@@ -60,4 +60,4 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   );
 }
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);

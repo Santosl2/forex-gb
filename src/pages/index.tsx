@@ -1,6 +1,7 @@
 import { motion, Variants } from "framer-motion";
 
 import { LoginForm } from "@/components/templates";
+import { GuestSSR } from "@/shared/utils/auth/GuestSSR";
 
 const loginVariants: Variants = {
   initial: {
@@ -41,3 +42,9 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps = GuestSSR(async (ctx) => {
+  return {
+    props: {},
+  };
+});
