@@ -2,6 +2,7 @@ import { motion, Variants } from "framer-motion";
 
 import { Logo } from "@/components/atoms";
 import { LoginForm } from "@/components/templates";
+import { SEO } from "@/SEO";
 import { GuestSSR } from "@/shared/utils/auth/GuestSSR";
 
 const loginVariants: Variants = {
@@ -29,19 +30,22 @@ const loginVariants: Variants = {
 
 export default function Home() {
   return (
-    <div className="w-screen h-screen">
-      <motion.div
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        variants={loginVariants}
-        className="flex flex-col items-center justify-center h-full"
-      >
-        <Logo />
+    <>
+      <SEO title="Login" />
+      <div className="w-screen h-screen">
+        <motion.div
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={loginVariants}
+          className="flex flex-col items-center justify-center h-full"
+        >
+          <Logo />
 
-        <LoginForm />
-      </motion.div>
-    </div>
+          <LoginForm />
+        </motion.div>
+      </div>
+    </>
   );
 }
 

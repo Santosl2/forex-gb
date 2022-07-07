@@ -17,8 +17,16 @@ const mockMutation = jest.spyOn(
   "useMutationLoginUser"
 );
 
+const mockRouter = jest.spyOn(require("next/router"), "useRouter");
+
 describe("Login Component", () => {
+  let mockPush = jest.fn();
   beforeEach(() => {
+    mockRouter.mockImplementation(() => ({
+      push: mockPush,
+      prefetch: async () => true,
+    }));
+
     mockMutation.mockImplementation(() => ({
       isLoading: false,
       mutateAsync: () => ({
@@ -124,6 +132,7 @@ describe("Login Component", () => {
     mockMutation.mockImplementation(() => ({
       isLoading: false,
       mutateAsync: () => ({
+        success: true,
         message: "Login successful!",
       }),
     }));
@@ -147,5 +156,6 @@ describe("Login Component", () => {
     expect(await screen.findByText("Login successful!")).toBeInTheDocument();
     expect(inputPassword.value).toBe("");
     expect(inputEmail.value).toBe("");
+    expect(mockPush).toHaveBeenCalledWith("/dashboard");
   });
 });

@@ -4,6 +4,7 @@ import { motion, Variants } from "framer-motion";
 
 import { Logo } from "@/components/atoms";
 import { RegisterForm } from "@/components/templates";
+import { SEO } from "@/SEO";
 import { CAPTCHA_CLIENT_KEY } from "@/shared/constants";
 import { GuestSSR } from "@/shared/utils/auth/GuestSSR";
 
@@ -71,19 +72,23 @@ export default function Register() {
   }, []);
 
   return (
-    <div className="w-screen h-screen">
-      <motion.div
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        variants={registerVariants}
-        className="flex flex-col items-center justify-center h-full"
-      >
-        <Logo />
+    <>
+      <SEO title="Register" />
 
-        <RegisterForm />
-      </motion.div>
-    </div>
+      <div className="w-screen h-screen">
+        <motion.div
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={registerVariants}
+          className="flex flex-col items-center justify-center h-full"
+        >
+          <Logo />
+
+          <RegisterForm />
+        </motion.div>
+      </div>
+    </>
   );
 }
 

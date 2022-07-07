@@ -36,6 +36,7 @@ export function LoginForm() {
       toast("Login successful!", { type: "success" });
 
       user(loginData);
+
       router.push("/dashboard");
     } catch (e: any) {
       toast(e.response?.data?.message ?? "Internal server error", {
