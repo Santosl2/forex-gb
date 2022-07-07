@@ -6,6 +6,8 @@ import { AnimatePresence } from "framer-motion";
 import type { AppProps } from "next/app";
 
 import "../styles/globals.scss";
+import NextNProgress from "nextjs-progressbar";
+
 import { ToastContainer } from "@/components/organims/ToastContainer";
 
 import { QueryClientProvider } from "react-query";
@@ -26,6 +28,13 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
         <ToastContainer />
         <ReactQueryDevtools />
+        <NextNProgress
+          color="#737373"
+          startPosition={0.3}
+          stopDelayMs={200}
+          height={2}
+          showOnShallow
+        />
       </QueryClientProvider>
     </Provider>
   );

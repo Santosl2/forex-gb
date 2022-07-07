@@ -23,7 +23,7 @@ const registerVariants: Variants = {
   },
   exit: {
     opacity: 0,
-    x: -100,
+    x: 100,
     transition: {
       duration: 0.5,
       ease: "easeInOut",
@@ -75,7 +75,7 @@ export default function Register() {
     <>
       <SEO title="Register" />
 
-      <div className="w-screen h-screen">
+      <div className="w-screen h-screen overflow-hidden">
         <motion.div
           initial="initial"
           animate="animate"
