@@ -12,13 +12,13 @@ import { Search } from "./Search";
 export function Header({ id, items }: HeaderProps) {
   return (
     <>
-      <header className="navbar bg-base-100">
+      <header className="navbar bg-base-300">
         <div className="navbar-start">
           <DrawerOpen id={id} />
         </div>
         <div className="navbar-center">
           <a className="btn btn-ghost normal-case text-xl" href="#">
-            Black Capital
+            {process.env.NEXT_PUBLIC_SITE_NAME}
           </a>
         </div>
         <div className="navbar-end">
