@@ -38,19 +38,15 @@ export function AuthSSR<P>(fn: GetServerSideProps<P>) {
 
       try {
         const data = JSON.parse(cookies[LOGIN_COOKIE_NAME]) as UserData;
-        const accessToken = JSON.parse(
-          cookies[LOGIN_COOKIE_ACCESS_TOKEN]
-        ) as UserData;
-        const refreshToken = JSON.parse(
-          cookies[LOGIN_COOKIE_REFRESH_TOKEN]
-        ) as UserData;
+        const accessToken = cookies[LOGIN_COOKIE_ACCESS_TOKEN];
+        const refreshToken = cookies[LOGIN_COOKIE_REFRESH_TOKEN];
 
         if (data.email) {
           getUserData(
             {
               ...data,
-              ...accessToken,
-              ...refreshToken,
+              accessToken,
+              refreshToken,
             },
             store,
             ctx
@@ -65,9 +61,13 @@ export function AuthSSR<P>(fn: GetServerSideProps<P>) {
             },
           };
         }
-      } catch {
-        logoutUser(ctx);
+      } catch (e) {
+        console.log(
+          "🚀 ~ file: AuthSSR.ts ~ line 65 ~ returnwrapper.getServerSideProps ~ e",
+          e
+        );
 
+        logoutUser(ctx);
         return {
           redirect: {
             destination: "/",

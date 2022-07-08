@@ -32,12 +32,10 @@ export function createUserCookie(
 }
 
 export function getUserData(
-  data: UserData,
+  { email, name, id, refreshToken, accessToken }: UserData,
   store: any,
   ctx: NextCTX | null = null
 ) {
-  const { email, name, id, refreshToken, accessToken } = data;
-
   const payload = {
     id,
     email: email!,

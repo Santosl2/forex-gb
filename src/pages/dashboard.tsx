@@ -1,8 +1,5 @@
-import { useEffect } from "react";
-
 import { Variants } from "framer-motion";
 
-import { auth } from "@/shared/services/firebase";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
 
 const loginVariants: Variants = {
@@ -29,11 +26,6 @@ const loginVariants: Variants = {
 };
 
 export default function Dashboard() {
-  useEffect(() => {
-    const usedr = auth.currentUser;
-    console.log(usedr);
-  }, []);
-
   return <>f</>;
 }
 
