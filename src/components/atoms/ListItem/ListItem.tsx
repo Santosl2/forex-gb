@@ -1,5 +1,5 @@
-import { ListItemProps } from "./ListItem.type";
+import { ReactNode } from "react";
 
-export function ListItem({ link, title }: ListItemProps) {
-  return <li>{title}</li>;
+export function ListItem({ children }: { children: ReactNode }) {
+  return <li>{children}</li>;
 }

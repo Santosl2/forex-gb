@@ -2,6 +2,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import Link from "next/link";
 
+import { ListItem } from "@/components/atoms";
+
 import { DrawerProps } from "./Drawer.types";
 
 export function Drawer({ id, items }: DrawerProps) {
@@ -14,9 +16,9 @@ export function Drawer({ id, items }: DrawerProps) {
         <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
           {items.map((item) => (
             <Link href={item.href} key={item.id} passHref>
-              <li>
+              <ListItem>
                 <a>{item.name} </a>
-              </li>
+              </ListItem>
             </Link>
           ))}
         </ul>
