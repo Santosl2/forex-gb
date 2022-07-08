@@ -7,3 +7,7 @@
   @apply right-5;
   @apply fixed;
 }
+
+.preventScroll {
+  @apply overflow-hidden;
+}
