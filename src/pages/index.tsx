@@ -32,19 +32,18 @@ export default function Home() {
   return (
     <>
       <SEO title="Login" />
-      <div className="w-screen h-screen overflow-hidden">
-        <motion.div
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          variants={loginVariants}
-          className="flex flex-col items-center justify-center h-full"
-        >
-          <Logo />
 
-          <LoginForm />
-        </motion.div>
-      </div>
+      <motion.div
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={loginVariants}
+        className="flex flex-col items-center justify-center h-full"
+      >
+        <Logo />
+
+        <LoginForm />
+      </motion.div>
     </>
   );
 }

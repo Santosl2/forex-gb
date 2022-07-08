@@ -2,17 +2,22 @@ import { NextPageContext } from "next/types";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 
 import { LOGIN_COOKIE_NAME } from "../constants";
+import { NextCTX } from "../interfaces/Common";
 import { UserData } from "../interfaces/User";
 
-export function cookieInsert(name: string, value: string) {
-  setCookie(null, name, value, {
+export function cookieInsert(
+  name: string,
+  value: string,
+  ctx: NextCTX | null = null
+) {
+  setCookie(ctx, name, value, {
     maxAge: 3600, // 1h,
     path: "/",
   });
 }
 
-export function cookieDestroy(name: string) {
-  destroyCookie(null, name);
+export function cookieDestroy(name: string, ctx: NextCTX | null = null) {
+  destroyCookie(ctx, name);
 }
 
 export function cookieGet(name: string, req?: NextPageContext) {

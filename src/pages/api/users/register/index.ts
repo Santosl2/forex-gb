@@ -44,15 +44,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         .json({ success: false, message: "Invalid recaptcha" });
     }
 
-    const queryEmail = query(dbInstanceUsers, where("email", "==", email));
-    const queryResult = await getDocs(queryEmail);
-
-    if (queryResult.size > 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "E-mail already in use" });
-    }
-
     const queryUser = query(dbInstanceUsers, where("username", "==", username));
     const queryResultUser = await getDocs(queryUser);
 
@@ -73,7 +64,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const userId = createUser.user.uid;
       addDoc(dbInstanceUsers, {
         id: userId,
-        username,
+        name: username,
         email,
         password: hashedPassword,
       });

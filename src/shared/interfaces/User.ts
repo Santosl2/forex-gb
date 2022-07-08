@@ -13,3 +13,8 @@ export type UserData = {
   accessToken: string;
   refreshToken: string;
 };
+
+export type UserCustom = UserCredential &
+  UserFirebaseType & {
+    accessToken: string;
+  };

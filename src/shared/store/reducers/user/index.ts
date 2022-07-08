@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { UserData } from "@/shared/interfaces/User";
 import { createSlice } from "@reduxjs/toolkit";
 

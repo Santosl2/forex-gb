@@ -75,19 +75,17 @@ export default function Register() {
     <>
       <SEO title="Register" />
 
-      <div className="w-screen h-screen overflow-hidden">
-        <motion.div
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          variants={registerVariants}
-          className="flex flex-col items-center justify-center h-full"
-        >
-          <Logo />
+      <motion.div
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={registerVariants}
+        className="flex flex-col items-center justify-center h-full"
+      >
+        <Logo />
 
-          <RegisterForm />
-        </motion.div>
-      </div>
+        <RegisterForm />
+      </motion.div>
     </>
   );
 }

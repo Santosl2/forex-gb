@@ -22,10 +22,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <AnimatePresence exitBeforeEnter>
-          <Component {...pageProps} key={router.route} />
-        </AnimatePresence>
-
+        <main className="w-screen h-screen overflow-hidden">
+          <AnimatePresence exitBeforeEnter>
+            <Component {...pageProps} key={router.route} />
+          </AnimatePresence>
+        </main>
         <ToastContainer />
         <ReactQueryDevtools />
         <NextNProgress

@@ -1,17 +1,17 @@
-import { LOGIN_COOKIE_NAME } from "@/shared/constants";
+/* eslint-disable import/no-cycle */
 import { UserData } from "@/shared/interfaces/User";
-import { cookieInsert } from "@/shared/utils/Cookie";
 import { PayloadAction } from "@reduxjs/toolkit";
+
+async function loadUserCookie(payload: UserData) {
+  const { createUserCookie } = await import("@/shared/utils/auth/UserLogin");
+
+  createUserCookie(payload);
+}
 
 export const userReducer = {
   setUser: (action: any, { payload }: PayloadAction<UserData>) => {
     if (process.browser) {
-      cookieInsert(
-        LOGIN_COOKIE_NAME,
-        JSON.stringify({
-          ...payload,
-        })
-      );
+      loadUserCookie(payload);
     }
 
     return payload;
