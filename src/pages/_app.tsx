@@ -26,6 +26,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           <AnimatePresence exitBeforeEnter>
             <Component {...pageProps} key={router.route} />
           </AnimatePresence>
+          <div id="drawerPortal" />
         </main>
         <ToastContainer />
         <ReactQueryDevtools />
