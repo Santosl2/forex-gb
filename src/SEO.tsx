@@ -36,8 +36,8 @@ export function SEO({
       <meta httpEquiv="x-ua-compatible" content="IE=edge,chrome=1" />
       <meta name="MobileOptimized" content="320" />
       <meta name="HandheldFriendly" content="True" />
-      <meta name="theme-color" content="#ff9d71" />
-      <meta name="msapplication-TileColor" content="#ff9d71" />
+      <meta name="theme-color" content="#18181b" />
+      <meta name="msapplication-TileColor" content="#18181b" />
       <meta name="referrer" content="no-referrer-when-downgrade" />
       <meta name="google" content="notranslate" />
 

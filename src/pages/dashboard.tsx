@@ -1,6 +1,7 @@
 import { Variants } from "framer-motion";
 
 import { Header } from "@/components/organims/Header";
+import { SEO } from "@/SEO";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
 
 const loginVariants: Variants = {
@@ -43,6 +44,7 @@ export default function Dashboard() {
 
   return (
     <>
+      <SEO title="Dashboard" />
       <Header id="menuDrawer" items={items} />
       <section className="max-w-[1120px] m-auto p-5 mt-5 relative z-10">
         <h2 className="text-4xl">Hello dear</h2>
