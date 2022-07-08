@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -23,6 +24,13 @@ const toastVariants: Variants = {
       mass: 0.5,
     },
   },
+  exit: {
+    opacity: 0,
+    y: -100,
+    transition: {
+      duration: 0.2,
+    },
+  },
 };
 
 export function Toast({ id, type = "success", message }: Toast) {
@@ -45,6 +53,7 @@ export function Toast({ id, type = "success", message }: Toast) {
       variants={toastVariants}
       initial="hidden"
       animate="visible"
+      exit="exit"
       className="flex items-center w-full max-w-xs p-4 mb-4 min-w-full bg-gray-800 rounded-md shadow text-gray-200"
       role="alert"
       layout="position"
