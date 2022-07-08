@@ -14,7 +14,7 @@ import { EmailSent } from "../EmailSent";
 import { RegisterFormData } from "./Register.types";
 
 export function RegisterForm() {
-  const [emailSent, setEmailSent] = useState(true);
+  const [emailSent, setEmailSent] = useState(false);
   const registerUser = useMutationRegisterUser();
   const toast = useToastCreate();
 
