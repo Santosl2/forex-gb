@@ -25,7 +25,7 @@ export function Drawer({ id, items }: DrawerProps) {
   if (!mounted) return <></>;
 
   return createPortal(
-    <div className="drawer fixed z-0 top-[64px]">
+    <div className="drawer absolute z-1 top-[64px]">
       <input id={id} type="checkbox" className="drawer-toggle" />
 
       <div className="drawer-side">
