@@ -57,6 +57,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
 
+      await auth.signOut();
+
       return res.json({
         success: true,
         user: {
