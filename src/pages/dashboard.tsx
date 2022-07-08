@@ -20,7 +20,28 @@ const loginVariants: Variants = {
 };
 
 export default function Dashboard() {
-  return <Header />;
+  const items = [
+    {
+      id: 1,
+      name: "Dashboard",
+      icon: "dashboard",
+      href: "/dashboard",
+    },
+    {
+      id: 2,
+      name: "Organizations",
+      icon: "organization",
+      href: "/organizations",
+    },
+    {
+      id: 3,
+      name: "Users",
+      icon: "user",
+      href: "/users",
+    },
+  ];
+
+  return <Header id="menuDrawer" items={items} />;
 }
 
 export const getServerSideProps = AuthSSR(async (ctx) => {
