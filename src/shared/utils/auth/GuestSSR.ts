@@ -14,7 +14,7 @@ import {
 import { wrapper } from "@/shared/store";
 
 export function GuestSSR<P>(fn: GetServerSideProps<P>) {
-  return wrapper.getServerSideProps((store) => {
+  return wrapper.getServerSideProps(() => {
     return async (
       ctx: GetServerSidePropsContext
     ): Promise<GetServerSidePropsResult<P>> => {

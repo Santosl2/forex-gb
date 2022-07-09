@@ -49,18 +49,37 @@ export default function Dashboard() {
       <section className="max-w-[1120px] m-auto p-5 mt-5 relative z-10">
         <h2 className="text-4xl">Hello dear</h2>
 
-        <div className="flex gap-5 overflow-y-auto w-full mt-5">
-          <div className="w-full max-w-lg  bg-gray-600 p-5 rounded-md h-32 flex flex-col justify-between cursor-pointer">
-            <h4 className="text-2xl">Amount</h4>
-            <p className="text-xl">R$5000,00</p>
-          </div>
-          <div className="w-full max-w-lg  bg-gray-600 p-5 rounded-md h-32 flex flex-col justify-between cursor-pointer">
-            <h4 className="text-2xl">Amount</h4>
-            <p className="text-xl">R$5000,00</p>
-          </div>
-          <div className="w-full max-w-lg  bg-gray-600 p-5 rounded-md h-32 flex flex-col justify-between cursor-pointer">
-            <h4 className="text-2xl">Amount</h4>
-            <p className="text-xl">R$5000,00</p>
+        <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
+          <div className="stats shadow">
+            <div className="stat bg-base-200  place-items-center w-72">
+              <div className="stat-title">Your amount</div>
+              <div className="stat-value text-primary">25.6K</div>
+            </div>
+
+            <div className="stat bg-base-200 place-items-center w-96">
+              <div className="stat-figure text-secondary">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  className="inline-block w-8 h-8 stroke-current"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+              </div>
+              <div className="stat-title">Percent of this month</div>
+              <div className="stat-value text-secondary">2.6%</div>
+            </div>
+
+            <div className="stat bg-base-200 place-items-center w-72">
+              <div className="stat-value">86%</div>
+              <div className="stat-title">Tasks done</div>
+            </div>
           </div>
         </div>
       </section>

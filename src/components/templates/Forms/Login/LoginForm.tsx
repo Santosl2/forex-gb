@@ -36,9 +36,9 @@ export function LoginForm() {
       toast("Login successful!", { type: "success" });
 
       user({
-        ...loginData.user,
-        accessToken: loginData.accessToken,
-        refreshToken: loginData.refreshToken,
+        ...loginData?.user,
+        accessToken: loginData?.accessToken,
+        refreshToken: loginData?.refreshToken,
       });
 
       router.push("/dashboard");

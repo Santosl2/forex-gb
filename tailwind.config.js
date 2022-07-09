@@ -30,10 +30,6 @@ module.exports = {
           500: "#1E6F9F",
         },
       },
-
-      fontFamily: {
-        body: "Inter, sans-serif",
-      },
     },
   },
   plugins: [require("@tailwindcss/forms"), require("daisyui")],

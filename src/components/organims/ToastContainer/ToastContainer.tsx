@@ -15,7 +15,7 @@ export function ToastContainer() {
         },
       }}
     >
-      <AnimatePresence exitBeforeEnter presenceAffectsLayout>
+      <AnimatePresence>
         {toast.map((t) => (
           <Toast key={t.id} type={t.type} message={t.message} id={t.id} />
         ))}
