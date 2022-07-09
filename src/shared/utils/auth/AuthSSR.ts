@@ -11,7 +11,6 @@ import {
   LOGIN_COOKIE_NAME,
   LOGIN_COOKIE_REFRESH_TOKEN,
 } from "@/shared/constants";
-import { UserData } from "@/shared/interfaces/User";
 import { api } from "@/shared/services/api";
 import { wrapper } from "@/shared/store";
 
@@ -28,7 +27,11 @@ export function AuthSSR<P>(fn: GetServerSideProps<P>) {
         cookies[LOGIN_COOKIE_ACCESS_TOKEN] &&
         cookies[LOGIN_COOKIE_NAME];
 
-      if (!userIsLogged || !cookies[LOGIN_COOKIE_NAME]) {
+      if (
+        !userIsLogged ||
+        !cookies[LOGIN_COOKIE_NAME] ||
+        !cookies[LOGIN_COOKIE_ACCESS_TOKEN]
+      ) {
         return {
           redirect: {
             destination: "/",
@@ -37,12 +40,19 @@ export function AuthSSR<P>(fn: GetServerSideProps<P>) {
         };
       }
 
-      try {
-        const data = JSON.parse(cookies[LOGIN_COOKIE_NAME]) as UserData;
-        const accessToken = cookies[LOGIN_COOKIE_ACCESS_TOKEN];
-        const refreshToken = cookies[LOGIN_COOKIE_REFRESH_TOKEN];
+      const accessToken = cookies[LOGIN_COOKIE_ACCESS_TOKEN];
+      const refreshToken = cookies[LOGIN_COOKIE_REFRESH_TOKEN];
 
-        const { data: userDataReq } = await api.post("users/me");
+      try {
+        const { data: userDataReq } = await api.post(
+          "users/me",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
         delete userDataReq.success;
 

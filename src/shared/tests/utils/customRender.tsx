@@ -2,8 +2,8 @@
 import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
+import { ToastContainer } from "react-toastify";
 
-import { ToastContainer } from "@/components/organims/ToastContainer";
 import { RootState } from "@/shared/store";
 import { combinedReducers } from "@/shared/store/reducers";
 import { configureStore } from "@reduxjs/toolkit";

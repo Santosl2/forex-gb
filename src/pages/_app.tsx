@@ -7,10 +7,10 @@ import type { AppProps } from "next/app";
 
 import "../styles/globals.scss";
 import NextNProgress from "nextjs-progressbar";
-
-import { ToastContainer } from "@/components/organims/ToastContainer";
+import "react-toastify/dist/ReactToastify.css";
 
 import { QueryClientProvider } from "react-query";
+import { ToastContainer } from "react-toastify";
 
 import { queryClient } from "@/shared/services/queryClient";
 
@@ -28,8 +28,21 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           </AnimatePresence>
           <div id="drawerPortal" />
         </main>
-        <ToastContainer />
-        <ReactQueryDevtools />
+
+        <ToastContainer
+          className="customToast"
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
+
         <NextNProgress
           color="#737373"
           startPosition={0.3}
@@ -37,6 +50,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           height={2}
           showOnShallow
         />
+
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </Provider>
   );

@@ -1,11 +1,11 @@
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { Button, FormControl, Input } from "@/components/atoms";
 import { useMutationLoginUser } from "@/shared/hooks/useMutation";
-import { useToastCreate } from "@/shared/hooks/useToast";
 import { useUserLogin } from "@/shared/hooks/useUser";
 import { loginSchema } from "@/shared/schemas/login";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,7 +14,7 @@ import { LoginFormData } from "./Login.types";
 
 export function LoginForm() {
   const loginUser = useMutationLoginUser();
-  const toast = useToastCreate();
+
   const user = useUserLogin();
 
   const router = useRouter();
@@ -33,7 +33,7 @@ export function LoginForm() {
         return;
       }
 
-      toast("Login successful!", { type: "success" });
+      toast.success("Login successful!");
 
       user({
         ...loginData?.user,
@@ -43,9 +43,7 @@ export function LoginForm() {
 
       router.push("/dashboard");
     } catch (e: any) {
-      toast(e.response?.data?.message ?? "Internal server error", {
-        type: "error",
-      });
+      toast.error(e.response?.data?.message ?? "Internal server error");
     } finally {
       reset();
     }

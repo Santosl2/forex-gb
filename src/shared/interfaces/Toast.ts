@@ -1,5 +1,5 @@
 export type Toast = {
-  id: number;
+  id: string | number;
   message: string;
   type: "success" | "error" | "info";
 };

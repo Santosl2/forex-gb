@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 import Link from "next/link";
 
 import { Button, FormControl, Input } from "@/components/atoms";
 import { useMutationRegisterUser } from "@/shared/hooks/useMutation";
-import { useToastCreate } from "@/shared/hooks/useToast";
 import { registerSchema } from "@/shared/schemas/register";
 import { verifyRecaptcha } from "@/shared/utils/verifyRecaptcha";
 import { yupResolver } from "@/shared/utils/yup";
@@ -16,7 +16,6 @@ import { RegisterFormData } from "./Register.types";
 export function RegisterForm() {
   const [emailSent, setEmailSent] = useState(false);
   const registerUser = useMutationRegisterUser();
-  const toast = useToastCreate();
 
   const { register, handleSubmit, formState } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
@@ -34,9 +33,7 @@ export function RegisterForm() {
 
         setEmailSent(true);
       } catch (e: any) {
-        toast(e.response?.data?.message ?? "Internal server error", {
-          type: "error",
-        });
+        toast.warning(e.response?.data?.message ?? "Internal server error");
       }
     }
   };

@@ -33,7 +33,10 @@
     "react-hook-form": "^7.33.1",
     "react-query": "^3.39.1",
     "react-redux": "^8.0.2",
+    "react-toastify": "^9.0.5",
+    "recharts": "^2.1.12",
     "sass": "^1.52.3",
+    "uuid": "^8.3.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {
@@ -47,6 +50,7 @@
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
     "babel-jest": "^28.1.1",

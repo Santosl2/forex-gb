@@ -2,12 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-.toastContainer {
-  @apply top-5;
-  @apply right-5;
-  @apply fixed;
+:root {
+  --toastify-icon-color-info: blue !important;
+  --toastify-icon-color-success: var(--toastify-color-success);
+  --toastify-icon-color-warning: var(--toastify-color-warning);
+  --toastify-icon-color-error: var(--toastify-color-error);
 }
 
+.customToast .Toastify__toast {
+  @apply bg-gray-800;
+  @apply text-white;
+}
 .preventScroll {
   @apply overflow-hidden;
+}
+
+* {
+  @apply text-white;
 }

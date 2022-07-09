@@ -36,17 +36,19 @@ export function getUserData(
   store: any,
   ctx: NextCTX | null = null
 ) {
-  const payload = {
-    id,
-    email: email!,
-    name,
-    refreshToken,
-    accessToken,
-  };
+  if (email) {
+    const payload = {
+      id,
+      email,
+      name,
+      refreshToken,
+      accessToken,
+    };
 
-  store.dispatch(setUser(payload));
+    store.dispatch(setUser(payload));
 
-  createUserCookie(payload, ctx);
+    createUserCookie(payload, ctx);
+  }
 }
 
 export function logoutUser(ctx: NextCTX | null = null) {
