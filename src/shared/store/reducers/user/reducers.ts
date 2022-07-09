@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { UserData } from "@/shared/interfaces/User";
+import { api } from "@/shared/services/api";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 async function loadUserCookie(payload: UserData) {
@@ -13,6 +14,8 @@ export const userReducer = {
     if (process.browser) {
       loadUserCookie(payload);
     }
+
+    api.defaults.headers.common.Authorization = `Bearer ${payload.accessToken}`;
 
     return payload;
   },

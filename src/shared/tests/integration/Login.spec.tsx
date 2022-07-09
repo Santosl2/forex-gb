@@ -1,4 +1,5 @@
 import { LoginForm } from "@/components/templates";
+import { UserData } from "@/shared/interfaces/User";
 import { fireEvent, screen } from "@testing-library/react";
 
 import { act } from "react-dom/test-utils";
@@ -11,6 +12,8 @@ function render() {
 
   return { mockStore };
 }
+
+const mockUseUser = jest.spyOn(require("../../hooks/useUser"), "useUserLogin");
 
 const mockMutation = jest.spyOn(
   require("../../hooks/useMutation"),
@@ -30,9 +33,13 @@ describe("Login Component", () => {
     mockMutation.mockImplementation(() => ({
       isLoading: false,
       mutateAsync: () => ({
-        message: "Invalid credentials",
+        message: "Invalid email or password",
       }),
     }));
+
+    mockUseUser.mockImplementation(() => (f: UserData) => {
+      return f;
+    });
   });
 
   afterEach(() => {
@@ -91,7 +98,9 @@ describe("Login Component", () => {
 
     expect(mockMutation).toHaveBeenCalled();
 
-    expect(await screen.findByText("Invalid credentials")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Invalid email or password")
+    ).toBeInTheDocument();
   });
 
   it("should NOT be able to login user when email is not verified", async () => {
@@ -134,6 +143,13 @@ describe("Login Component", () => {
       mutateAsync: () => ({
         success: true,
         message: "Login successful!",
+        user: {
+          id: "1",
+          name: "Teste",
+          email: "teste@gmail.com",
+        },
+        accessToken: "f",
+        refreshToken: "f",
       }),
     }));
 

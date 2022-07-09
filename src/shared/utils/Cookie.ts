@@ -1,9 +1,6 @@
-import { NextPageContext } from "next/types";
-import { destroyCookie, parseCookies, setCookie } from "nookies";
+import { destroyCookie, setCookie } from "nookies";
 
-import { LOGIN_COOKIE_NAME } from "../constants";
 import { NextCTX } from "../interfaces/Common";
-import { UserData } from "../interfaces/User";
 
 export function cookieInsert(
   name: string,
@@ -18,21 +15,4 @@ export function cookieInsert(
 
 export function cookieDestroy(name: string, ctx: NextCTX | null = null) {
   destroyCookie(ctx, name);
-}
-
-export function cookieGet(name: string, req?: NextPageContext) {
-  const { [name]: cookie } = parseCookies(req ?? null);
-
-  return cookie ?? undefined;
-}
-
-export function getUserCookie(req?: any): UserData {
-  const { [LOGIN_COOKIE_NAME]: cookie } = req.cookies;
-  try {
-    const parsedCookie = JSON.parse(cookie) as UserData;
-
-    return parsedCookie;
-  } catch {
-    return {} as UserData;
-  }
 }

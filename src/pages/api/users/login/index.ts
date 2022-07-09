@@ -7,6 +7,7 @@ import { SignInFormData } from "@/shared/interfaces/Forms";
 import { UserType } from "@/shared/interfaces/User";
 import { loginSchema } from "@/shared/schemas/login";
 import { auth, dbInstanceUsers } from "@/shared/services/firebase";
+import { jwtGenerate } from "@/shared/utils/auth/JWT";
 import { verifyPassword } from "@/shared/utils/hash";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -28,7 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (queryResult.size === 0) {
       return res.status(400).json({
         success: false,
-        message: "Invalid credentials",
+        message: "Invalid email or password",
       });
     }
 
@@ -41,12 +42,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       if (!verifyUserPassword) {
         return res.status(400).json({
           success: false,
-          message: "Invalid credentials",
+          message: "Invalid email or password",
         });
       }
 
       const {
-        user: { refreshToken, accessToken, emailVerified },
+        user: { emailVerified },
       } = (await signInWithEmailAndPassword(auth, email, password)) as UserType;
 
       if (!emailVerified) {
@@ -59,6 +60,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       await auth.signOut();
 
+      const token = jwtGenerate(id.toString());
+
       return res.json({
         success: true,
         user: {
@@ -66,10 +69,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           name,
           email,
         },
-        refreshToken,
-        accessToken,
+        refreshToken: token,
+        accessToken: token,
       });
     } catch (error) {
+      console.log(error);
       return res.status(500).json({
         success: false,
         message: "Oops, an error occurred.",

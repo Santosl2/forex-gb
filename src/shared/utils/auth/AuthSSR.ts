@@ -12,6 +12,7 @@ import {
   LOGIN_COOKIE_REFRESH_TOKEN,
 } from "@/shared/constants";
 import { UserData } from "@/shared/interfaces/User";
+import { api } from "@/shared/services/api";
 import { wrapper } from "@/shared/store";
 
 import { getUserData, logoutUser } from "./UserLogin";
@@ -27,7 +28,7 @@ export function AuthSSR<P>(fn: GetServerSideProps<P>) {
         cookies[LOGIN_COOKIE_ACCESS_TOKEN] &&
         cookies[LOGIN_COOKIE_NAME];
 
-      if (!userIsLogged) {
+      if (!userIsLogged || !cookies[LOGIN_COOKIE_NAME]) {
         return {
           redirect: {
             destination: "/",
@@ -41,26 +42,19 @@ export function AuthSSR<P>(fn: GetServerSideProps<P>) {
         const accessToken = cookies[LOGIN_COOKIE_ACCESS_TOKEN];
         const refreshToken = cookies[LOGIN_COOKIE_REFRESH_TOKEN];
 
-        if (data.email) {
-          getUserData(
-            {
-              ...data,
-              accessToken,
-              refreshToken,
-            },
-            store,
-            ctx
-          );
-        } else {
-          logoutUser(ctx);
+        const { data: userDataReq } = await api.post("users/me");
 
-          return {
-            redirect: {
-              destination: "/",
-              permanent: false,
-            },
-          };
-        }
+        delete userDataReq.success;
+
+        getUserData(
+          {
+            ...userDataReq,
+            accessToken,
+            refreshToken,
+          },
+          store,
+          ctx
+        );
       } catch (e) {
         console.log(
           "🚀 ~ file: AuthSSR.ts ~ line 65 ~ returnwrapper.getServerSideProps ~ e",

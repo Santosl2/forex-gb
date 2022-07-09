@@ -9,8 +9,11 @@ import { DrawerProps } from "../Drawer.types";
 export function DrawerOpen({ id }: Pick<DrawerProps, "id">) {
   const handleClick = useCallback(() => {
     const swapCheckbox = document.getElementById("swapId") as HTMLInputElement;
+    const { checked } = swapCheckbox;
 
-    swapCheckbox.checked = !swapCheckbox.checked;
+    swapCheckbox.checked = !checked;
+
+    document.body.classList.toggle("preventScroll");
   }, []);
 
   return (

@@ -21,7 +21,9 @@ const mockedSuccessUser = [
 ];
 
 jest.mock("firebase/auth", () => ({
-  getAuth: () => true,
+  getAuth: () => ({
+    signOut: () => true,
+  }),
   signInWithEmailAndPassword: (i: string, email: string) => ({
     user: {
       accessToken: "654321",
@@ -56,6 +58,8 @@ jest.mock("firebase/firestore", () => ({
   collection: () => true,
 }));
 
+const mockedJWT = jest.spyOn(require("../../../utils/auth/JWT"), "jwtGenerate");
+
 const mockHashPassword = jest.spyOn(
   require("../../../utils/hash"),
   "verifyPassword"
@@ -64,6 +68,7 @@ const mockHashPassword = jest.spyOn(
 describe("[API] Login ", () => {
   beforeAll(() => {
     mockHashPassword.mockImplementation(() => true);
+    mockedJWT.mockReturnValue("654321");
   });
 
   afterEach(() => {
@@ -145,7 +150,7 @@ describe("[API] Login ", () => {
     expect(res._getData()).toBe(
       JSON.stringify({
         success: false,
-        message: "Invalid credentials",
+        message: "Invalid email or password",
       })
     );
   });
@@ -166,7 +171,7 @@ describe("[API] Login ", () => {
     expect(res._getData()).toBe(
       JSON.stringify({
         success: false,
-        message: "Invalid credentials",
+        message: "Invalid email or password",
       })
     );
   });
@@ -220,7 +225,7 @@ describe("[API] Login ", () => {
           name,
           email,
         },
-        refreshToken: "123456",
+        refreshToken: "654321",
         accessToken: "654321",
       })
     );
