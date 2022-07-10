@@ -15,11 +15,12 @@ import { Upload } from "phosphor-react";
 import { ALLOWED_UPLOAD_TYPES } from "@/shared/constants";
 import { classNames } from "@/shared/utils/classNames";
 
+import { CopyButton } from "../CopyButton";
 import { Label } from "../Label";
 import { InputProps } from "./Input.types";
 
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { label, error, id, ...props },
+  { label, error, id, enableCopyButton, ...props },
   ref
 ) => {
   const hasError = !!error;
@@ -62,14 +63,17 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           </label>
         ))}
 
-      <input
-        {...props}
-        ref={ref}
-        id={id}
-        className={buttonClasses}
-        onChange={props.type === "file" ? onUpdateFile : () => {}}
-      />
-      {hasError && <p className="self-start mt-3 text-red-error">{error}</p>}
+      <div className="relative">
+        <input
+          {...props}
+          ref={ref}
+          id={id}
+          className={buttonClasses}
+          onChange={props.type === "file" ? onUpdateFile : () => {}}
+        />
+        {hasError && <p className="self-start mt-3 text-red-error">{error}</p>}
+        {enableCopyButton && id && <CopyButton copyId={id} />}
+      </div>
     </>
   );
 };

@@ -32,6 +32,7 @@ export function AuthSSR<P>(fn: GetServerSideProps<P>) {
         !cookies[LOGIN_COOKIE_NAME] ||
         !cookies[LOGIN_COOKIE_ACCESS_TOKEN]
       ) {
+        console.log("User is not logged");
         return {
           redirect: {
             destination: "/",
