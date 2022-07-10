@@ -5,14 +5,14 @@
 
 import { Drawer, DrawerOpen } from "@/components/molecules/Drawer";
 
+import { AddMoney } from "./AddMoney";
 import { HeaderProps } from "./Header.types";
 import { Notification } from "./Notification";
-import { Search } from "./Search";
 
 export function Header({ id, items }: HeaderProps) {
   return (
     <>
-      <header className="navbar bg-base-300">
+      <header className="navbar bg-base-300 border-b border-gray-900">
         <div className="navbar-start">
           <DrawerOpen id={id} />
         </div>
@@ -22,8 +22,8 @@ export function Header({ id, items }: HeaderProps) {
           </a>
         </div>
         <div className="navbar-end">
-          <Search />
           <Notification />
+          <AddMoney />
         </div>
       </header>
       <Drawer id={id} items={items} />

@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 
+import { ModalAdd } from "@/components/organims/ModalAdd";
 import { queryClient } from "@/shared/services/queryClient";
 
 import { Provider } from "react-redux";
@@ -26,7 +27,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           <AnimatePresence exitBeforeEnter>
             <Component {...pageProps} key={router.route} />
           </AnimatePresence>
-          <div id="drawerPortal" />
+
+          <ModalAdd />
         </main>
 
         <ToastContainer

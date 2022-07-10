@@ -17,6 +17,8 @@ export default function Document() {
       <body data-theme="dark">
         <Main />
         <NextScript />
+        <div id="drawerPortal" />
+        <div id="modalPortal" />
       </body>
     </Html>
   );

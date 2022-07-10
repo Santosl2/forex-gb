@@ -2,21 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --toastify-icon-color-info: blue !important;
-  --toastify-icon-color-success: var(--toastify-color-success);
-  --toastify-icon-color-warning: var(--toastify-color-warning);
-  --toastify-icon-color-error: var(--toastify-color-error);
-}
-
-.customToast .Toastify__toast {
+.customToast .Toastify__toast,
+.recharts-default-tooltip {
   @apply bg-gray-800;
   @apply text-white;
 }
+
 .preventScroll {
   @apply overflow-hidden;
 }
 
-* {
+header,
+body {
   @apply text-white;
+}
+
+.recharts-default-tooltip {
+  background-color: #242933 !important;
+  color: #fff;
+}
+
+.customInputFile {
+  @apply w-0 hidden;
 }

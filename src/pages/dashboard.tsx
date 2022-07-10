@@ -118,8 +118,8 @@ export default function Dashboard() {
 
         <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
           <StatContainer>
-            <Stat title="Your amount" value="25.6K" />
-            <Stat title="Percent of this month" value="2.6%" color="error" />
+            <Stat title="Your amount" value="25.6K" color="green-500" />
+            <Stat title="Percent of this month" value="2.6%" color="red-700" />
             <Stat title="Your profits" value="25.6K" color="white" />
           </StatContainer>
         </div>

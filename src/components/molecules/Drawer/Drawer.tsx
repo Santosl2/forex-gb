@@ -29,8 +29,8 @@ export function Drawer({ id, items }: DrawerProps) {
       <input id={id} type="checkbox" className="drawer-toggle" />
 
       <div className="drawer-side">
-        <label htmlFor={id} className="drawer-overlay" />
-        <ul className="menu p-4 overflow-y-auto w-80 bg-base-300 text-base-content">
+        <label htmlFor={id} className="drawer-overlay bg-black z-10" />
+        <ul className="menu p-4 overflow-y-auto w-80 bg-base-300 text-base-content border-r border-gray-900 z-20">
           {items.map((item) => (
             <Link href={item.href} key={item.id} passHref>
               <ListItem>
@@ -42,6 +42,6 @@ export function Drawer({ id, items }: DrawerProps) {
       </div>
     </div>,
     // @ts-ignore
-    mounted ? document.querySelector("#drawerPortal") : window.document.body
+    document.querySelector("#drawerPortal")
   );
 }
