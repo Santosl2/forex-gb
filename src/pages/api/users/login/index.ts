@@ -47,7 +47,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
     const doc = queryResult.docs[0];
 
     try {
-      const { password: userPassword, name, id } = doc.data();
+      const { password: userPassword, name, id, isAdmin } = doc.data();
       const verifyUserPassword = await verifyPassword(password, userPassword);
 
       if (!verifyUserPassword) {
@@ -79,6 +79,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
           id,
           name,
           email,
+          isAdmin,
         },
         refreshToken: token,
         accessToken: token,

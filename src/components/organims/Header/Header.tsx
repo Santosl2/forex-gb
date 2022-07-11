@@ -9,7 +9,7 @@ import { AddMoney } from "./AddMoney";
 import { HeaderProps } from "./Header.types";
 import { Notification } from "./Notification";
 
-export function Header({ id, items }: HeaderProps) {
+export function Header({ id }: HeaderProps) {
   return (
     <>
       <header className="navbar bg-base-300 border-b border-gray-900">
@@ -26,7 +26,7 @@ export function Header({ id, items }: HeaderProps) {
           <AddMoney />
         </div>
       </header>
-      <Drawer id={id} items={items} />
+      <Drawer id={id} />
     </>
   );
 }

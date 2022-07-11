@@ -23,7 +23,7 @@ const index = async (req: CustomRequest, res: NextApiResponse) => {
       }
 
       const doc = queryResult.docs[0];
-      const { name: username, id, email } = doc.data();
+      const { name: username, id, email, isAdmin } = doc.data();
 
       res.setHeader(
         "Cache-Control",
@@ -35,6 +35,7 @@ const index = async (req: CustomRequest, res: NextApiResponse) => {
         name: username,
         id,
         email,
+        isAdmin,
       });
     } catch (e) {
       return res.status(400).json({

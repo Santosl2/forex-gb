@@ -161,13 +161,13 @@ export function ModalAdd() {
                     </tr>
                     <tr className="active">
                       <td>Silver</td>
-                      <td>$2001.00 - $5000.00</td>
+                      <td>$2000.00 - $5000.00</td>
                       <td>4% at 5%</td>
                       <td>30 days</td>
                     </tr>
                     <tr>
                       <td>Diamond</td>
-                      <td>$5001.00 - </td>
+                      <td>$5000.00 - </td>
                       <td>5% at 6%</td>
                       <td>30 days</td>
                     </tr>

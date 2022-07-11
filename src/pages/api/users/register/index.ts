@@ -88,6 +88,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         name: username,
         email,
         password: hashedPassword,
+        isAdmin: false,
       });
 
       const {

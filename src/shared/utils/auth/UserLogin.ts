@@ -21,6 +21,7 @@ export function createUserCookie(
       id: payload.id,
       email: payload.email,
       name: payload.name,
+      isAdmin: payload.isAdmin,
     }),
     ctx
   );
@@ -32,7 +33,7 @@ export function createUserCookie(
 }
 
 export function getUserData(
-  { email, name, id, refreshToken, accessToken }: UserData,
+  { email, name, id, refreshToken, accessToken, isAdmin }: UserData,
   store: any,
   ctx: NextCTX | null = null
 ) {
@@ -41,6 +42,7 @@ export function getUserData(
       id,
       email,
       name,
+      isAdmin,
       refreshToken,
       accessToken,
     };

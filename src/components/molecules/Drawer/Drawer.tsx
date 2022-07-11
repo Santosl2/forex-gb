@@ -3,17 +3,21 @@
 /* eslint-disable consistent-return */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
 import Link from "next/link";
 
 import { ListItem } from "@/components/atoms";
+import { HEADER_ADMIN_ITEMS, HEADER_USER_ITEMS } from "@/shared/constants";
+import { useUser } from "@/shared/hooks/useUser";
 
 import { DrawerProps } from "./Drawer.types";
 
-export function Drawer({ id, items }: DrawerProps) {
+export function Drawer({ id }: DrawerProps) {
   const [mounted, setMounted] = useState(false);
+  const user = useUser();
+
   useEffect(() => {
     setMounted(true);
 
@@ -21,6 +25,11 @@ export function Drawer({ id, items }: DrawerProps) {
       setMounted(false);
     };
   }, []);
+
+  const formatedItems = useMemo(() => {
+    if (user.isAdmin) return HEADER_ADMIN_ITEMS;
+    return HEADER_USER_ITEMS;
+  }, [user]);
 
   if (!mounted) return <></>;
 
@@ -31,11 +40,13 @@ export function Drawer({ id, items }: DrawerProps) {
       <div className="drawer-side">
         <label htmlFor={id} className="drawer-overlay bg-black z-10" />
         <ul className="menu p-4 overflow-y-auto w-80 bg-base-300 text-base-content border-r border-gray-900 z-20">
-          {items.map((item) => (
+          {formatedItems.map((item) => (
             <Link href={item.href} key={item.id} passHref>
-              <ListItem>
-                <a>{item.name} </a>
-              </ListItem>
+              <a>
+                <ListItem>
+                  <a>{item.name} </a>
+                </ListItem>
+              </a>
             </Link>
           ))}
         </ul>

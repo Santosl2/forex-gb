@@ -10,6 +10,7 @@ export type UserData = {
   id?: string;
   name: string;
   email: string;
+  isAdmin: boolean;
   accessToken: string;
   refreshToken: string;
 };
