@@ -8,19 +8,26 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 import { Upload } from "phosphor-react";
 
 import { Button, Input } from "@/components/atoms";
 import { CopyButton } from "@/components/atoms/CopyButton";
+import { useMutationAddMoney } from "@/shared/hooks/useMutation";
 import { modalAddSchema } from "@/shared/schemas/modal";
-import { formatCurrency, formatCurrencyRegex } from "@/shared/utils/common";
+import {
+  convertFileToBase64,
+  formatCurrency,
+  formatCurrencyRegex,
+} from "@/shared/utils/common";
 import { yupResolver } from "@/shared/utils/yup";
 
 import { ModalAddFormData } from "./ModalAdd.types";
 
 export function ModalAdd() {
   const [mounted, setMounted] = useState(false);
+  const addMoneyMutation = useMutationAddMoney();
 
   const { register, handleSubmit, formState, watch, setValue, reset } =
     useForm<ModalAddFormData>({
@@ -28,8 +35,21 @@ export function ModalAdd() {
     });
 
   const onSubmit: SubmitHandler<ModalAddFormData> = async (data) => {
-    console.log(data);
-    reset();
+    const { amount, voucherFile } = data;
+
+    const formatedData = {
+      amount,
+      voucherFile: await convertFileToBase64(voucherFile[0]),
+    };
+
+    try {
+      const dataMutation = await addMoneyMutation.mutateAsync(formatedData);
+      toast.success(dataMutation.message);
+    } catch (e: any) {
+      toast.error(e.response?.data?.message ?? "Internal server error");
+    } finally {
+      reset();
+    }
   };
 
   const defaultCurrencyValue = () => {
@@ -101,8 +121,8 @@ export function ModalAdd() {
                   htmlFor="uploadVoucher"
                   className="btn flex items-center gap-2 mb-5 text-sm"
                 >
-                  {watch("voucher")?.length > 0 ? (
-                    watch("voucher")[0]?.name
+                  {watch("voucherFile")?.length > 0 ? (
+                    watch("voucherFile")[0]?.name
                   ) : (
                     <>
                       <Upload size={20} /> Insert a payment voucher
@@ -110,15 +130,15 @@ export function ModalAdd() {
                   )}
                 </label>
                 <input
-                  {...register("voucher")}
+                  {...register("voucherFile")}
                   type="file"
                   id="uploadVoucher"
                   className="customInputFile"
                   accept=".png, .jpg, .jpeg"
                 />
-                {formState.errors.voucher && (
+                {formState.errors.voucherFile && (
                   <p className="self-start mt-3 text-red-error">
-                    {formState.errors.voucher.message}
+                    {formState.errors.voucherFile.message}
                   </p>
                 )}
               </div>
@@ -129,14 +149,14 @@ export function ModalAdd() {
                       <th>#</th>
                       <th>Amount</th>
                       <th>Percent</th>
-                      <th>Days</th>
+                      <th>Days to withdraw</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>Bronze</td>
                       <td>$500.00 - $2000.00</td>
-                      <td>3% at 5%</td>
+                      <td>3% at 4%</td>
                       <td>30 days</td>
                     </tr>
                     <tr className="active">
@@ -163,7 +183,10 @@ export function ModalAdd() {
               >
                 Cancel
               </label>
-              <Button className="w-20  bg-emerald-800 text-white hover:bg-emerald-900 hover:border-emerald-900 border-emerald-800">
+              <Button
+                className="w-20  bg-emerald-800 text-white hover:bg-emerald-900 hover:border-emerald-900 border-emerald-800"
+                isLoading={addMoneyMutation.isLoading}
+              >
                 Send
               </Button>
             </div>

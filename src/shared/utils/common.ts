@@ -9,3 +9,13 @@ export function formatCurrency(value: number) {
 export function formatCurrencyRegex(value: number) {
   return (value / 100).toFixed(2);
 }
+
+export const convertFileToBase64 = (
+  file: File
+): Promise<string | ArrayBuffer | null> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });

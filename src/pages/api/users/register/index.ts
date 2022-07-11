@@ -103,13 +103,6 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
       return res.status(201).json({
         success: true,
-        user: {
-          id: userId,
-          name: username,
-          email,
-        },
-        refreshToken,
-        accessToken,
       });
     } catch (error) {
       console.log(error);

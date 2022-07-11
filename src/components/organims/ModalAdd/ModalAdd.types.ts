@@ -1,4 +1,4 @@
 export type ModalAddFormData = {
-  voucher: File[];
+  voucherFile: File[];
   amount: string;
 };
