@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 
 import { Check, CopySimple } from "phosphor-react";
 
@@ -6,7 +6,7 @@ import { classNames } from "@/shared/utils/classNames";
 
 import { CopyButtonProps } from "./CopyButton.types";
 
-export function CopyButton({ copyId, isInput = false }: CopyButtonProps) {
+function CopyBase({ copyId, isInput = false, size = 22 }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   const copyClasses = useMemo(() => {
@@ -39,8 +39,12 @@ export function CopyButton({ copyId, isInput = false }: CopyButtonProps) {
   }, [copyId]);
 
   if (copied) {
-    return <Check size={24} className={copyClasses} />;
+    return <Check size={size} className={copyClasses} />;
   }
 
-  return <CopySimple size={22} className={copyClasses} onClick={handleClick} />;
+  return (
+    <CopySimple size={size} className={copyClasses} onClick={handleClick} />
+  );
 }
+
+export const CopyButton = memo(CopyBase);

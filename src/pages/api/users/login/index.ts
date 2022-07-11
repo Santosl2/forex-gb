@@ -1,8 +1,9 @@
 /* eslint-disable consistent-return */
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { getDocs, query, where } from "firebase/firestore";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 
+import { CustomRequest } from "@/shared/interfaces/Common";
 import { SignInFormData } from "@/shared/interfaces/Forms";
 import { UserType } from "@/shared/interfaces/User";
 import { loginSchema } from "@/shared/schemas/login";
@@ -10,8 +11,18 @@ import { auth, dbInstanceUsers } from "@/shared/services/firebase";
 import { jwtGenerate } from "@/shared/utils/auth/JWT";
 import { verifyPassword } from "@/shared/utils/hash";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+import guestMiddleware from "../../middlewares/guestMiddleware";
+
+export default async (req: CustomRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
+    try {
+      await guestMiddleware(req, res);
+    } catch {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
     const { email, password } = req.body as SignInFormData;
 
     try {

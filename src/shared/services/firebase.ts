@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { collection, getFirestore } from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -16,3 +17,15 @@ export const firebase = initializeApp(firebaseConfig);
 export const database = getFirestore(firebase);
 export const auth = getAuth();
 export const dbInstanceUsers = collection(database, "users");
+export const storage = getStorage();
+
+export const storageRef = ref(storage, "images");
+
+export const uploadFile = async (file: File) => {
+  try {
+    await uploadBytes(storageRef, file);
+    return true;
+  } catch {
+    return false;
+  }
+};

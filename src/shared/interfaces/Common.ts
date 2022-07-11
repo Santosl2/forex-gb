@@ -1,5 +1,7 @@
 import {
   GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
   NextPageContext,
   PreviewData,
 } from "next/types";
@@ -9,3 +11,16 @@ export type NextCTX =
   | GetServerSidePropsContext<ParsedUrlQuery, PreviewData>
   | NextPageContext
   | null;
+
+export type CustomRequest = NextApiRequest & {
+  user: string;
+  headers: {
+    authorization: string;
+  };
+};
+
+export type CustomResponse = NextApiResponse & {
+  headers: {
+    authorization: string;
+  };
+};

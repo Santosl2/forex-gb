@@ -1,10 +1,11 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react/jsx-no-useless-fragment */
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -13,6 +14,7 @@ import { Upload } from "phosphor-react";
 import { Button, Input } from "@/components/atoms";
 import { CopyButton } from "@/components/atoms/CopyButton";
 import { modalAddSchema } from "@/shared/schemas/modal";
+import { formatCurrency, formatCurrencyRegex } from "@/shared/utils/common";
 import { yupResolver } from "@/shared/utils/yup";
 
 import { ModalAddFormData } from "./ModalAdd.types";
@@ -20,7 +22,7 @@ import { ModalAddFormData } from "./ModalAdd.types";
 export function ModalAdd() {
   const [mounted, setMounted] = useState(false);
 
-  const { register, handleSubmit, formState, watch, reset } =
+  const { register, handleSubmit, formState, watch, setValue, reset } =
     useForm<ModalAddFormData>({
       resolver: yupResolver(modalAddSchema),
     });
@@ -28,6 +30,16 @@ export function ModalAdd() {
   const onSubmit: SubmitHandler<ModalAddFormData> = async (data) => {
     console.log(data);
     reset();
+  };
+
+  const defaultCurrencyValue = () => {
+    const amount = +watch("amount");
+
+    if (isNaN(amount)) {
+      return formatCurrency(0);
+    }
+
+    return formatCurrency(+amount.toString().replace("$", ""));
   };
 
   const flushInput = () => {
@@ -56,14 +68,14 @@ export function ModalAdd() {
               You must deposit the money in the wallet below and after that,
               send a proof so that we can approve the payment.
             </p>
-            <div className="flex gap-2">
-              Wallet:{" "}
+            <div className="flex flex-wrap gap-1 text-sm">
+              Wallet:
               <b className="text-green-700" id="wallet">
                 {process.env.NEXT_PUBLIC_WALLET}
               </b>
-              <CopyButton copyId="wallet" />
+              <CopyButton copyId="wallet" size={17} />
             </div>
-            <p>
+            <p className="text-sm">
               Network: <b className="text-orange-200">Tron - TRC20</b>
             </p>
 
@@ -74,17 +86,28 @@ export function ModalAdd() {
                 id="amount"
                 {...register("amount")}
                 error={formState.errors.amount?.message}
+                value={defaultCurrencyValue()}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const { value } = e.target;
+
+                  e.target.value = value.replace(/[^0-9]/g, "");
+                  e.target.value = formatCurrencyRegex(+e.target.value);
+                  setValue("amount", e.target.value);
+                }}
               />
 
               <div className="mt-5">
                 <label
                   htmlFor="uploadVoucher"
-                  className="btn flex items-center gap-2 mb-5"
+                  className="btn flex items-center gap-2 mb-5 text-sm"
                 >
-                  <Upload size={20} />
-                  {watch("voucher")?.length > 0
-                    ? watch("voucher")[0]?.name
-                    : "Insert a payment voucher"}
+                  {watch("voucher")?.length > 0 ? (
+                    watch("voucher")[0]?.name
+                  ) : (
+                    <>
+                      <Upload size={20} /> Insert a payment voucher
+                    </>
+                  )}
                 </label>
                 <input
                   {...register("voucher")}
@@ -135,7 +158,7 @@ export function ModalAdd() {
             <div className="modal-action">
               <label
                 htmlFor="modalAdd"
-                className="btn bg-rose-800 text-white hover:bg-rose-900 hover:border-rose-900 border-rose-800 mr-auto"
+                className="btn btn-link text-red-500 mr-auto"
                 onClick={flushInput}
               >
                 Cancel

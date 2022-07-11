@@ -8,8 +8,9 @@ import {
   User,
 } from "firebase/auth";
 import { addDoc, getDocs, query, where } from "firebase/firestore";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 
+import { CustomRequest } from "@/shared/interfaces/Common";
 import { SignUpFormData } from "@/shared/interfaces/Forms";
 import { UserType } from "@/shared/interfaces/User";
 import { registerSchema } from "@/shared/schemas/register";
@@ -17,8 +18,19 @@ import { verifyCaptcha } from "@/shared/services/auth/captcha";
 import { auth, dbInstanceUsers } from "@/shared/services/firebase";
 import { hashPassword } from "@/shared/utils/hash";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+import guestMiddleware from "../../middlewares/guestMiddleware";
+
+export default async (req: CustomRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
+    try {
+      await guestMiddleware(req, res);
+    } catch {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
     const { username, email, password, confirmPassword, captchaToken } =
       req.body as SignUpFormData;
 
