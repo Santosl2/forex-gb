@@ -13,8 +13,10 @@ import { Stat } from "@/components/molecules/Stat/Stat";
 import { StatContainer } from "@/components/organims";
 import { Header } from "@/components/organims/Header";
 import { SEO } from "@/SEO";
+import { useUserStatus } from "@/shared/hooks/useQuery";
 import { useUser } from "@/shared/hooks/useUser";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
+import { formatCurrency } from "@/shared/utils/common";
 
 const data = [
   {
@@ -81,27 +83,7 @@ const dashboardVariants: Variants = {
 
 export default function Dashboard() {
   const { name } = useUser();
-
-  const items = [
-    {
-      id: 1,
-      name: "Dashboard",
-      icon: "dashboard",
-      href: "/dashboard",
-    },
-    {
-      id: 2,
-      name: "Organizations",
-      icon: "organization",
-      href: "/organizations",
-    },
-    {
-      id: 3,
-      name: "Users",
-      icon: "user",
-      href: "/users",
-    },
-  ];
+  const { isLoading, isFetching, data: registers } = useUserStatus();
 
   return (
     <>
@@ -116,11 +98,30 @@ export default function Dashboard() {
       >
         <h2 className="text-4xl">Hello, {name}</h2>
 
-        <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
+        <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center ">
           <StatContainer>
-            <Stat title="Your amount" value="25.6K" color="green-500" />
-            <Stat title="Percent of this month" value="2.6%" color="red-700" />
-            <Stat title="Your profits" value="25.6K" color="white" />
+            <Stat
+              title="Your amount"
+              value={formatCurrency(
+                registers?.data?.totalAmountWithoutPercent || 0
+              )}
+              color="orange-200"
+              isLoading={isLoading}
+            />
+            <Stat
+              title="Actual percent"
+              value={`${registers?.data.percentOfMonth}%`}
+              color="red-700"
+              isLoading={isLoading}
+            />
+            <Stat
+              title="Your profits"
+              value={formatCurrency(
+                registers?.data?.totalAmountWithPercent || 0
+              )}
+              color="green-500"
+              isLoading={isLoading}
+            />
           </StatContainer>
         </div>
 

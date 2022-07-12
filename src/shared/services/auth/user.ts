@@ -17,3 +17,9 @@ export async function loginUser(user: SignInFormData) {
 
   return response.data;
 }
+
+export async function getStatus() {
+  const response = await api.get("/users/status");
+
+  return response.data;
+}

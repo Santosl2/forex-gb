@@ -27,7 +27,7 @@ const index = async (req: CustomRequest, res: NextApiResponse) => {
 
       res.setHeader(
         "Cache-Control",
-        "public, s-maxage=10, stale-while-revalidate=59"
+        "public, s-maxage=60, stale-while-revalidate=60"
       );
 
       return res.json({

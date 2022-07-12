@@ -5,3 +5,4 @@ export * from "./Button";
 
 export * from "./Logo";
 export * from "./ListItem";
+export * from "./Spinner";

@@ -3,9 +3,11 @@ import { useMemo } from "react";
 
 import { motion, Variants } from "framer-motion";
 
+import { Spinner } from "@/components/atoms";
 import { Badge } from "@/components/atoms/Badge/Badge";
 import { Table } from "@/components/organims";
 import { Header } from "@/components/organims/Header";
+import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { SEO } from "@/SEO";
 import { useUserFinances } from "@/shared/hooks/useQuery";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
@@ -37,7 +39,7 @@ const badgeType = {
 } as any;
 
 export default function PaymentVouchers() {
-  const { isLoading, data: registers } = useUserFinances();
+  const { isLoading, isFetching, data: registers } = useUserFinances();
 
   const formattedData = useMemo(() => {
     return registers?.data?.map((res: any) => {
@@ -100,12 +102,18 @@ export default function PaymentVouchers() {
         variants={dashboardVariants}
         className="max-w-[1100px] m-auto p-5 mt-5 relative z-10"
       >
-        <h2 className="text-4xl">Your payments</h2>
+        <h2 className="text-4xl flex gap-2 items-center">
+          Your payments {isFetching && <Spinner />}
+        </h2>
 
         <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
+          {isLoading && !registers && <Spinner />}
+
           {!isLoading && registers && (
             <Table columns={columns} data={formattedData} />
           )}
+
+          {registers?.data.length === 0 && !isLoading && <NoResults />}
         </div>
       </motion.section>
     </>
