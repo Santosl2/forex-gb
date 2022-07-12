@@ -2,7 +2,7 @@ export type UserFinancesResponse = {
   data: {
     amount: number;
     createdAt: number;
-    approved: boolean;
+    status: "recused" | "approved" | "pending";
     url: string;
   }[];
 };

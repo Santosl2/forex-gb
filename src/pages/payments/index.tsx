@@ -30,6 +30,12 @@ const dashboardVariants: Variants = {
   },
 };
 
+const badgeType = {
+  recused: "error",
+  approved: "success",
+  pending: "warning",
+} as any;
+
 export default function PaymentVouchers() {
   const { isLoading, data: registers } = useUserFinances();
 
@@ -39,7 +45,7 @@ export default function PaymentVouchers() {
         amount: res.amount,
         voucher: res.url,
         createdAt: res.createdAt,
-        status: res.approved,
+        status: res.status,
       };
     });
   }, [registers]);
@@ -70,9 +76,7 @@ export default function PaymentVouchers() {
         Header: "Status",
         accessor: "status",
         Cell: ({ cell: { value } }: any) => (
-          <Badge type={value ? "success" : "error"}>
-            {value ? "Approved" : "Pending"}
-          </Badge>
+          <Badge type={badgeType[value]}>{value}</Badge>
         ),
       },
       {

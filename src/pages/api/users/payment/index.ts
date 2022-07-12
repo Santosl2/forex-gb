@@ -47,7 +47,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         userId: user,
         url: data,
         amount: amount.replace("$", ""),
-        approved: false,
+        status: "pending",
         createdAt: new Date().getTime(),
       });
 
@@ -69,12 +69,12 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
     const queryResult = await getDocs(q);
 
     const data = queryResult.docs.map((doc) => {
-      const { url, amount, approved, createdAt } = doc.data();
+      const { url, amount, status, createdAt } = doc.data();
 
       return {
         url,
         amount,
-        approved,
+        status,
         createdAt,
       };
     });
