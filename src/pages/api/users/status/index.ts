@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable consistent-return */
 import { getDocs, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
@@ -43,16 +44,11 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         where("createdAt", ">=", initialDayOfMonthUnix),
         where("createdAt", "<=", endDayOfMonthUnix)
       );
-      const queryPercent = query(dbInstanceConfig, where("percent", ">", "0"));
 
       const queryResult = await getDocs(q);
-      const queryPercentResult = await getDocs(queryPercent);
-
-      const percentOfMonth = parseFloat(
-        queryPercentResult.docs[0].data().percent
-      );
 
       const data = queryResult.docs.map((doc) => doc.data());
+
       const totalAmountWithoutPercent = data.reduce((acc, curr) => {
         const approvedDate = new Date(curr.approvedAt).getDate();
 
@@ -62,6 +58,24 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
         return Number(acc);
       }, 0);
+
+      const findAmount =
+        totalAmountWithoutPercent >= 5000
+          ? 5000
+          : totalAmountWithoutPercent >= 2000
+          ? 2000
+          : 500;
+
+      const queryPercent = query(
+        dbInstanceConfig,
+        where("amountMin", "==", findAmount)
+      );
+
+      const queryPercentResult = await getDocs(queryPercent);
+
+      const percentOfMonth = parseFloat(
+        queryPercentResult.docs[0].data().percent
+      );
 
       const percentCalc = (totalAmountWithoutPercent / 100) * percentOfMonth;
       const totalAmountWithPercent = totalAmountWithoutPercent + percentCalc;
@@ -80,7 +94,8 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
           percentOfMonth,
         },
       });
-    } catch {
+    } catch (e) {
+      console.log("🚀 ~ file: index.ts ~ line 91 ~ e", e);
       return res.status(500).json({
         success: false,
         message: "Oops, an error occurred.",

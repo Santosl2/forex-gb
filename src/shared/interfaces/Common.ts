@@ -24,3 +24,8 @@ export type CustomResponse = NextApiResponse & {
     authorization: string;
   };
 };
+
+export type yieldCronResponse = {
+  userId: string;
+  amount: number;
+};

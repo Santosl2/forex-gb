@@ -38,7 +38,7 @@ export function ModalAdd() {
     const { amount, voucherFile } = data;
 
     const formatedData = {
-      amount,
+      amount: amount.replace(",", ""),
       voucherFile: await convertFileToBase64(voucherFile[0]),
     };
 
