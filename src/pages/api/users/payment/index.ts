@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import { addDoc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
 import { ModalAddFormData } from "@/components/organims/ModalAdd/ModalAdd.types";
@@ -65,7 +65,11 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
   }
 
   if (req.method === "GET") {
-    const q = query(dbInstancesUsersFinances, where("userId", "==", user));
+    const q = query(
+      dbInstancesUsersFinances,
+      where("userId", "==", user),
+      orderBy("createdAt", "desc")
+    );
     const queryResult = await getDocs(q);
 
     const data = queryResult.docs.map((doc) => {
@@ -78,6 +82,11 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         createdAt,
       };
     });
+
+    res.setHeader(
+      "Cache-Control",
+      "public, s-maxage=60, stale-while-revalidate=60"
+    );
 
     return res.status(200).json({
       success: true,

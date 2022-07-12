@@ -53,13 +53,13 @@ export function ModalAdd() {
   };
 
   const defaultCurrencyValue = () => {
-    const amount = +watch("amount");
+    const amount = watch("amount")?.replace("$", "") || 0;
 
-    if (isNaN(amount)) {
+    if (isNaN(+amount)) {
       return formatCurrency(0);
     }
 
-    return formatCurrency(+amount.toString().replace("$", ""));
+    return formatCurrency(+amount);
   };
 
   const flushInput = () => {
@@ -111,6 +111,7 @@ export function ModalAdd() {
                   const { value } = e.target;
 
                   e.target.value = value.replace(/[^0-9]/g, "");
+
                   e.target.value = formatCurrencyRegex(+e.target.value);
                   setValue("amount", e.target.value);
                 }}
@@ -154,19 +155,19 @@ export function ModalAdd() {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Bronze</td>
+                      <td>1</td>
                       <td>$500.00 - $2000.00</td>
                       <td>3% at 4%</td>
                       <td>30 days</td>
                     </tr>
                     <tr className="active">
-                      <td>Silver</td>
+                      <td>2</td>
                       <td>$2000.00 - $5000.00</td>
                       <td>4% at 5%</td>
                       <td>30 days</td>
                     </tr>
                     <tr>
-                      <td>Diamond</td>
+                      <td>3</td>
                       <td>$5000.00 - </td>
                       <td>5% at 6%</td>
                       <td>30 days</td>
@@ -184,7 +185,7 @@ export function ModalAdd() {
                 Cancel
               </label>
               <Button
-                className="w-20  bg-emerald-800 text-white hover:bg-emerald-900 hover:border-emerald-900 border-emerald-800"
+                className="w-24 bg-emerald-800 text-white hover:bg-emerald-900 hover:border-emerald-900 border-emerald-800"
                 isLoading={addMoneyMutation.isLoading}
               >
                 Send

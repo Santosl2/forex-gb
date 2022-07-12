@@ -25,3 +25,7 @@ body {
 .customInputFile {
   @apply w-0 hidden;
 }
+
+#notificationCenter:checked ~ div {
+  @apply flex flex-wrap;
+}

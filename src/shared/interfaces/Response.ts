@@ -6,3 +6,11 @@ export type UserFinancesResponse = {
     url: string;
   }[];
 };
+
+export type UserStatusResponse = {
+  data: {
+    totalAmountWithPercent: number;
+    totalAmountWithoutPercent: number;
+    percentOfMonth: number;
+  };
+};
