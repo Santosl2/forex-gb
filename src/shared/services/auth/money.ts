@@ -1,7 +1,7 @@
 import { api } from "../api";
 
 export async function addMoney(data: any) {
-  const response = await api.post("/users/addMoney", {
+  const response = await api.post("/users/payment", {
     ...data,
   });
 

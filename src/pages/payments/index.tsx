@@ -1,11 +1,15 @@
+/* eslint-disable react/no-unstable-nested-components */
+import { useMemo } from "react";
+
 import { motion, Variants } from "framer-motion";
 
-import { Stat } from "@/components/molecules/Stat/Stat";
-import { StatContainer } from "@/components/organims";
+import { Badge } from "@/components/atoms/Badge/Badge";
+import { Table } from "@/components/organims";
 import { Header } from "@/components/organims/Header";
 import { SEO } from "@/SEO";
-import { useUser } from "@/shared/hooks/useUser";
+import { useUserFinances } from "@/shared/hooks/useQuery";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
+import { formatCurrency, formatDate } from "@/shared/utils/common";
 
 const dashboardVariants: Variants = {
   initial: {
@@ -27,12 +31,64 @@ const dashboardVariants: Variants = {
 };
 
 export default function PaymentVouchers() {
-  const { name } = useUser();
+  const { isLoading, data: registers } = useUserFinances();
+
+  const formattedData = useMemo(() => {
+    return registers?.data?.map((res: any) => {
+      return {
+        amount: res.amount,
+        voucher: res.url,
+        createdAt: res.createdAt,
+        status: res.approved,
+      };
+    });
+  }, [registers]);
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Amount",
+        accessor: "amount",
+        Cell: ({ cell: { value } }: any) => formatCurrency(value),
+      },
+      {
+        Header: "Image",
+        accessor: "voucher",
+        disableSortBy: true,
+        Cell: ({ cell: { value } }: any) => (
+          <a
+            href={`https://firebasestorage.googleapis.com/v0/b/blackinvestiments.appspot.com/o/images%2F${value}?alt=media`}
+            className="underline"
+            target="_blank"
+            rel="noreferrer"
+          >
+            See complete image
+          </a>
+        ),
+      },
+      {
+        Header: "Status",
+        accessor: "status",
+        Cell: ({ cell: { value } }: any) => (
+          <Badge type={value ? "success" : "error"}>
+            {value ? "Approved" : "Pending"}
+          </Badge>
+        ),
+      },
+      {
+        Header: "Created At",
+        accessor: "createdAt",
+        Cell: ({ cell: { value } }: any) => formatDate(value),
+      },
+    ],
+    []
+  );
 
   return (
     <>
       <SEO title="Dashboard" />
       <Header id="menuDrawer" />
+
       <motion.section
         initial="initial"
         animate="animate"
@@ -43,15 +99,9 @@ export default function PaymentVouchers() {
         <h2 className="text-4xl">Your payments</h2>
 
         <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
-          <StatContainer>
-            <Stat title="Your amount" value="25.6K" color="green-500" />
-            <Stat title="Percent of this month" value="2.6%" color="red-700" />
-            <Stat title="Your profits" value="25.6K" color="white" />
-          </StatContainer>
-        </div>
-
-        <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
-          fd
+          {!isLoading && registers && (
+            <Table columns={columns} data={formattedData} />
+          )}
         </div>
       </motion.section>
     </>

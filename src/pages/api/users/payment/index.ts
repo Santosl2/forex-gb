@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import { addDoc } from "firebase/firestore";
+import { addDoc, getDocs, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
 import { ModalAddFormData } from "@/components/organims/ModalAdd/ModalAdd.types";
@@ -13,16 +13,18 @@ import {
 import authMiddleware from "../../middlewares/authMiddleware";
 
 export default async (req: CustomRequest, res: NextApiResponse) => {
-  if (req.method === "POST") {
-    try {
-      await authMiddleware(req, res);
-    } catch {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
+  try {
+    await authMiddleware(req, res);
+  } catch {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized",
+    });
+  }
 
+  const { user } = req;
+
+  if (req.method === "POST") {
     const { amount, voucherFile } = req.body as Record<
       keyof ModalAddFormData,
       string
@@ -38,17 +40,15 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       return res.status(400).json({ success: false, message: "Invalid data" });
     }
 
-    const { user } = req;
-
     try {
       const data = await uploadFile(voucherFile, "data_url");
 
       addDoc(dbInstancesUsersFinances, {
         userId: user,
         url: data,
-        amount,
+        amount: amount.replace("$", ""),
         approved: false,
-        createAt: new Date().getTime(),
+        createdAt: new Date().getTime(),
       });
 
       return res.status(200).json({
@@ -64,6 +64,24 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
     }
   }
 
-  res.setHeader("Allow", "POST");
-  res.status(405).end("Method not allowed");
+  if (req.method === "GET") {
+    const q = query(dbInstancesUsersFinances, where("userId", "==", user));
+    const queryResult = await getDocs(q);
+
+    const data = queryResult.docs.map((doc) => {
+      const { url, amount, approved, createdAt } = doc.data();
+
+      return {
+        url,
+        amount,
+        approved,
+        createdAt,
+      };
+    });
+
+    return res.status(200).json({
+      success: true,
+      data,
+    });
+  }
 };

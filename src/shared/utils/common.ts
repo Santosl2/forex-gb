@@ -6,6 +6,14 @@ export function formatCurrency(value: number) {
   }).format(value);
 }
 
+export function formatDate(value: number) {
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(value);
+}
+
 export function formatCurrencyRegex(value: number) {
   return (value / 100).toFixed(2);
 }
