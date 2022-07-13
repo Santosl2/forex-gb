@@ -14,7 +14,6 @@ const middleware = async (req: CustomRequest, res: NextApiResponse) => {
   const [, token] = authHeader.split(" ");
 
   if (token !== process.env.CRON_JOB_KEY) {
-    console.log("🚀 ~ file: authMiddleware.ts ~ line 25 ~ middleware ~ e", e);
     throw new Error("Unauthorized");
   }
 };
