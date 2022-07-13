@@ -20,10 +20,6 @@ import { formatCurrency, formatDate } from "@/shared/utils/common";
 
 function CustomTooltip({ payload, label, active }: any) {
   if (active) {
-    console.log(
-      "🚀 ~ file: dashboard.tsx ~ line 21 ~ CustomTooltip ~ payload",
-      payload[0].payload
-    );
     return (
       <div className="bg-base-300 p-5 rounded">
         <p>{`${label}`}</p>
@@ -31,7 +27,7 @@ function CustomTooltip({ payload, label, active }: any) {
           Value: {formatCurrency(payload[0].value)}
         </p>
         <p className="text-green-200">
-          Percent: {formatCurrency(payload[0].payload.percent)}
+          Percent Value: {formatCurrency(payload[0].payload.percent)}
         </p>
       </div>
     );
@@ -102,8 +98,8 @@ export default function Dashboard() {
             />
             <Stat
               title="Actual percent"
-              value={`${registers?.data.percentOfMonth}%`}
-              color="red-700"
+              value={`+${registers?.data.percentOfMonth}%`}
+              color="red-200"
               isLoading={isLoading}
             />
             <Stat
@@ -111,7 +107,7 @@ export default function Dashboard() {
               value={formatCurrency(
                 registers?.data?.totalAmountWithPercent || 0
               )}
-              color="green-500"
+              color="green-200"
               isLoading={isLoading}
             />
           </StatContainer>
@@ -139,13 +135,6 @@ export default function Dashboard() {
                 connectNulls
                 type="monotone"
                 dataKey="amount"
-                stroke="#8884d8"
-                fill="#8884d8"
-              />
-              <Line
-                connectNulls
-                type="monotone"
-                dataKey="percent"
                 stroke="#8884d8"
                 fill="#8884d8"
               />

@@ -57,7 +57,9 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       const queryResultYields = await getDocs(qYield);
 
       const data = queryResult.docs.map((doc) => doc.data().amount);
-      const userYields = queryResultYields.docs.map((doc) => doc.data().amount);
+      const userYields = queryResultYields.docs.map(
+        (doc) => doc.data().percent
+      );
 
       const totalUserYields = userYields.reduce(
         (acc, curr) => acc + Number(curr),
@@ -67,6 +69,8 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
       const percentOfMonth = await getGlobalPercent();
 
+      const totalAmountWithPercent =
+        totalUserYields > 0 ? totalUserYields + totalUserAmount : 0;
       // Cache request
       res.setHeader(
         "Cache-Control",
@@ -76,7 +80,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       return res.status(200).json({
         success: true,
         data: {
-          totalAmountWithPercent: totalUserYields,
+          totalAmountWithPercent,
           totalAmountWithoutPercent: totalUserAmount,
           percentOfMonth,
         },

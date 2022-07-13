@@ -7,7 +7,6 @@ import { Drawer, DrawerOpen } from "@/components/molecules/Drawer";
 
 import { AddMoney } from "./AddMoney";
 import { HeaderProps } from "./Header.types";
-import { Notification } from "./Notification";
 
 export function Header({ id }: HeaderProps) {
   return (
@@ -22,7 +21,6 @@ export function Header({ id }: HeaderProps) {
           </a>
         </div>
         <div className="navbar-end">
-          <Notification />
           <AddMoney />
         </div>
       </header>
