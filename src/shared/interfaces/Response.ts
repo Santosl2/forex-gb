@@ -14,3 +14,11 @@ export type UserStatusResponse = {
     percentOfMonth: number;
   };
 };
+
+export type UserStatisticsResponse = {
+  data: {
+    amount: number;
+    percent: number;
+    createdAt: number;
+  }[];
+};

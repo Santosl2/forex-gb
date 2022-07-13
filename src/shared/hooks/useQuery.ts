@@ -2,9 +2,10 @@ import { useQuery, UseQueryResult } from "react-query";
 
 import {
   UserFinancesResponse,
+  UserStatisticsResponse,
   UserStatusResponse,
 } from "../interfaces/Response";
-import { getStatus } from "../services/auth/user";
+import { getStatistics, getStatus } from "../services/auth/user";
 import { getFinances } from "../services/finances/user";
 
 export function useUserFinances() {
@@ -19,4 +20,11 @@ export function useUserStatus() {
     staleTime: 1000 * 60 * 60,
     cacheTime: 1000 * 60 * 60,
   }) as UseQueryResult<UserStatusResponse, unknown>;
+}
+
+export function useUserStatistics() {
+  return useQuery(["userStatistics"], () => getStatistics(), {
+    staleTime: 1000 * 60 * 60,
+    cacheTime: 1000 * 60 * 60,
+  }) as UseQueryResult<UserStatisticsResponse, unknown>;
 }

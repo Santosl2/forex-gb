@@ -5,24 +5,16 @@ import { NextApiResponse } from "next";
 
 import { CustomRequest, yieldCronResponse } from "@/shared/interfaces/Common";
 import {
-  dbInstanceConfig,
+  createLogs,
+  getGlobalPercent,
+  getPercentByValue,
+} from "@/shared/services/config/percent";
+import {
   dbInstancesUsersFinances,
   dbInstanceYield,
 } from "@/shared/services/firebase";
 
 import cronMiddleware from "../middlewares/cronMiddleware";
-
-async function getPercentByValue(totalPercent: number) {
-  const value = totalPercent >= 5000 ? 5000 : totalPercent >= 2000 ? 2000 : 500;
-
-  const queryPercent = query(dbInstanceConfig, where("amountMin", "==", value));
-
-  const getPercent = await getDocs(queryPercent);
-
-  const percent = parseFloat(getPercent.docs[0]?.data().percent);
-
-  return percent;
-}
 
 export default async (req: CustomRequest, res: NextApiResponse) => {
   try {
@@ -87,24 +79,33 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       }, {} as yieldCronResponse);
 
       const createdAt = new Date().getTime();
+      const globalPercent = await getGlobalPercent();
 
-      const result = Object.entries(formatObject)
+      Object.entries(formatObject)
         .filter(([e]) => e !== "undefined")
         .forEach(async ([userId, amount]) => {
           const amountToNumber = Number(amount);
           const getPercent = await getPercentByValue(amountToNumber);
-          const percent = (amountToNumber / 100) * getPercent;
+
+          if (globalPercent >= getPercent) return;
+
+          const percent = (amountToNumber / 100) * globalPercent;
           const amountWithPercent = amountToNumber + percent;
 
           addDoc(dbInstanceYield, {
             userId,
             amount: amountWithPercent,
+            percent,
             createdAt,
+            status: "in_wallet",
           });
 
-          console.log(
-            `🚀 [Yield Cron] ${userId} - ${amountToNumber} - ${getPercent}/${percent}% = ${amountWithPercent}`
-          );
+          createLogs({
+            userId,
+            amount: amountToNumber,
+            amountPercent: amountWithPercent,
+            userPercent: getPercent,
+          });
         });
 
       res.setHeader(
@@ -114,7 +115,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
       return res.status(200).json({
         success: true,
-        data: result,
+        data: "All cron jobs executed! 🚀",
       });
     } catch (e) {
       console.log("🚀 ~ file: index.ts ~ line 91 ~ e", e);
@@ -124,4 +125,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       });
     }
   }
+
+  res.setHeader("Allow", "GET");
+  res.status(405).end("Method not allowed");
 };

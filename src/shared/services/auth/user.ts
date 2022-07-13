@@ -23,3 +23,9 @@ export async function getStatus() {
 
   return response.data;
 }
+
+export async function getStatistics() {
+  const response = await api.get("/users/status/statistics");
+
+  return response.data;
+}

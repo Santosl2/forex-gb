@@ -6,62 +6,39 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
 } from "recharts";
 
 import { Stat } from "@/components/molecules/Stat/Stat";
 import { StatContainer } from "@/components/organims";
 import { Header } from "@/components/organims/Header";
 import { SEO } from "@/SEO";
-import { useUserStatus } from "@/shared/hooks/useQuery";
+import { useUserStatistics, useUserStatus } from "@/shared/hooks/useQuery";
 import { useUser } from "@/shared/hooks/useUser";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
-import { formatCurrency } from "@/shared/utils/common";
+import { formatCurrency, formatDate } from "@/shared/utils/common";
 
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+function CustomTooltip({ payload, label, active }: any) {
+  if (active) {
+    console.log(
+      "🚀 ~ file: dashboard.tsx ~ line 21 ~ CustomTooltip ~ payload",
+      payload[0].payload
+    );
+    return (
+      <div className="bg-base-300 p-5 rounded">
+        <p>{`${label}`}</p>
+        <p className="text-red-200">
+          Value: {formatCurrency(payload[0].value)}
+        </p>
+        <p className="text-green-200">
+          Percent: {formatCurrency(payload[0].payload.percent)}
+        </p>
+      </div>
+    );
+  }
+
+  return null;
+}
+
 const dashboardVariants: Variants = {
   initial: {
     opacity: 0,
@@ -83,7 +60,21 @@ const dashboardVariants: Variants = {
 
 export default function Dashboard() {
   const { name } = useUser();
-  const { isLoading, isFetching, data: registers } = useUserStatus();
+  const { isLoading, data: registers } = useUserStatus();
+  const { data: statistics, isLoading: isLoadingStatistics } =
+    useUserStatistics();
+
+  const formatData = () => {
+    const data = statistics?.data.map((e) => {
+      return {
+        name: formatDate(e.createdAt),
+        percent: e.percent,
+        amount: e.amount,
+      };
+    });
+
+    return data;
+  };
 
   return (
     <>
@@ -126,20 +117,39 @@ export default function Dashboard() {
         </div>
 
         <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
-          <LineChart width={700} height={400} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="pv"
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
-            />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-          </LineChart>
+          {isLoadingStatistics && <p>Loading...</p>}
+          {statistics?.data && (
+            <LineChart
+              width={700}
+              height={400}
+              data={formatData()}
+              margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip content={<CustomTooltip />} />
+              <Line
+                connectNulls
+                type="monotone"
+                dataKey="amount"
+                stroke="#8884d8"
+                fill="#8884d8"
+              />
+              <Line
+                connectNulls
+                type="monotone"
+                dataKey="percent"
+                stroke="#8884d8"
+                fill="#8884d8"
+              />
+            </LineChart>
+          )}
         </div>
       </motion.section>
     </>

@@ -4,9 +4,10 @@ import { getDocs, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
 import { CustomRequest } from "@/shared/interfaces/Common";
+import { getGlobalPercent } from "@/shared/services/config/percent";
 import {
-  dbInstanceConfig,
   dbInstancesUsersFinances,
+  dbInstanceYield,
 } from "@/shared/services/firebase";
 
 import authMiddleware from "../../middlewares/authMiddleware";
@@ -40,45 +41,31 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       const q = query(
         dbInstancesUsersFinances,
         where("userId", "==", user),
-        where("status", "==", "approved"),
-        where("createdAt", ">=", initialDayOfMonthUnix),
-        where("createdAt", "<=", endDayOfMonthUnix)
+        where("status", "==", "approved")
+        // where("createdAt", ">=", initialDayOfMonthUnix),
+        // where("createdAt", "<=", endDayOfMonthUnix)
       );
 
       const queryResult = await getDocs(q);
 
-      const data = queryResult.docs.map((doc) => doc.data());
-
-      const totalAmountWithoutPercent = data.reduce((acc, curr) => {
-        const approvedDate = new Date(curr.approvedAt).getDate();
-
-        if (actualDate.getDate() > approvedDate) {
-          return acc + Number(curr.amount);
-        }
-
-        return Number(acc);
-      }, 0);
-
-      const findAmount =
-        totalAmountWithoutPercent >= 5000
-          ? 5000
-          : totalAmountWithoutPercent >= 2000
-          ? 2000
-          : 500;
-
-      const queryPercent = query(
-        dbInstanceConfig,
-        where("amountMin", "==", findAmount)
+      const qYield = query(
+        dbInstanceYield,
+        where("userId", "==", user),
+        where("status", "==", "in_wallet")
       );
 
-      const queryPercentResult = await getDocs(queryPercent);
+      const queryResultYields = await getDocs(qYield);
 
-      const percentOfMonth = parseFloat(
-        queryPercentResult.docs[0].data().percent
+      const data = queryResult.docs.map((doc) => doc.data().amount);
+      const userYields = queryResultYields.docs.map((doc) => doc.data().amount);
+
+      const totalUserYields = userYields.reduce(
+        (acc, curr) => acc + Number(curr),
+        0
       );
+      const totalUserAmount = data.reduce((acc, curr) => acc + Number(curr), 0);
 
-      const percentCalc = (totalAmountWithoutPercent / 100) * percentOfMonth;
-      const totalAmountWithPercent = totalAmountWithoutPercent + percentCalc;
+      const percentOfMonth = await getGlobalPercent();
 
       // Cache request
       res.setHeader(
@@ -89,8 +76,8 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       return res.status(200).json({
         success: true,
         data: {
-          totalAmountWithPercent,
-          totalAmountWithoutPercent,
+          totalAmountWithPercent: totalUserYields,
+          totalAmountWithoutPercent: totalUserAmount,
           percentOfMonth,
         },
       });

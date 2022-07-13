@@ -21,6 +21,7 @@ export const dbInstanceUsers = collection(database, "users");
 export const dbInstancesUsersFinances = collection(database, "users_finances");
 export const dbInstanceConfig = collection(database, "config_percent");
 export const dbInstanceYield = collection(database, "users_yield");
+export const dbInstanceLogs = collection(database, "yield_logs");
 export const storage = getStorage();
 
 export const uploadFile = async (
