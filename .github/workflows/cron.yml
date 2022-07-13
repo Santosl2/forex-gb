@@ -1,0 +1,17 @@
+name: 1hour cron
+
+on: 
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs: 
+  cron:
+
+    runs-on: ubuntu-latest 
+
+    steps:
+
+      - name: Call API Yield
+        run: |
+          curl -X GET -H "Authorization: Bearer e61f993c766d7b9966977bc9eb64ce9a" \
+          https://forex-gb.vercel.app/api/yield
