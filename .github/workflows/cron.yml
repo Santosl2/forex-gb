@@ -2,7 +2,7 @@ name: 1hour cron
 
 on: 
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "40 8 * * *"
 
 jobs: 
   cron:
@@ -12,6 +12,7 @@ jobs:
     steps:
 
       - name: Call API Yield
+      
         run: |
           curl -X GET -H "Authorization: Bearer e61f993c766d7b9966977bc9eb64ce9a" \
-          https://forex-gb.vercel.app/api/yield
+          https://forex-gb.vercel.app/api/yieldCron
