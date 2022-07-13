@@ -2,13 +2,12 @@ name: 1hour cron
 
 on: 
   schedule:
-    - cron: "43 11 * * *"
+    - cron: "50 11 * * *"
 
 jobs: 
   cron:
 
-    runs-on: ubuntu-latest 
-
+    runs-on: ubuntu-latest
     steps:
       - name: Call API Yield
         run: |
