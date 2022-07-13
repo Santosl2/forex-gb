@@ -11,6 +11,7 @@ import {
 import { Stat } from "@/components/molecules/Stat/Stat";
 import { StatContainer } from "@/components/organims";
 import { Header } from "@/components/organims/Header";
+import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { SEO } from "@/SEO";
 import { useUserStatistics, useUserStatus } from "@/shared/hooks/useQuery";
 import { useUser } from "@/shared/hooks/useUser";
@@ -118,7 +119,7 @@ export default function Dashboard() {
 
         <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
           {isLoadingStatistics && <p>Loading...</p>}
-          {statistics?.data && (
+          {statistics?.data && statistics.data.length > 0 ? (
             <LineChart
               width={700}
               height={400}
@@ -149,6 +150,8 @@ export default function Dashboard() {
                 fill="#8884d8"
               />
             </LineChart>
+          ) : (
+            <NoResults />
           )}
         </div>
       </motion.section>
