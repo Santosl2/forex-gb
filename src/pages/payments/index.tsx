@@ -10,6 +10,7 @@ import { Header } from "@/components/organims/Header";
 import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { SEO } from "@/SEO";
 import { useUserFinances } from "@/shared/hooks/useQuery";
+import { badgeTypes } from "@/shared/interfaces/Common";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
 import { formatCurrency, formatDate } from "@/shared/utils/common";
 
@@ -31,12 +32,6 @@ const dashboardVariants: Variants = {
     opacity: 0,
   },
 };
-
-const badgeType = {
-  recused: "error",
-  approved: "success",
-  pending: "warning",
-} as any;
 
 export default function PaymentVouchers() {
   const { isLoading, isFetching, data: registers } = useUserFinances();
@@ -78,7 +73,7 @@ export default function PaymentVouchers() {
         Header: "Status",
         accessor: "status",
         Cell: ({ cell: { value } }: any) => (
-          <Badge type={badgeType[value]}>{value}</Badge>
+          <Badge type={badgeTypes[value]}>{value}</Badge>
         ),
       },
       {

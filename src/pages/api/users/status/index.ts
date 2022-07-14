@@ -11,10 +11,12 @@ import {
 } from "@/shared/services/firebase";
 
 import authMiddleware from "../../middlewares/authMiddleware";
+import corsMiddleware from "../../middlewares/corsMiddleware";
 
 export default async (req: CustomRequest, res: NextApiResponse) => {
   try {
     await authMiddleware(req, res);
+    await corsMiddleware(req, res);
   } catch {
     return res.status(401).json({
       success: false,
@@ -62,10 +64,13 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       );
 
       const totalUserYields = userYields.reduce(
-        (acc, curr) => acc + Number(curr),
+        (acc, curr) => acc + parseFloat(curr),
         0
       );
-      const totalUserAmount = data.reduce((acc, curr) => acc + Number(curr), 0);
+      const totalUserAmount = data.reduce(
+        (acc, curr) => acc + parseFloat(curr),
+        0
+      );
 
       const percentOfMonth = await getGlobalPercent();
 

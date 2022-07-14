@@ -26,9 +26,16 @@ export const HEADER_USER_ITEMS: ListItemProps[] = [
 
 export const HEADER_ADMIN_ITEMS: ListItemProps[] = [
   ...HEADER_USER_ITEMS,
+
   {
     id: 3,
-    name: "Configs",
+    name: "User List",
+    icon: "configs",
+    href: "/admin/users",
+  },
+  {
+    id: 4,
+    name: "Settings",
     icon: "configs",
     href: "/admin/configs",
   },

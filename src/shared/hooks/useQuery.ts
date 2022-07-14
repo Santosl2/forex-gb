@@ -2,13 +2,18 @@ import { useQuery, UseQueryResult } from "react-query";
 
 import {
   AdminPercentResponse,
+  AdminUserListResponse,
   UserFinancesResponse,
   UserStatisticsResponse,
   UserStatusResponse,
 } from "../interfaces/Response";
-import { getPercent } from "../services/auth/admin,";
-import { getStatistics, getStatus } from "../services/auth/user";
-import { getFinances } from "../services/finances/user";
+import {
+  getFinances,
+  getUserList,
+  getUserPayments,
+} from "../services/finances/user";
+import { getPercent } from "../services/requests/admin";
+import { getStatistics, getStatus } from "../services/requests/user";
 
 export function useUserFinances() {
   return useQuery(["userFinances"], () => getFinances(), {
@@ -33,7 +38,20 @@ export function useUserStatistics() {
 
 export function useGLobalPercent() {
   return useQuery(["adminPercent"], () => getPercent(), {
+    staleTime: 1000 * 60 * 30,
+    cacheTime: 1000 * 60 * 30,
+  }) as UseQueryResult<AdminPercentResponse, unknown>;
+}
+
+export function useAdminUserList() {
+  return useQuery(["adminUserList"], () => getUserList(), {
     staleTime: 1000 * 60 * 60,
     cacheTime: 1000 * 60 * 60,
-  }) as UseQueryResult<AdminPercentResponse, unknown>;
+  }) as UseQueryResult<AdminUserListResponse, unknown>;
+}
+
+export function useUserPaymentData(id: string) {
+  return useQuery(["adminPaymentData"], () =>
+    getUserPayments({ id })
+  ) as UseQueryResult<UserFinancesResponse, unknown>;
 }

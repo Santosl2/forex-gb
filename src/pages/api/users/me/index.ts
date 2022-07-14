@@ -11,6 +11,7 @@ const index = async (req: CustomRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     try {
       await authMiddleware(req, res);
+      // await corsMiddleware(req, res);
 
       const q = query(dbInstanceUsers, where("id", "==", req.user));
       const queryResult = await getDocs(q);

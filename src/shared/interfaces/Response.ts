@@ -26,3 +26,20 @@ export type UserStatisticsResponse = {
 export type AdminPercentResponse = {
   percent: number;
 };
+
+export type AdminUserListResponse = {
+  data: {
+    id: number;
+    email: string;
+    name: string;
+    totalAmountApproved: string;
+    totalAmountPending: string;
+    lastLogin?: number;
+    createdAt: number;
+  }[];
+};
+
+export type AdminUserUpdateStatusResponse = {
+  status: string;
+  id: string;
+};

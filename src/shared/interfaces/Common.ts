@@ -26,6 +26,16 @@ export type CustomResponse = NextApiResponse & {
 };
 
 export type yieldCronResponse = {
-  userId: string;
-  amount: number;
+  [key: string]: {
+    docId: string;
+    amount: number | string;
+  };
 };
+
+export const statusTypes = ["Approved", "Pending", "Decline", "Paid"];
+
+export const badgeTypes = {
+  recused: "error",
+  approved: "success",
+  pending: "warning",
+} as any;

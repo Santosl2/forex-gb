@@ -42,9 +42,9 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
     try {
       const q = query(
         dbInstancesUsersFinances,
-        where("status", "==", "approved"),
-        where("createdAt", ">=", initialDayOfMonthUnix),
-        where("createdAt", "<=", endDayOfMonthUnix)
+        where("status", "==", "approved")
+        // where("createdAt", ">=", initialDayOfMonthUnix),
+        // where("createdAt", "<=", endDayOfMonthUnix)
       );
 
       const queryResult = await getDocs(q);
@@ -58,8 +58,9 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         const approvedDate = new Date(approvedAt).getDate();
 
         if (actualDate.getDate() > approvedDate) {
-          obj.amount = Number(amount);
+          obj.amount = parseFloat(amount);
           obj.userId = userId;
+          obj.docId = reg.id;
         }
 
         return obj;
@@ -69,9 +70,15 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       const formatObject: yieldCronResponse = data.reduce((acc, curr) => {
         if (curr.amount) {
           if (acc[curr.userId]) {
-            acc[curr.userId] += curr.amount;
+            acc[curr.userId] = {
+              amount: acc[curr.userId].amount + curr.amount,
+              docId: curr.docId,
+            };
           } else {
-            acc[curr.userId] = curr.amount;
+            acc[curr.userId] = {
+              amount: curr.amount,
+              docId: curr.docId,
+            };
           }
         }
 
@@ -83,8 +90,8 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
       Object.entries(formatObject)
         .filter(([e]) => e !== "undefined")
-        .forEach(async ([userId, amount]) => {
-          const amountToNumber = Number(amount);
+        .forEach(async ([key, value]) => {
+          const amountToNumber = parseFloat(value.amount.toString());
           const getPercent = await getPercentByValue(amountToNumber);
 
           if (globalPercent >= getPercent) return;
@@ -93,7 +100,8 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
           const amountWithPercent = amountToNumber + percent;
 
           addDoc(dbInstanceYield, {
-            userId,
+            docId: value.docId,
+            userId: key,
             amount: amountWithPercent,
             percent,
             createdAt,
@@ -101,7 +109,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
           });
 
           createLogs({
-            userId,
+            userId: key,
             amount: amountToNumber,
             amountPercent: amountWithPercent,
             userPercent: getPercent,

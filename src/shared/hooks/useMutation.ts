@@ -1,10 +1,14 @@
 import { useMutation } from "react-query";
 
 import { SignInFormData, SignUpFormData } from "../interfaces/Forms";
-import { updatePercent } from "../services/auth/admin,";
-import { addMoney } from "../services/auth/money";
-import { createUser, loginUser } from "../services/auth/user";
+import { AdminUserUpdateStatusResponse } from "../interfaces/Response";
 import { queryClient } from "../services/queryClient";
+import {
+  updatePercent,
+  updateUserPaymentData,
+} from "../services/requests/admin";
+import { addMoney } from "../services/requests/money";
+import { createUser, loginUser } from "../services/requests/user";
 
 export function useMutationRegisterUser() {
   return useMutation(async (user: SignUpFormData) => createUser(user));
@@ -28,4 +32,16 @@ export function useMutationUpdatePercent() {
       queryClient.invalidateQueries("adminPercent");
     },
   });
+}
+
+export function useMutationUpdatePayment() {
+  return useMutation(
+    async (data: AdminUserUpdateStatusResponse) => updateUserPaymentData(data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("adminPaymentData");
+        queryClient.invalidateQueries("adminUserList");
+      },
+    }
+  );
 }

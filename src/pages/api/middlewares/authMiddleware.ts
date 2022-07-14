@@ -1,6 +1,7 @@
 import jwtDecode from "jwt-decode";
 import { NextApiResponse } from "next";
 
+import { LOGIN_COOKIE_NAME } from "@/shared/constants";
 import { CustomRequest } from "@/shared/interfaces/Common";
 
 const middleware = async (
@@ -19,19 +20,24 @@ const middleware = async (
   const [, token] = authHeader.split(" ");
 
   try {
-    const { sub, exp, isAdmin } = jwtDecode(token) as any;
-
-    if (exp < Date.now() / 1000) {
-      // throw new Error("Token expired");
-    }
+    const { sub, exp } = jwtDecode(token) as any;
 
     if (onlyAdmin) {
-      // protect route
+      const { [LOGIN_COOKIE_NAME]: userToken } = req.cookies;
+
+      try {
+        const parseToken = JSON.parse(userToken);
+
+        if (!parseToken.isAdmin) {
+          throw new Error("Unauthorized");
+        }
+      } catch {
+        throw new Error("Unauthorized");
+      }
     }
 
     req.user = sub;
   } catch (e) {
-    console.log("🚀 ~ file: authMiddleware.ts ~ line 25 ~ middleware ~ e", e);
     throw new Error("Unauthorized");
   }
 };

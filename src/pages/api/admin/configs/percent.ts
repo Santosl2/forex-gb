@@ -7,10 +7,12 @@ import { getGlobalPercent } from "@/shared/services/config/percent";
 import { dbInstanceConfig } from "@/shared/services/firebase";
 
 import authMiddleware from "../../middlewares/authMiddleware";
+import corsMiddleware from "../../middlewares/corsMiddleware";
 
 export default async (req: CustomRequest, res: NextApiResponse) => {
   try {
     await authMiddleware(req, res, true);
+    await corsMiddleware(req, res);
   } catch {
     return res.status(401).json({
       success: false,

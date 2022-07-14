@@ -14,8 +14,8 @@ import { CustomRequest } from "@/shared/interfaces/Common";
 import { SignUpFormData } from "@/shared/interfaces/Forms";
 import { UserType } from "@/shared/interfaces/User";
 import { registerSchema } from "@/shared/schemas/register";
-import { verifyCaptcha } from "@/shared/services/auth/captcha";
 import { auth, dbInstanceUsers } from "@/shared/services/firebase";
+import { verifyCaptcha } from "@/shared/services/requests/captcha";
 import { hashPassword } from "@/shared/utils/hash";
 
 import guestMiddleware from "../../middlewares/guestMiddleware";
@@ -89,6 +89,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         email,
         password: hashedPassword,
         isAdmin: false,
+        createdAt: new Date().getTime(),
       });
 
       const {
