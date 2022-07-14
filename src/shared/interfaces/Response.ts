@@ -22,3 +22,7 @@ export type UserStatisticsResponse = {
     createdAt: number;
   }[];
 };
+
+export type AdminPercentResponse = {
+  percent: number;
+};

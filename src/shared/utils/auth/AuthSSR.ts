@@ -16,7 +16,7 @@ import { wrapper } from "@/shared/store";
 
 import { getUserData, logoutUser } from "./UserLogin";
 
-export function AuthSSR<P>(fn: GetServerSideProps<P>) {
+export function AuthSSR<P>(fn: GetServerSideProps<P>, adminProtect = false) {
   return wrapper.getServerSideProps((store) => {
     return async (
       ctx: GetServerSidePropsContext
@@ -66,6 +66,15 @@ export function AuthSSR<P>(fn: GetServerSideProps<P>) {
           store,
           ctx
         );
+
+        if (adminProtect && !userDataReq.isAdmin) {
+          return {
+            redirect: {
+              destination: "/dashboard",
+              permanent: false,
+            },
+          };
+        }
       } catch (e) {
         console.log(
           "🚀 ~ file: AuthSSR.ts ~ line 65 ~ returnwrapper.getServerSideProps ~ e",

@@ -3,7 +3,11 @@ import { NextApiResponse } from "next";
 
 import { CustomRequest } from "@/shared/interfaces/Common";
 
-const middleware = async (req: CustomRequest, res: NextApiResponse) => {
+const middleware = async (
+  req: CustomRequest,
+  res: NextApiResponse,
+  onlyAdmin = false
+) => {
   const { headers } = req;
 
   const authHeader = headers.authorization;
@@ -15,7 +19,15 @@ const middleware = async (req: CustomRequest, res: NextApiResponse) => {
   const [, token] = authHeader.split(" ");
 
   try {
-    const { sub } = jwtDecode(token) as any;
+    const { sub, exp, isAdmin } = jwtDecode(token) as any;
+
+    if (exp < Date.now() / 1000) {
+      // throw new Error("Token expired");
+    }
+
+    if (onlyAdmin) {
+      // protect route
+    }
 
     req.user = sub;
   } catch (e) {

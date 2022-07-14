@@ -28,8 +28,8 @@ export const HEADER_ADMIN_ITEMS: ListItemProps[] = [
   ...HEADER_USER_ITEMS,
   {
     id: 3,
-    name: "Users",
-    icon: "users",
-    href: "/users",
+    name: "Configs",
+    icon: "configs",
+    href: "/admin/configs",
   },
 ];
