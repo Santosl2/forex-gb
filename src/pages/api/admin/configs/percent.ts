@@ -52,6 +52,10 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
   }
 
   if (req.method === "GET") {
+    res.setHeader(
+      "Cache-control",
+      "public, s-maxage=86000, stale-while-revalidate=6000"
+    );
     return res.status(200).json({
       success: true,
       percent: actualPercent,
