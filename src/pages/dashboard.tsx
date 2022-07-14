@@ -84,9 +84,32 @@ export default function Dashboard() {
         variants={dashboardVariants}
         className="max-w-[1100px] m-auto p-5 mt-5 relative z-10"
       >
-        <h2 className="text-4xl">Hello, {name}</h2>
+        <div className="alert shadow-lg w-full mb-5">
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              className="stroke-info flex-shrink-0 w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <div>
+              <h3 className="font-bold">Alert!</h3>
+              <div className="text-xs">
+                Payments are made only on the 31st! And the income only starts
+                counting after one day of approval.
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center ">
+        <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center flex-col">
           <StatContainer>
             <Stat
               title="Your amount"
@@ -111,9 +134,6 @@ export default function Dashboard() {
               isLoading={isLoading}
             />
           </StatContainer>
-        </div>
-
-        <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
           {isLoadingStatistics && <p>Loading...</p>}
           {statistics?.data && statistics.data.length > 0 && (
             <LineChart
