@@ -5,6 +5,7 @@ export function Stat({
   value,
   color = "success",
   isLoading = false,
+  description,
 }: StatProps) {
   return (
     <div className={`stat bg-base-200 place-items-center w-80 text-${color}`}>
@@ -14,6 +15,7 @@ export function Stat({
       ) : (
         <div className="stat-value">{value}</div>
       )}
+      {!!description && <div className="stat-desc">{description}</div>}
     </div>
   );
 }

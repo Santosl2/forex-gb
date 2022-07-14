@@ -1,4 +1,8 @@
+/* eslint-disable no-prototype-builtins */
+import { useEffect, useState } from "react";
+
 import { motion, Variants } from "framer-motion";
+import dynamic from "next/dynamic";
 import {
   Line,
   LineChart,
@@ -14,7 +18,6 @@ import { Header } from "@/components/organims/Header";
 import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { SEO } from "@/SEO";
 import { useUserStatistics, useUserStatus } from "@/shared/hooks/useQuery";
-import { useUser } from "@/shared/hooks/useUser";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
 import { formatCurrency, formatDate } from "@/shared/utils/common";
 
@@ -55,11 +58,23 @@ const dashboardVariants: Variants = {
   },
 };
 
+const DynamicModalAlert = dynamic<any>(() =>
+  import("@/components/organims/ModalAlertUser").then(
+    (mod) => mod.ModalAlertUser
+  )
+);
+
 export default function Dashboard() {
-  const { name } = useUser();
+  const [userModalYield, setUserModalYield] = useState(true);
   const { isLoading, data: registers } = useUserStatus();
   const { data: statistics, isLoading: isLoadingStatistics } =
     useUserStatistics();
+
+  useEffect(() => {
+    if (registers?.data.hasOwnProperty("canYield")) {
+      setUserModalYield(registers?.data.canYield);
+    }
+  }, [registers]);
 
   const formatData = () => {
     const data = statistics?.data.map((e) => {
@@ -125,11 +140,13 @@ export default function Dashboard() {
               color="red-200"
               isLoading={isLoading}
             />
+
             <Stat
               title="Your profits"
-              value={formatCurrency(
+              value={formatCurrency(registers?.data?.totalAmountPercent || 0)}
+              description={`Total: ${formatCurrency(
                 registers?.data?.totalAmountWithPercent || 0
-              )}
+              )}`}
               color="green-200"
               isLoading={isLoading}
             />
@@ -165,6 +182,10 @@ export default function Dashboard() {
             statistics.data.length === 0 && <NoResults />}
         </div>
       </motion.section>
+
+      {!userModalYield && (
+        <DynamicModalAlert onClose={() => setUserModalYield(true)} />
+      )}
     </>
   );
 }

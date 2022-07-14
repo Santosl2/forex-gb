@@ -3,4 +3,5 @@ export type StatProps = {
   value: string;
   color?: string;
   isLoading?: boolean;
+  description?: string;
 };

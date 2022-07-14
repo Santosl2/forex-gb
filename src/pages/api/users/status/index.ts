@@ -4,7 +4,10 @@ import { getDocs, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
 import { CustomRequest } from "@/shared/interfaces/Common";
-import { getGlobalPercent } from "@/shared/services/config/percent";
+import {
+  getGlobalPercent,
+  getPercentByValue,
+} from "@/shared/services/config/percent";
 import {
   dbInstancesUsersFinances,
   dbInstanceYield,
@@ -73,6 +76,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       );
 
       const percentOfMonth = await getGlobalPercent();
+      const userPercent = await getPercentByValue(totalUserAmount);
 
       const totalAmountWithPercent =
         totalUserYields > 0 ? totalUserYields + totalUserAmount : 0;
@@ -87,7 +91,9 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         data: {
           totalAmountWithPercent,
           totalAmountWithoutPercent: totalUserAmount,
+          totalAmountPercent: totalUserYields,
           percentOfMonth,
+          canYield: userPercent > percentOfMonth,
         },
       });
     } catch (e) {

@@ -11,7 +11,9 @@ export type UserStatusResponse = {
   data: {
     totalAmountWithPercent: number;
     totalAmountWithoutPercent: number;
+    totalAmountPercent: number;
     percentOfMonth: number;
+    canYield: boolean;
   };
 };
 
