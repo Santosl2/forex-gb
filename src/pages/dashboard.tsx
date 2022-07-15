@@ -15,6 +15,7 @@ import {
 import { Stat } from "@/components/molecules/Stat/Stat";
 import { StatContainer } from "@/components/organims";
 import { Header } from "@/components/organims/Header";
+import { ModalAlertUserProps } from "@/components/organims/ModalAlertUser/ModalAlertUser.types";
 import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { SEO } from "@/SEO";
 import { useUserStatistics, useUserStatus } from "@/shared/hooks/useQuery";
@@ -58,7 +59,7 @@ const dashboardVariants: Variants = {
   },
 };
 
-const DynamicModalAlert = dynamic<any>(() =>
+const DynamicModalAlert = dynamic<ModalAlertUserProps>(() =>
   import("@/components/organims/ModalAlertUser").then(
     (mod) => mod.ModalAlertUser
   )

@@ -5,7 +5,6 @@ import { NextApiResponse } from "next";
 
 import { CustomRequest, yieldCronResponse } from "@/shared/interfaces/Common";
 import {
-  createLogs,
   getGlobalPercent,
   getPercentByValue,
 } from "@/shared/services/config/percent";
@@ -108,12 +107,12 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
             status: "in_wallet",
           });
 
-          createLogs({
-            userId: key,
-            amount: amountToNumber,
-            amountPercent: amountWithPercent,
-            userPercent: getPercent,
-          });
+          // createLogs({
+          //   userId: key,
+          //   amount: amountToNumber,
+          //   amountPercent: amountWithPercent,
+          //   userPercent: getPercent,
+          // });
         });
 
       res.setHeader(

@@ -29,3 +29,19 @@ body {
 #notificationCenter:checked ~ div {
   @apply flex flex-wrap;
 }
+
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-base-300 rounded-2xl;
+
+  &:hover {
+    @apply bg-base-200;
+  }
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}

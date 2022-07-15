@@ -3,12 +3,14 @@ import { useQuery, UseQueryResult } from "react-query";
 import {
   AdminPercentResponse,
   AdminUserListResponse,
+  AdminUserYieldDataResponse,
   UserFinancesResponse,
   UserStatisticsResponse,
   UserStatusResponse,
 } from "../interfaces/Response";
 import {
   getFinances,
+  getPaymentYields,
   getUserList,
   getUserPayments,
 } from "../services/finances/user";
@@ -54,4 +56,10 @@ export function useUserPaymentData(id: string) {
   return useQuery(["adminPaymentData"], () =>
     getUserPayments({ id })
   ) as UseQueryResult<UserFinancesResponse, unknown>;
+}
+
+export function usePaymentYieldData(id: string) {
+  return useQuery(["adminYieldData"], () =>
+    getPaymentYields(id)
+  ) as UseQueryResult<AdminUserYieldDataResponse, unknown>;
 }

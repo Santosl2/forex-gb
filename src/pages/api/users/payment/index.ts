@@ -2,7 +2,7 @@
 import { addDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
-import { ModalAddFormData } from "@/components/organims/ModalAdd/ModalAdd.types";
+import { ModalAddFormData } from "@/components/organims/ModalAddMoney/ModalAdd.types";
 import { CustomRequest } from "@/shared/interfaces/Common";
 import { modalAddSchema } from "@/shared/schemas/modal";
 import {

@@ -6,7 +6,9 @@ import { Wallet as WalletIcon } from "phosphor-react";
 import { Button } from "@/components/atoms";
 import { useUser } from "@/shared/hooks/useUser";
 
-const DynamicUpdateWallet = dynamic<any>(() =>
+import { ModalUpdateUserWalletProps } from "../../ModalUpdateUserWallet/ModalUpdateUserWallet.types";
+
+const DynamicUpdateWallet = dynamic<ModalUpdateUserWalletProps>(() =>
   import("../../ModalUpdateUserWallet").then((mod) => mod.ModalUpdateUserWallet)
 );
 

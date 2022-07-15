@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 
-import { ModalAdd } from "@/components/organims/ModalAdd";
+import { ModalAdd } from "@/components/organims/ModalAddMoney";
 import { queryClient } from "@/shared/services/queryClient";
 
 import { Provider } from "react-redux";

@@ -45,3 +45,12 @@ export type AdminUserUpdateStatusResponse = {
   status: string;
   id: string;
 };
+
+export type AdminUserYieldDataResponse = {
+  data: {
+    amount: string;
+    percent: string;
+    status: string;
+    createdAt: number;
+  }[];
+};

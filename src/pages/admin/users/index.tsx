@@ -8,6 +8,7 @@ import { Cardholder } from "phosphor-react";
 import { Button, Spinner } from "@/components/atoms";
 import { Table } from "@/components/organims";
 import { Header } from "@/components/organims/Header";
+import { ModalViewUserPaymentsProps } from "@/components/organims/ModalViewUserPayments/ModalViewUserPayments.types";
 import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { SEO } from "@/SEO";
 import { useAdminUserList } from "@/shared/hooks/useQuery";
@@ -33,14 +34,14 @@ const dashboardVariants: Variants = {
   },
 };
 
-const DynamicModalPayment = dynamic<any>(() =>
+const DynamicModalPayment = dynamic<ModalViewUserPaymentsProps>(() =>
   import("@/components/organims/ModalViewUserPayments").then(
     (mod) => mod.ModalViewUserPayments
   )
 );
 
 export default function PaymentVouchers() {
-  const [modalPaymentOpen, setModalPaymentOpen] = useState({
+  const [modal, setModalOpen] = useState({
     isOpen: false,
     id: null,
   });
@@ -57,7 +58,7 @@ export default function PaymentVouchers() {
           <Button
             className="btn-ghost w-14"
             onClick={() =>
-              setModalPaymentOpen({
+              setModalOpen({
                 isOpen: true,
                 id: value,
               })
@@ -121,11 +122,11 @@ export default function PaymentVouchers() {
           {registers?.data?.length === 0 && !isLoading && <NoResults />}
         </div>
 
-        {modalPaymentOpen.isOpen && modalPaymentOpen.id !== null && (
+        {modal.isOpen && modal.id !== null && (
           <DynamicModalPayment
-            id={modalPaymentOpen.id}
+            id={modal.id}
             onClose={() => {
-              setModalPaymentOpen({
+              setModalOpen({
                 isOpen: false,
                 id: null,
               });

@@ -21,3 +21,9 @@ export async function getUserPayments({
 
   return response.data;
 }
+
+export async function getPaymentYields(id: string) {
+  const response = await api.get(`/admin/yields/${id}`);
+
+  return response.data;
+}

@@ -1,8 +1,10 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
-import { Wallet } from "phosphor-react";
+import dynamic from "next/dynamic";
+import { ChartLineUp, Wallet } from "phosphor-react";
 
 import { Button, Spinner } from "@/components/atoms";
 import { CopyButton } from "@/components/atoms/CopyButton";
@@ -11,13 +13,24 @@ import { useUserPaymentData } from "@/shared/hooks/useQuery";
 import { statusTypes } from "@/shared/interfaces/Common";
 import { formatCurrency, formatDate } from "@/shared/utils/common";
 
+import { ModalViewYieldsProps } from "../ModalViewYields/ModalViewYields.types";
 import { Table } from "../Table";
 import { ModalViewUserPaymentsProps } from "./ModalViewUserPayments.types";
+
+const DynamicModalYields = dynamic<ModalViewYieldsProps>(() =>
+  import("@/components/organims/ModalViewYields").then(
+    (mod) => mod.ModalViewYields
+  )
+);
 
 export function ModalViewUserPayments({
   id,
   onClose,
 }: ModalViewUserPaymentsProps) {
+  const [viewYields, setViewYields] = useState({
+    isOpen: false,
+    id: "",
+  });
   const { isLoading, data: paymentRegister } = useUserPaymentData(id);
   const { isLoading: isLoadingChangeStatus, mutateAsync } =
     useMutationUpdatePayment();
@@ -81,6 +94,24 @@ export function ModalViewUserPayments({
         Cell: ({ cell: { value } }: any) =>
           value === null ? "Not approved yet" : formatDate(value),
       },
+      {
+        Header: "",
+        accessor: "id",
+        disableSortBy: true,
+        Cell: ({ cell: { value } }: any) => (
+          <Button
+            className="btn-ghost w-14"
+            onClick={() =>
+              setViewYields({
+                isOpen: true,
+                id: value,
+              })
+            }
+          >
+            <ChartLineUp size={24} />
+          </Button>
+        ),
+      },
     ],
     []
   );
@@ -88,8 +119,10 @@ export function ModalViewUserPayments({
   return (
     <div className="modal text-white visible opacity-100 z-50 pointer-events-auto w-full">
       <div className="modal-box w-11/12 max-w-5xl">
-        <div className="overflow-x-auto">
-          {isLoading ? (
+        <div className="p-5">
+          {viewYields.isOpen ? (
+            <DynamicModalYields id={viewYields.id} />
+          ) : isLoading ? (
             <Spinner />
           ) : (
             <>
@@ -117,7 +150,17 @@ export function ModalViewUserPayments({
           <Button
             className="btn btn-link text-red-500 w-24 mr-auto"
             type="button"
-            onClick={onClose}
+            onClick={() => {
+              if (viewYields.isOpen) {
+                setViewYields({
+                  isOpen: false,
+                  id: "",
+                });
+                return;
+              }
+
+              onClose?.();
+            }}
             disabled={isLoadingChangeStatus}
           >
             Close
