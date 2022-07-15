@@ -24,11 +24,11 @@ const index = async (req: CustomRequest, res: NextApiResponse) => {
       }
 
       const doc = queryResult.docs[0];
-      const { name: username, id, email, isAdmin } = doc.data();
+      const { name: username, id, email, isAdmin, walletId } = doc.data();
 
       res.setHeader(
         "Cache-Control",
-        "public, s-maxage=60, stale-while-revalidate=60"
+        "public, s-maxage=3600, stale-while-revalidate=3600"
       );
 
       return res.json({
@@ -37,6 +37,7 @@ const index = async (req: CustomRequest, res: NextApiResponse) => {
         id,
         email,
         isAdmin,
+        walletId,
       });
     } catch (e) {
       return res.status(400).json({

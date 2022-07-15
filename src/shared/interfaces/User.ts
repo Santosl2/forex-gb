@@ -13,6 +13,7 @@ export type UserData = {
   isAdmin: boolean;
   accessToken: string;
   refreshToken: string;
+  walletId: string;
 };
 
 export type UserCustom = UserCredential &

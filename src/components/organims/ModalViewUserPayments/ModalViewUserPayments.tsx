@@ -5,6 +5,7 @@ import React, { useMemo } from "react";
 import { Wallet } from "phosphor-react";
 
 import { Button, Spinner } from "@/components/atoms";
+import { CopyButton } from "@/components/atoms/CopyButton";
 import { useMutationUpdatePayment } from "@/shared/hooks/useMutation";
 import { useUserPaymentData } from "@/shared/hooks/useQuery";
 import { statusTypes } from "@/shared/interfaces/Common";
@@ -91,15 +92,26 @@ export function ModalViewUserPayments({
           {isLoading ? (
             <Spinner />
           ) : (
-            <Table data={paymentRegister?.data} columns={columns} />
+            <>
+              <Table data={paymentRegister?.data} columns={columns} />
+
+              <hr />
+              <div className="alert shadow-lg mt-5">
+                <div>
+                  <Wallet size={25} />
+                  <span>
+                    Wallet of this user:
+                    <div className="flex gap-1">
+                      <p id="userWalletID" className="text-sky-500">
+                        {paymentRegister?.data[0].walletId}
+                      </p>
+                      <CopyButton copyId="userWalletID" />
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </>
           )}
-          <hr />
-          <div className="alert shadow-lg mt-5">
-            <div>
-              <Wallet size={25} />
-              <span>Wallet of this user:</span>
-            </div>
-          </div>
         </div>
         <div className="modal-action">
           <Button

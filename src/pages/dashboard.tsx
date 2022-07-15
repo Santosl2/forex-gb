@@ -124,7 +124,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center flex-col">
+        <div className="md:flex sm:block w-full mt-5 overflow-y-auto items-center justify-center flex-col">
           <StatContainer>
             <Stat
               title="Your amount"
@@ -151,10 +151,13 @@ export default function Dashboard() {
               isLoading={isLoading}
             />
           </StatContainer>
+        </div>
+
+        <div className="md:flex sm:block gap-5 w-full mt-5 overflow-y-auto items-center justify-center flex-col">
           {isLoadingStatistics && <p>Loading...</p>}
           {statistics?.data && statistics.data.length > 0 && (
             <LineChart
-              width={700}
+              width={980}
               height={400}
               data={formatData()}
               margin={{

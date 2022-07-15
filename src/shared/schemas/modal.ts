@@ -31,3 +31,10 @@ export const modalAddSchema = yup.object({
       return value?.[0]?.size <= MAX_ALLOWED_FILE_SIZE || true;
     }),
 });
+
+export const modalUpdateWalletSchema = yup.object({
+  walletAddress: yup
+    .string()
+    .required("Wallet address is required")
+    .max(100, "Wallet address is too long"),
+});

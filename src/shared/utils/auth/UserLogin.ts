@@ -22,6 +22,7 @@ export function createUserCookie(
       email: payload.email,
       name: payload.name,
       isAdmin: payload.isAdmin,
+      walletId: payload.walletId,
     }),
     ctx
   );
@@ -33,7 +34,7 @@ export function createUserCookie(
 }
 
 export function getUserData(
-  { email, name, id, refreshToken, accessToken, isAdmin }: UserData,
+  { email, name, id, refreshToken, accessToken, isAdmin, walletId }: UserData,
   store: any,
   ctx: NextCTX | null = null
 ) {
@@ -45,6 +46,7 @@ export function getUserData(
       isAdmin,
       refreshToken,
       accessToken,
+      walletId,
     };
 
     store.dispatch(setUser(payload));

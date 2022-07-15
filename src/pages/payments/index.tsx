@@ -36,17 +36,6 @@ const dashboardVariants: Variants = {
 export default function PaymentVouchers() {
   const { isLoading, isFetching, data: registers } = useUserFinances();
 
-  const formattedData = useMemo(() => {
-    return registers?.data?.map((res: any) => {
-      return {
-        amount: res.amount,
-        voucher: res.url,
-        createdAt: res.createdAt,
-        status: res.status,
-      };
-    });
-  }, [registers]);
-
   const columns = useMemo(
     () => [
       {
@@ -81,6 +70,12 @@ export default function PaymentVouchers() {
         accessor: "createdAt",
         Cell: ({ cell: { value } }: any) => formatDate(value),
       },
+      {
+        Header: "Approved At",
+        accessor: "approvedAt",
+        Cell: ({ cell: { value } }: any) =>
+          value === null ? "Not approved yet" : formatDate(value),
+      },
     ],
     []
   );
@@ -105,7 +100,7 @@ export default function PaymentVouchers() {
           {isLoading && !registers && <Spinner />}
 
           {!isLoading && registers && (
-            <Table columns={columns} data={formattedData} />
+            <Table columns={columns} data={registers.data} />
           )}
 
           {registers?.data.length === 0 && !isLoading && <NoResults />}

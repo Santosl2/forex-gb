@@ -75,13 +75,14 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
     const queryResult = await getDocs(q);
 
     const data = queryResult.docs.map((doc) => {
-      const { url, amount, status, createdAt } = doc.data();
+      const { url, amount, status, createdAt, approvedAt } = doc.data();
 
       return {
         url,
         amount,
         status,
         createdAt,
+        approvedAt: approvedAt ?? null,
       };
     });
 

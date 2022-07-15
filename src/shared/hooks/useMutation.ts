@@ -1,5 +1,7 @@
 import { useMutation } from "react-query";
 
+import { ModalUpdateUserWalletFormData } from "@/components/organims/ModalUpdateUserWallet/ModalUpdateUserWallet.types";
+
 import { SignInFormData, SignUpFormData } from "../interfaces/Forms";
 import { AdminUserUpdateStatusResponse } from "../interfaces/Response";
 import { queryClient } from "../services/queryClient";
@@ -7,7 +9,7 @@ import {
   updatePercent,
   updateUserPaymentData,
 } from "../services/requests/admin";
-import { addMoney } from "../services/requests/money";
+import { addMoney, addWallet } from "../services/requests/money";
 import { createUser, loginUser } from "../services/requests/user";
 
 export function useMutationRegisterUser() {
@@ -24,6 +26,12 @@ export function useMutationAddMoney() {
       queryClient.invalidateQueries("userFinances");
     },
   });
+}
+
+export function useMutationUpdateUserWallet() {
+  return useMutation(async (data: ModalUpdateUserWalletFormData) =>
+    addWallet(data)
+  );
 }
 
 export function useMutationUpdatePercent() {

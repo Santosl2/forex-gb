@@ -12,6 +12,7 @@ import { NextApiResponse } from "next";
 import { CustomRequest, statusTypes } from "@/shared/interfaces/Common";
 import {
   dbInstancesUsersFinances,
+  dbInstanceUsers,
   dbInstanceYield,
 } from "@/shared/services/firebase";
 
@@ -43,12 +44,17 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       const q = query(dbInstancesUsersFinances, where("userId", "==", id));
       const queryResult = await getDocs(q);
 
-      if (queryResult.size === 0) {
+      const qUser = query(dbInstanceUsers, where("id", "==", id));
+      const queryResultUser = await getDocs(qUser);
+
+      if (queryResult.size === 0 || queryResultUser.size === 0) {
         return res.status(200).json({
           success: true,
           message: "No data",
         });
       }
+
+      const { walletId } = queryResultUser.docs[0].data();
 
       const data = queryResult.docs.map((docData) => {
         const { id: docId } = docData;
@@ -59,6 +65,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
           amount,
           status,
           url,
+          walletId,
           createdAt,
           approvedAt: approvedAt ?? null,
         };

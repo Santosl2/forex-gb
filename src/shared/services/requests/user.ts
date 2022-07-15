@@ -29,3 +29,9 @@ export async function getStatistics() {
 
   return response.data;
 }
+
+export async function getWallet() {
+  const response = await api.get("/users/wallet");
+
+  return response.data;
+}

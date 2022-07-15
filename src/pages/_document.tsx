@@ -19,6 +19,7 @@ export default function Document() {
         <NextScript />
         <div id="drawerPortal" />
         <div id="modalPortal" />
+        <div id="modalWalletPortal" />
       </body>
     </Html>
   );

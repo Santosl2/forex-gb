@@ -4,6 +4,7 @@ export type UserFinancesResponse = {
     createdAt: number;
     status: "recused" | "approved" | "pending";
     url: string;
+    walletId: string;
   }[];
 };
 
@@ -24,7 +25,6 @@ export type UserStatisticsResponse = {
     createdAt: number;
   }[];
 };
-
 export type AdminPercentResponse = {
   percent: number;
 };

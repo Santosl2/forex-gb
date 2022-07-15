@@ -4,3 +4,4 @@ export * from "./Table";
 export * from "./ModalAdd";
 export * from "./ModalAlertUser";
 export * from "./ModalViewUserPayments";
+export * from "./ModalUpdateUserWallet";

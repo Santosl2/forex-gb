@@ -50,6 +50,24 @@ export default function PaymentVouchers() {
   const columns = useMemo(
     () => [
       {
+        Header: "#",
+        accessor: "id",
+        disableSortBy: true,
+        Cell: ({ cell: { value } }: any) => (
+          <Button
+            className="btn-ghost w-14"
+            onClick={() =>
+              setModalPaymentOpen({
+                isOpen: true,
+                id: value,
+              })
+            }
+          >
+            <Cardholder size={24} />
+          </Button>
+        ),
+      },
+      {
         Header: "Name",
         accessor: "name",
       },
@@ -72,24 +90,6 @@ export default function PaymentVouchers() {
         Header: "Created At",
         accessor: "createdAt",
         Cell: ({ cell: { value } }: any) => formatDate(value),
-      },
-      {
-        Header: "#",
-        accessor: "id",
-        disableSortBy: true,
-        Cell: ({ cell: { value } }: any) => (
-          <Button
-            className="btn-ghost"
-            onClick={() =>
-              setModalPaymentOpen({
-                isOpen: true,
-                id: value,
-              })
-            }
-          >
-            <Cardholder size={24} />
-          </Button>
-        ),
       },
     ],
     []
