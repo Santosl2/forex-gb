@@ -66,6 +66,10 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       const {
         user: { emailVerified },
       } = (await signInWithEmailAndPassword(auth, email, password)) as UserType;
+      console.log(
+        "🚀 ~ file: index.ts ~ line 69 ~ signInWithEmailAndPassword",
+        emailVerified
+      );
 
       if (!emailVerified) {
         return res.json({
