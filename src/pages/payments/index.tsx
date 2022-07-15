@@ -45,7 +45,7 @@ export default function PaymentVouchers() {
       },
       {
         Header: "Image",
-        accessor: "voucher",
+        accessor: "url",
         disableSortBy: true,
         Cell: ({ cell: { value } }: any) => (
           <a

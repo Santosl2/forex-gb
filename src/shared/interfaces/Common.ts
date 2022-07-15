@@ -32,10 +32,11 @@ export type yieldCronResponse = {
   };
 };
 
-export const statusTypes = ["Approved", "Pending", "Decline", "Paid"];
+export const statusTypes = ["Approved", "Pending", "Declined", "Paid"];
 
 export const badgeTypes = {
-  recused: "error",
-  approved: "success",
+  declined: "error",
+  approved: "info",
+  paid: "success",
   pending: "warning",
 } as any;
