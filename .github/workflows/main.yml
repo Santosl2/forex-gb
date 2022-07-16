@@ -2,7 +2,7 @@ name: 1hour cron
 
 on: 
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 0 * * 1-5"
 
 jobs: 
   cron:
