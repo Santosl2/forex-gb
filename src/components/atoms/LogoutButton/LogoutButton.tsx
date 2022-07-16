@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
 import { logout } from "@/shared/store/reducers/user";
+import { logoutUser } from "@/shared/utils/auth/UserLogin";
 
 import { Button } from "../Button";
 
@@ -24,6 +25,7 @@ function LogoutBase() {
       })
     );
 
+    logoutUser();
     router.push("/");
   }, []);
 

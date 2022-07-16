@@ -37,7 +37,7 @@ const index = async (req: CustomRequest, res: NextApiResponse) => {
         id,
         email,
         isAdmin,
-        walletId,
+        walletId: walletId || "",
       });
     } catch (e) {
       return res.status(400).json({

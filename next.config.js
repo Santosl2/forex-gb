@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   api: {
     bodyParser: false,
-    sizeLimit: "2mb",
+    sizeLimit: "7mb",
   },
 };
 

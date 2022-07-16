@@ -8,6 +8,7 @@ import { ChartLineUp, Wallet } from "phosphor-react";
 
 import { Button, Spinner } from "@/components/atoms";
 import { CopyButton } from "@/components/atoms/CopyButton";
+import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { useMutationUpdatePayment } from "@/shared/hooks/useMutation";
 import { useUserPaymentData } from "@/shared/hooks/useQuery";
 import { statusTypes } from "@/shared/interfaces/Common";
@@ -124,7 +125,7 @@ export function ModalViewUserPayments({
             <DynamicModalYields id={viewYields.id} />
           ) : isLoading ? (
             <Spinner />
-          ) : (
+          ) : paymentRegister?.data ? (
             <>
               <Table data={paymentRegister?.data} columns={columns} />
 
@@ -136,7 +137,7 @@ export function ModalViewUserPayments({
                     Wallet of this user:
                     <div className="flex gap-1">
                       <p id="userWalletID" className="text-sky-500">
-                        {paymentRegister?.data[0].walletId}
+                        {paymentRegister?.data?.[0].walletId}
                       </p>
                       <CopyButton copyId="userWalletID" />
                     </div>
@@ -144,6 +145,8 @@ export function ModalViewUserPayments({
                 </div>
               </div>
             </>
+          ) : (
+            <NoResults />
           )}
         </div>
         <div className="modal-action">

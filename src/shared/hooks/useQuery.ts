@@ -53,13 +53,13 @@ export function useAdminUserList() {
 }
 
 export function useUserPaymentData(id: string) {
-  return useQuery(["adminPaymentData"], () =>
+  return useQuery(["adminPaymentData", id], () =>
     getUserPayments({ id })
   ) as UseQueryResult<UserFinancesResponse, unknown>;
 }
 
 export function usePaymentYieldData(id: string) {
-  return useQuery(["adminYieldData"], () =>
+  return useQuery(["adminYieldData", id], () =>
     getPaymentYields(id)
   ) as UseQueryResult<AdminUserYieldDataResponse, unknown>;
 }

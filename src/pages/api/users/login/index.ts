@@ -1,13 +1,11 @@
 /* eslint-disable consistent-return */
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { getDocs, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
 import { CustomRequest } from "@/shared/interfaces/Common";
 import { SignInFormData } from "@/shared/interfaces/Forms";
-import { UserType } from "@/shared/interfaces/User";
 import { loginSchema } from "@/shared/schemas/login";
-import { auth, dbInstanceUsers } from "@/shared/services/firebase";
+import { dbInstanceUsers } from "@/shared/services/firebase";
 import { jwtGenerate } from "@/shared/utils/auth/JWT";
 import { verifyPassword } from "@/shared/utils/hash";
 
@@ -63,24 +61,6 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         });
       }
 
-      const {
-        user: { emailVerified },
-      } = (await signInWithEmailAndPassword(auth, email, password)) as UserType;
-      console.log(
-        "🚀 ~ file: index.ts ~ line 69 ~ signInWithEmailAndPassword",
-        emailVerified
-      );
-
-      if (!emailVerified) {
-        return res.json({
-          success: false,
-          message:
-            "Your email is not verified, please verify your email to login.",
-        });
-      }
-
-      await auth.signOut();
-
       const token = jwtGenerate(id.toString());
 
       return res.json({
@@ -90,7 +70,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
           name,
           email,
           isAdmin,
-          walletId,
+          walletId: walletId || "",
         },
         refreshToken: token,
         accessToken: token,

@@ -89,7 +89,7 @@ export function ModalViewYields({ id }: ModalViewYieldsProps) {
     <>
       {yieldData?.data ? (
         <div className="p-5">
-          <Table data={yieldData?.data} columns={columns} />
+          <Table data={yieldData.data} columns={columns} />
           <hr />
           <h3 className="text-4xl my-5">Graphic</h3>
           <div className="overflow-x-auto">

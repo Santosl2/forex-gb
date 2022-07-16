@@ -99,7 +99,7 @@ export default function PaymentVouchers() {
         <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
           {isLoading && !registers && <Spinner />}
 
-          {!isLoading && registers && (
+          {!isLoading && registers?.data && registers.data.length > 0 && (
             <Table columns={columns} data={registers.data} />
           )}
 

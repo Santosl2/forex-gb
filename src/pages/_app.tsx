@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
           <ModalAdd />
         </main>
-        {name && window.location.pathname !== "/" && id && <LogoutButton />}
+        {name && id && router.route !== "/" && <LogoutButton />}
 
         <ToastContainer
           className="customToast"

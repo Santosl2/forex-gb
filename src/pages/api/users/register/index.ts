@@ -1,18 +1,12 @@
 /* eslint-disable consistent-return */
 /* eslint-disable camelcase */
 /* eslint-disable unused-imports/no-unused-vars */
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  signInWithEmailAndPassword,
-  User,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, getDocs, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
 import { CustomRequest } from "@/shared/interfaces/Common";
 import { SignUpFormData } from "@/shared/interfaces/Forms";
-import { UserType } from "@/shared/interfaces/User";
 import { registerSchema } from "@/shared/schemas/register";
 import { auth, dbInstanceUsers } from "@/shared/services/firebase";
 import { verifyCaptcha } from "@/shared/services/requests/captcha";
@@ -90,17 +84,6 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         password: hashedPassword,
         isAdmin: false,
         createdAt: new Date().getTime(),
-      });
-
-      const {
-        user: { refreshToken, accessToken },
-      } = (await signInWithEmailAndPassword(auth, email, password)) as UserType;
-
-      const currentUser = auth.currentUser ?? ({} as User);
-
-      sendEmailVerification(currentUser).then(async () => {
-        console.log(`E-mail sent successfuly to ${email}`);
-        await auth.signOut();
       });
 
       return res.status(201).json({

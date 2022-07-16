@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -10,16 +9,16 @@ import { registerSchema } from "@/shared/schemas/register";
 import { verifyRecaptcha } from "@/shared/utils/verifyRecaptcha";
 import { yupResolver } from "@/shared/utils/yup";
 
-import { EmailSent } from "../EmailSent";
 import { RegisterFormData } from "./Register.types";
 
 export function RegisterForm() {
-  const [emailSent, setEmailSent] = useState(false);
+  // const [emailSent, setEmailSent] = useState(false);
   const registerUser = useMutationRegisterUser();
 
-  const { register, handleSubmit, formState } = useForm<RegisterFormData>({
-    resolver: yupResolver(registerSchema),
-  });
+  const { register, handleSubmit, formState, reset } =
+    useForm<RegisterFormData>({
+      resolver: yupResolver(registerSchema),
+    });
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     const recaptchaVerify = await verifyRecaptcha();
@@ -31,14 +30,18 @@ export function RegisterForm() {
           captchaToken: recaptchaVerify,
         });
 
-        setEmailSent(true);
+        toast.success(
+          "Successfully registered! Now you can login in your account."
+        );
+        reset();
+        // setEmailSent(true);
       } catch (e: any) {
         toast.warning(e.response?.data?.message ?? "Internal server error");
       }
     }
   };
 
-  if (emailSent) return <EmailSent />;
+  // if (emailSent) return <EmailSent />;
 
   return (
     <form
