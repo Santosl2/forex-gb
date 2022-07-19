@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable consistent-return */
-import { getDocs, query, where } from "firebase/firestore";
+import { getDocs, orderBy, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
 import { CustomRequest } from "@/shared/interfaces/Common";
@@ -27,7 +27,8 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       const q = query(
         dbInstanceYield,
         where("userId", "==", user),
-        where("status", "==", "in_wallet")
+        where("status", "==", "in_wallet"),
+        orderBy("createdAt", "asc")
       );
 
       const queryResult = await getDocs(q);

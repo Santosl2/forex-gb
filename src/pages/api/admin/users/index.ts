@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import { getDocs, query, where } from "firebase/firestore";
+import { getDocs, orderBy, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
 import { CustomRequest } from "@/shared/interfaces/Common";
@@ -24,11 +24,11 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
   if (req.method === "GET") {
     try {
-      const q = query(dbInstanceUsers);
+      const q = query(dbInstanceUsers, orderBy("createdAt", "desc"));
       const queryResult = await getDocs(q);
 
       const formatData = queryResult.docs.map(async (doc) => {
-        const { email, id, isAdmin, name } = doc.data();
+        const { email, id, isAdmin, name, createdAt } = doc.data();
 
         const qUserFinances = query(
           dbInstancesUsersFinances,
@@ -52,6 +52,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
           isAdmin,
           totalAmountApproved,
           totalAmountPending,
+          createdAt,
         };
       });
 

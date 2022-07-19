@@ -25,24 +25,24 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
     });
   }
 
-  const actualDate = new Date();
-  let initialDayOfMonthUnix = 0;
-  const totalDaysOfMonth = new Date(2022, actualDate.getMonth() + 1, 0);
-  const endDayOfMonthUnix = totalDaysOfMonth.getTime();
+  const dateMoreOneDay = new Date().getTime() + 86400 * 1000;
+  // let initialDayOfMonthUnix = 0;
+  // const totalDaysOfMonth = new Date(2022, actualDate.getMonth() + 1, 0);
+  // const endDayOfMonthUnix = totalDaysOfMonth.getTime();
 
-  if (actualDate.getDate() === 1) {
-    initialDayOfMonthUnix = actualDate.getTime();
-  } else {
-    initialDayOfMonthUnix =
-      actualDate.getTime() - (actualDate.getDate() - 1) * (86400 * 1000);
-  }
+  // if (actualDate.getDate() === 1) {
+  //   initialDayOfMonthUnix = actualDate.getTime();
+  // } else {
+  //   initialDayOfMonthUnix =
+  //     actualDate.getTime() - (actualDate.getDate() - 1) * (86400 * 1000);
+  // }
 
   if (req.method === "GET") {
     try {
       const q = query(
         dbInstancesUsersFinances,
-        where("status", "==", "approved")
-        // where("createdAt", ">=", initialDayOfMonthUnix),
+        where("status", "==", "approved"),
+        where("approvedAt", "<", dateMoreOneDay)
         // where("createdAt", "<=", endDayOfMonthUnix)
       );
 
@@ -52,15 +52,11 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       const data = queryResult.docs.map((reg) => {
         const obj = {} as any;
 
-        const { amount, approvedAt, userId } = reg.data();
+        const { amount, userId } = reg.data();
 
-        const approvedDate = new Date(approvedAt).getDate();
-
-        if (actualDate.getDate() > approvedDate) {
-          obj.amount = parseFloat(amount);
-          obj.userId = userId;
-          obj.docId = reg.id;
-        }
+        obj.amount = parseFloat(amount);
+        obj.userId = userId;
+        obj.docId = reg.id;
 
         return obj;
       });
@@ -69,15 +65,9 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       const formatObject: yieldCronResponse = data.reduce((acc, curr) => {
         if (curr.amount) {
           if (acc[curr.userId]) {
-            acc[curr.userId] = {
-              amount: acc[curr.userId].amount + curr.amount,
-              docId: curr.docId,
-            };
+            acc[curr.userId] += curr.amount;
           } else {
-            acc[curr.userId] = {
-              amount: curr.amount,
-              docId: curr.docId,
-            };
+            acc[curr.userId] = curr.amount;
           }
         }
 
@@ -87,20 +77,22 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       const createdAt = new Date().getTime();
       const globalPercent = await getGlobalPercent();
 
-      Object.entries(formatObject)
+      Object.entries(data)
         .filter(([e]) => e !== "undefined")
-        .forEach(async ([key, value]) => {
-          const amountToNumber = parseFloat(value.amount.toString());
+        .forEach(async ([, { userId, docId, amount }]) => {
+          const userIdAmount = formatObject[userId];
+
+          const amountToNumber = parseFloat(userIdAmount.toString());
           const getPercent = await getPercentByValue(amountToNumber);
 
           if (globalPercent >= getPercent) return;
 
-          const percent = (amountToNumber / 100) * globalPercent;
-          const amountWithPercent = amountToNumber + percent;
+          const percent = (amount / 100) * globalPercent;
+          const amountWithPercent = amount + percent;
 
           addDoc(dbInstanceYield, {
-            docId: value.docId,
-            userId: key,
+            docId,
+            userId,
             amount: amountWithPercent,
             percent,
             createdAt,
@@ -115,14 +107,9 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
           // });
         });
 
-      res.setHeader(
-        "Cache-Control",
-        "public, s-maxage=3600, stale-while-revalidate=3600"
-      );
-
       return res.status(200).json({
         success: true,
-        data: "All cron jobs executed! 🚀",
+        data: `All cron jobs executed! 🚀${data.length}`,
       });
     } catch (e) {
       console.log("🚀 ~ file: index.ts ~ line 91 ~ e", e);

@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import { getDocs, query, where } from "firebase/firestore";
+import { getDocs, orderBy, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
 import { CustomRequest } from "@/shared/interfaces/Common";
@@ -30,7 +30,11 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
   if (req.method === "GET") {
     try {
-      const q = query(dbInstanceYield, where("docId", "==", id));
+      const q = query(
+        dbInstanceYield,
+        where("docId", "==", id),
+        orderBy("createdAt", "asc")
+      );
       const queryResult = await getDocs(q);
 
       if (queryResult.size === 0) {
@@ -60,7 +64,8 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         success: true,
         data,
       });
-    } catch {
+    } catch (e) {
+      console.log("🚀 ~ file: [id].ts ~ line 68 ~ e", e);
       return res.status(500).json({
         success: false,
         message: "Internal server error",
