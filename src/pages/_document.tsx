@@ -13,6 +13,12 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Heebo:wght@200;400&display=swap"
           rel="stylesheet"
         />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/images/favicon.ico"
+        />
       </Head>
       <body data-theme="dark">
         <Main />
