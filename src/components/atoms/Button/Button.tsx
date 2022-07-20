@@ -19,7 +19,12 @@ const ButtonBase: ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
   }, [isLoading, props.className]);
 
   return (
-    <button {...props} ref={ref} className={buttonClasses}>
+    <button
+      {...props}
+      ref={ref}
+      className={buttonClasses}
+      disabled={props.disabled || isLoading}
+    >
       {children}
     </button>
   );

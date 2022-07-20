@@ -11,7 +11,7 @@ import { CopyButton } from "@/components/atoms/CopyButton";
 import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { useMutationUpdatePayment } from "@/shared/hooks/useMutation";
 import { useUserPaymentData } from "@/shared/hooks/useQuery";
-import { statusTypes } from "@/shared/interfaces/Common";
+import { borderColor, statusTypes } from "@/shared/interfaces/Common";
 import { formatCurrency, formatDate } from "@/shared/utils/common";
 
 import { ModalViewYieldsProps } from "../ModalViewYields/ModalViewYields.types";
@@ -62,27 +62,31 @@ export function ModalViewUserPayments({
         Header: "Status",
         accessor: "status",
         disableSortBy: true,
-        Cell: ({ cell }: any) => (
-          <select
-            className="select select-bordered w-full max-w-xs"
-            onChange={async (e: React.ChangeEvent<HTMLSelectElement>) => {
-              await mutateAsync({
-                id: cell.row.original.id,
-                status: e.target.value,
-              });
-            }}
-          >
-            {statusTypes.map((status) => (
-              <option
-                key={status}
-                value={status.toLowerCase()}
-                selected={cell.value === status.toLocaleLowerCase()}
-              >
-                {status}
-              </option>
-            ))}
-          </select>
-        ),
+        Cell: ({ cell }: any) => {
+          const value = cell.value.toString().toLowerCase() ?? "declined";
+
+          return (
+            <select
+              className={`select select-bordered w-full max-w-xs ${borderColor[value]}`}
+              onChange={async (e: React.ChangeEvent<HTMLSelectElement>) => {
+                await mutateAsync({
+                  id: cell.row.original.id,
+                  status: e.target.value,
+                });
+              }}
+            >
+              {statusTypes.map((status) => (
+                <option
+                  key={status}
+                  value={status.toLowerCase()}
+                  selected={cell.value === status.toLocaleLowerCase()}
+                >
+                  {status}
+                </option>
+              ))}
+            </select>
+          );
+        },
       },
       {
         Header: "Created At",

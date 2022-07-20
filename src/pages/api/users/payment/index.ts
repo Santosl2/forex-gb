@@ -9,6 +9,7 @@ import {
   dbInstancesUsersFinances,
   uploadFile,
 } from "@/shared/services/firebase";
+import { canWithDraw } from "@/shared/utils/common";
 
 import authMiddleware from "../../middlewares/authMiddleware";
 import corsMiddleware from "../../middlewares/corsMiddleware";
@@ -78,11 +79,13 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
       const { url, amount, status, createdAt, approvedAt } = doc.data();
 
       return {
+        id: doc.id,
         url,
         amount,
         status,
         createdAt,
         approvedAt: approvedAt ?? null,
+        canWithdraw: status === "approved" && canWithDraw(),
       };
     });
 

@@ -35,3 +35,9 @@ export async function getWallet() {
 
   return response.data;
 }
+
+export async function requestWithdraw(id: string) {
+  const response = await api.post(`/users/withdraw/${id}`);
+
+  return response.data;
+}

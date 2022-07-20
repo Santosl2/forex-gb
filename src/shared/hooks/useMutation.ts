@@ -11,7 +11,11 @@ import {
   updateUserPaymentData,
 } from "../services/requests/admin";
 import { addMoney, addWallet } from "../services/requests/money";
-import { createUser, loginUser } from "../services/requests/user";
+import {
+  createUser,
+  loginUser,
+  requestWithdraw,
+} from "../services/requests/user";
 
 export function useMutationRegisterUser() {
   return useMutation(async (user: SignUpFormData) => createUser(user));
@@ -60,6 +64,14 @@ export function useMutationSendIncomes() {
     onSuccess: () => {
       queryClient.invalidateQueries("adminPaymentData");
       queryClient.invalidateQueries("adminUserList");
+    },
+  });
+}
+
+export function useRequestWithdraw() {
+  return useMutation(async (id: string) => requestWithdraw(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("userFinances");
     },
   });
 }

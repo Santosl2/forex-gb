@@ -1,14 +1,16 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { useMemo } from "react";
+import { toast } from "react-toastify";
 
 import { motion, Variants } from "framer-motion";
 
-import { Spinner } from "@/components/atoms";
+import { Button, Spinner } from "@/components/atoms";
 import { Badge } from "@/components/atoms/Badge/Badge";
 import { Table } from "@/components/organims";
 import { Header } from "@/components/organims/Header";
 import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { SEO } from "@/SEO";
+import { useRequestWithdraw } from "@/shared/hooks/useMutation";
 import { useUserFinances } from "@/shared/hooks/useQuery";
 import { badgeTypes } from "@/shared/interfaces/Common";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
@@ -35,6 +37,23 @@ const dashboardVariants: Variants = {
 
 export default function PaymentVouchers() {
   const { isLoading, isFetching, data: registers } = useUserFinances();
+  const { isLoading: isRequestWithdraw, mutateAsync } = useRequestWithdraw();
+
+  const requestWithdraw = async (id: string) => {
+    try {
+      const requestWithdrawData = await mutateAsync(id);
+
+      if (!requestWithdrawData.success) {
+        toast(requestWithdrawData.message, { type: "info" });
+
+        return;
+      }
+
+      toast.success(requestWithdrawData.message);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message ?? "Internal server error");
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -62,7 +81,7 @@ export default function PaymentVouchers() {
         Header: "Status",
         accessor: "status",
         Cell: ({ cell: { value } }: any) => (
-          <Badge type={badgeTypes[value]}>{value}</Badge>
+          <Badge type={badgeTypes[value].color}>{badgeTypes[value].text}</Badge>
         ),
       },
       {
@@ -75,6 +94,26 @@ export default function PaymentVouchers() {
         accessor: "approvedAt",
         Cell: ({ cell: { value } }: any) =>
           value === null ? "Not approved yet" : formatDate(value),
+      },
+      {
+        Header: "#",
+        accessor: "canWithdraw",
+        disableSortBy: true,
+        Cell: ({ cell }: any) => {
+          const { id } = cell.row.original;
+          const { canWithdraw, status } = cell.row.values;
+
+          return (
+            <Button
+              className="w-24"
+              disabled={!canWithdraw || status === "request_withdraw"}
+              isLoading={isRequestWithdraw}
+              onClick={() => requestWithdraw(id)}
+            >
+              Withdraw
+            </Button>
+          );
+        },
       },
     ],
     []

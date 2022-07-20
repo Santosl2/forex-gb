@@ -27,3 +27,8 @@ export const convertFileToBase64 = (
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+
+export function canWithDraw() {
+  const isFirstDayOfMonth = new Date().getDate() === 20;
+  return isFirstDayOfMonth;
+}
