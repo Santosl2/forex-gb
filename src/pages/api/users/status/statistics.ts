@@ -3,7 +3,7 @@
 import { getDocs, orderBy, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
-import { CustomRequest } from "@/shared/interfaces/Common";
+import { CustomRequest, StatisticsTypes } from "@/shared/interfaces/Common";
 import { dbInstanceYield } from "@/shared/services/firebase";
 
 import authMiddleware from "../../middlewares/authMiddleware";
@@ -33,24 +33,28 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
       const queryResult = await getDocs(q);
 
-      const sumAllAmount = queryResult.docs.reduce((acc, curr) => {
-        return acc + curr.data().percent;
-      }, 0);
-      console.log(
-        "🚀 ~ file: statistics.ts ~ line 39 ~ sumAllAmount ~ sumAllAmount",
-        sumAllAmount
-      );
+      const statisticsReduce = queryResult.docs.reduce((acc, curr) => {
+        const { createdAt, percent } = curr.data() as StatisticsTypes;
+        const formatCreatedAt: any = new Date(createdAt).toLocaleDateString();
 
-      const findCreatedAt = queryResult.docs[0]
-        ? queryResult.docs[0].data()
-        : {};
+        if (percent && !acc[formatCreatedAt]) {
+          acc[formatCreatedAt] = {
+            percent,
+            createdAt,
+          };
+        } else {
+          acc[formatCreatedAt] = {
+            ...acc[formatCreatedAt],
+            percent: Math.ceil(acc[formatCreatedAt].percent + percent),
+          };
+        }
 
-      const formatedData = {
-        amount: sumAllAmount,
-        createdAt: findCreatedAt.createdAt,
-      };
+        return acc;
+      }, [] as StatisticsTypes[]);
 
-      const data = queryResult.docs.length > 0 ? formatedData : [];
+      const formatData = Object.entries(statisticsReduce).map(([, value]) => ({
+        ...value,
+      }));
 
       // Cache request
       res.setHeader(
@@ -60,7 +64,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
       return res.status(200).json({
         success: true,
-        data,
+        data: formatData,
       });
     } catch (e) {
       console.log("🚀 ~ file: index.ts ~ line 91 ~ e", e);

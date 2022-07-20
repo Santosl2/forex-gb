@@ -2,7 +2,7 @@
 import { getDocs, orderBy, query, where } from "firebase/firestore";
 import { NextApiResponse } from "next";
 
-import { CustomRequest } from "@/shared/interfaces/Common";
+import { CustomRequest, StatisticsTypes } from "@/shared/interfaces/Common";
 import { dbInstanceYield } from "@/shared/services/firebase";
 
 import authMiddleware from "../../middlewares/authMiddleware";
@@ -44,16 +44,30 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
         });
       }
 
-      const data = queryResult.docs.map((docData) => {
-        const { amount, percent, createdAt, status } = docData.data();
+      const statisticsReduce = queryResult.docs.reduce((acc, curr) => {
+        const { createdAt, percent, status } = curr.data() as StatisticsTypes;
+        const formatCreatedAt: any = new Date(createdAt).toLocaleDateString();
 
-        return {
-          amount,
-          percent,
-          createdAt,
-          status,
-        };
-      });
+        if (percent && !acc[formatCreatedAt]) {
+          acc[formatCreatedAt] = {
+            percent,
+            createdAt,
+            status,
+          };
+        } else {
+          acc[formatCreatedAt] = {
+            ...acc[formatCreatedAt],
+            percent: Math.ceil(acc[formatCreatedAt].percent + percent),
+            status,
+          };
+        }
+
+        return acc;
+      }, [] as StatisticsTypes[]);
+
+      const formatData = Object.entries(statisticsReduce).map(([, value]) => ({
+        ...value,
+      }));
 
       res.setHeader(
         "Cache-Control",
@@ -62,7 +76,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
       return res.status(200).json({
         success: true,
-        data,
+        data: formatData,
       });
     } catch (e) {
       console.log("🚀 ~ file: [id].ts ~ line 68 ~ e", e);

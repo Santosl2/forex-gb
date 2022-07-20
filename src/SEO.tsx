@@ -11,7 +11,7 @@ interface SEOProps {
 
 export function SEO({
   title,
-  description,
+  description = "Make your money work!",
   image,
   shouldExcludeTitleSuffix = false,
   shouldIndexPage = true,

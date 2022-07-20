@@ -70,3 +70,9 @@ export const badgeTypes = {
     text: "Wait payment",
   },
 } as any;
+
+export type StatisticsTypes = {
+  percent: number;
+  createdAt: number;
+  status?: string;
+};

@@ -1,3 +1,5 @@
+import { StatisticsTypes } from "./Common";
+
 export type UserFinancesResponse = {
   data: {
     amount: number;
@@ -19,10 +21,7 @@ export type UserStatusResponse = {
 };
 
 export type UserStatisticsResponse = {
-  data: {
-    amount: number;
-    createdAt: number;
-  };
+  data: StatisticsTypes[];
 };
 export type AdminPercentResponse = {
   percent: number;

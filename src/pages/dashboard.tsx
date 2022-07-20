@@ -1,17 +1,10 @@
 /* eslint-disable no-prototype-builtins */
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { motion, Variants } from "framer-motion";
 import dynamic from "next/dynamic";
-import {
-  Line,
-  LineChart,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
 
+import { LineChart } from "@/components/atoms/";
 import { Stat } from "@/components/molecules/Stat/Stat";
 import { StatContainer } from "@/components/organims";
 import { Header } from "@/components/organims/Header";
@@ -21,21 +14,6 @@ import { SEO } from "@/SEO";
 import { useUserStatistics, useUserStatus } from "@/shared/hooks/useQuery";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
 import { formatCurrency, formatDate } from "@/shared/utils/common";
-
-function CustomTooltip({ payload, label, active }: any) {
-  if (active) {
-    return (
-      <div className="bg-base-300 p-5 rounded">
-        <p>{`${label}`}</p>
-        <p className="text-green-200">
-          Income value of this day: {formatCurrency(payload[0].value)}
-        </p>
-      </div>
-    );
-  }
-
-  return null;
-}
 
 const dashboardVariants: Variants = {
   initial: {
@@ -74,17 +52,15 @@ export default function Dashboard() {
     }
   }, [registers]);
 
-  const formatData = useCallback(() => {
+  const formatData = useMemo(() => {
     if (!statistics?.data) return [];
 
-    const { amount, createdAt } = statistics.data;
-
-    const data = [
-      {
-        name: formatDate(createdAt),
-        amount,
-      },
-    ];
+    const data = statistics?.data.map((e) => {
+      return {
+        name: formatDate(e.createdAt),
+        amount: e.percent,
+      };
+    });
 
     return data;
   }, [statistics]);
@@ -156,37 +132,16 @@ export default function Dashboard() {
 
         <div className="md:flex sm:block gap-5 w-full mt-5 overflow-y-auto items-center justify-center flex-col">
           {isLoadingStatistics && <p>Loading...</p>}
-          {statistics?.data && statistics.data.amount && (
-            <LineChart
-              width={980}
-              height={400}
-              data={formatData()}
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip content={<CustomTooltip />} />
-              <Line
-                connectNulls
-                type="monotone"
-                dataKey="amount"
-                stroke="#8884d8"
-                fill="#8884d8"
-              />
-            </LineChart>
+          {statistics?.data && statistics.data.length > 0 && (
+            <LineChart data={formatData} />
           )}
-          {!isLoadingStatistics &&
-            !statistics?.data.hasOwnProperty("amount") && <NoResults />}
+          {!isLoadingStatistics && statistics?.data.length === 0 && (
+            <NoResults />
+          )}
         </div>
       </motion.section>
 
-      {!userModalYield && (
+      {!userModalYield && statistics?.data.hasOwnProperty("amount") && (
         <DynamicModalAlert onClose={() => setUserModalYield(true)} />
       )}
     </>
