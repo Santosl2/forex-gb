@@ -1,5 +1,5 @@
 /* eslint-disable no-prototype-builtins */
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { motion, Variants } from "framer-motion";
 import dynamic from "next/dynamic";
@@ -27,11 +27,8 @@ function CustomTooltip({ payload, label, active }: any) {
     return (
       <div className="bg-base-300 p-5 rounded">
         <p>{`${label}`}</p>
-        <p className="text-red-200">
-          Value: {formatCurrency(payload[0].value)}
-        </p>
         <p className="text-green-200">
-          Percent Value: {formatCurrency(payload[0].payload.percent)}
+          Income value of this day: {formatCurrency(payload[0].value)}
         </p>
       </div>
     );
@@ -77,17 +74,20 @@ export default function Dashboard() {
     }
   }, [registers]);
 
-  const formatData = () => {
-    const data = statistics?.data.map((e) => {
-      return {
-        name: formatDate(e.createdAt),
-        percent: e.percent,
-        amount: e.amount,
-      };
-    });
+  const formatData = useCallback(() => {
+    if (!statistics?.data) return [];
+
+    const { amount, createdAt } = statistics.data;
+
+    const data = [
+      {
+        name: formatDate(createdAt),
+        amount,
+      },
+    ];
 
     return data;
-  };
+  }, [statistics]);
 
   return (
     <>
@@ -156,7 +156,7 @@ export default function Dashboard() {
 
         <div className="md:flex sm:block gap-5 w-full mt-5 overflow-y-auto items-center justify-center flex-col">
           {isLoadingStatistics && <p>Loading...</p>}
-          {statistics?.data && statistics.data.length > 0 && (
+          {statistics?.data && statistics.data.amount && (
             <LineChart
               width={980}
               height={400}
@@ -182,8 +182,7 @@ export default function Dashboard() {
             </LineChart>
           )}
           {!isLoadingStatistics &&
-            statistics?.data &&
-            statistics.data.length === 0 && <NoResults />}
+            !statistics?.data.hasOwnProperty("amount") && <NoResults />}
         </div>
       </motion.section>
 

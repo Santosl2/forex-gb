@@ -33,7 +33,7 @@ export function LoginForm() {
         return;
       }
 
-      toast.success("Login successful!");
+      toast.success("Login successfully!");
 
       user({
         ...loginData?.user,

@@ -142,7 +142,7 @@ describe("Login Component", () => {
       isLoading: false,
       mutateAsync: () => ({
         success: true,
-        message: "Login successful!",
+        message: "Login successfully!",
         user: {
           id: "1",
           name: "Teste",
@@ -169,7 +169,7 @@ describe("Login Component", () => {
     });
 
     expect(mockMutation).toHaveBeenCalled();
-    expect(await screen.findByText("Login successful!")).toBeInTheDocument();
+    expect(await screen.findByText("Login successfully!")).toBeInTheDocument();
     expect(inputPassword.value).toBe("");
     expect(inputEmail.value).toBe("");
     expect(mockPush).toHaveBeenCalledWith("/dashboard");

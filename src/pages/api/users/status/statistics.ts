@@ -33,15 +33,24 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
       const queryResult = await getDocs(q);
 
-      const data = queryResult.docs.map((doc) => {
-        const { amount, createdAt, percent } = doc.data();
+      const sumAllAmount = queryResult.docs.reduce((acc, curr) => {
+        return acc + curr.data().percent;
+      }, 0);
+      console.log(
+        "🚀 ~ file: statistics.ts ~ line 39 ~ sumAllAmount ~ sumAllAmount",
+        sumAllAmount
+      );
 
-        return {
-          amount,
-          percent,
-          createdAt,
-        };
-      });
+      const findCreatedAt = queryResult.docs[0]
+        ? queryResult.docs[0].data()
+        : {};
+
+      const formatedData = {
+        amount: sumAllAmount,
+        createdAt: findCreatedAt.createdAt,
+      };
+
+      const data = queryResult.docs.length > 0 ? formatedData : [];
 
       // Cache request
       res.setHeader(

@@ -26,3 +26,9 @@ export async function updateUserPaymentData({
 
   return response.data;
 }
+
+export async function sendIncome() {
+  const response = await api.post("/yieldCron");
+
+  return response.data;
+}

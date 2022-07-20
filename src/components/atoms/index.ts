@@ -7,3 +7,4 @@ export * from "./Logo";
 export * from "./ListItem";
 export * from "./Spinner";
 export * from "./LogoutButton";
+export * from "./Box";

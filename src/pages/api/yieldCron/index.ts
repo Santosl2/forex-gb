@@ -13,11 +13,12 @@ import {
   dbInstanceYield,
 } from "@/shared/services/firebase";
 
-import cronMiddleware from "../middlewares/cronMiddleware";
+import authMiddleware from "../middlewares/authMiddleware";
 
 export default async (req: CustomRequest, res: NextApiResponse) => {
   try {
-    await cronMiddleware(req, res);
+    await authMiddleware(req, res, true);
+    // await cronMiddleware(req, res);
   } catch {
     return res.status(401).json({
       success: false,
@@ -37,7 +38,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
   //     actualDate.getTime() - (actualDate.getDate() - 1) * (86400 * 1000);
   // }
 
-  if (req.method === "GET") {
+  if (req.method === "POST") {
     try {
       const q = query(
         dbInstancesUsersFinances,
@@ -109,7 +110,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
 
       return res.status(200).json({
         success: true,
-        data: `All cron jobs executed! 🚀${data.length}`,
+        data: "All incomes send ! 🚀",
       });
     } catch (e) {
       console.log("🚀 ~ file: index.ts ~ line 91 ~ e", e);

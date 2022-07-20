@@ -6,6 +6,7 @@ import { SignInFormData, SignUpFormData } from "../interfaces/Forms";
 import { AdminUserUpdateStatusResponse } from "../interfaces/Response";
 import { queryClient } from "../services/queryClient";
 import {
+  sendIncome,
   updatePercent,
   updateUserPaymentData,
 } from "../services/requests/admin";
@@ -52,4 +53,13 @@ export function useMutationUpdatePayment() {
       },
     }
   );
+}
+
+export function useMutationSendIncomes() {
+  return useMutation(async () => sendIncome(), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("adminPaymentData");
+      queryClient.invalidateQueries("adminUserList");
+    },
+  });
 }

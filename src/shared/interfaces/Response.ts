@@ -21,9 +21,8 @@ export type UserStatusResponse = {
 export type UserStatisticsResponse = {
   data: {
     amount: number;
-    percent: number;
     createdAt: number;
-  }[];
+  };
 };
 export type AdminPercentResponse = {
   percent: number;
