@@ -141,7 +141,7 @@ export default function Dashboard() {
         </div>
       </motion.section>
 
-      {!userModalYield && statistics?.data.hasOwnProperty("amount") && (
+      {!userModalYield && statistics && statistics.data?.length > 0 && (
         <DynamicModalAlert onClose={() => setUserModalYield(true)} />
       )}
     </>
