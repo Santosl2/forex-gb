@@ -29,6 +29,6 @@ export const convertFileToBase64 = (
   });
 
 export function canWithDraw() {
-  const isFirstDayOfMonth = new Date().getDate() === 20;
+  const isFirstDayOfMonth = new Date().getDate() >= 20; // change to 01
   return isFirstDayOfMonth;
 }
