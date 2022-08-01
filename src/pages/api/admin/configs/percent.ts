@@ -25,7 +25,7 @@ export default async (req: CustomRequest, res: NextApiResponse) => {
   if (req.method === "PATCH") {
     const { percent } = req.body;
 
-    if (!percent) {
+    if (percent < 0 || !Number.isInteger(percent)) {
       return res.status(400).json({
         success: false,
         message: "Percent is required",
