@@ -2,13 +2,15 @@ import { memo, useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 import { useRouter } from "next/router";
+import { SignOut } from "phosphor-react";
 
+import { Item } from "@/components/molecules/Sidebar/Item";
 import { logout } from "@/shared/store/reducers/user";
 import { logoutUser } from "@/shared/utils/auth/UserLogin";
 
-import { Button } from "../Button";
+import { CustomItemProps } from "../Item.types";
 
-function LogoutBase() {
+function LogoutBase({ hiddenText }: CustomItemProps) {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -30,12 +32,15 @@ function LogoutBase() {
   }, []);
 
   return (
-    <Button
-      className="btn-error btn-circle absolute right-5 bottom-5 z-10 w-24"
-      onClick={handleLogoutUser}
-    >
-      Logout
-    </Button>
+    <span className="text-error text-bold">
+      <Item
+        onClick={handleLogoutUser}
+        title="Logout"
+        icon={<SignOut />}
+        href="#"
+        hiddenText={hiddenText}
+      />
+    </span>
   );
 }
 

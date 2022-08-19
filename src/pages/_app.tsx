@@ -12,7 +12,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 
-import { LogoutButton } from "@/components/atoms/LogoutButton/LogoutButton";
 import { ModalAdd } from "@/components/organims/ModalAddMoney";
 import { useUser } from "@/shared/hooks/useUser";
 import { queryClient } from "@/shared/services/queryClient";
@@ -34,7 +33,6 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
           <ModalAdd />
         </main>
-        {name && id && router.route !== "/" && <LogoutButton />}
 
         <ToastContainer
           className="customToast"

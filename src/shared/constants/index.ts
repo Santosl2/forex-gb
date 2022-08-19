@@ -1,3 +1,10 @@
+import {
+  CurrencyDollarSimple,
+  Sliders,
+  SquaresFour,
+  Users,
+} from "phosphor-react";
+
 import { ListItemProps } from "@/components/atoms/ListItem/ListItem.type";
 
 export const CAPTCHA_CLIENT_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY;
@@ -13,13 +20,13 @@ export const HEADER_USER_ITEMS: ListItemProps[] = [
   {
     id: 1,
     name: "Dashboard",
-    icon: "dashboard",
+    icon: SquaresFour,
     href: "/dashboard",
   },
   {
     id: 2,
     name: "My payments",
-    icon: "payment",
+    icon: CurrencyDollarSimple,
     href: "/payments",
   },
 ];
@@ -30,13 +37,13 @@ export const HEADER_ADMIN_ITEMS: ListItemProps[] = [
   {
     id: 3,
     name: "Payment management",
-    icon: "configs",
+    icon: Users,
     href: "/admin/users",
   },
   {
     id: 4,
     name: "Settings",
-    icon: "configs",
+    icon: Sliders,
     href: "/admin/configs",
   },
 ];

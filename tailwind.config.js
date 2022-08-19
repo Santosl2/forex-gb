@@ -9,6 +9,9 @@ module.exports = {
     },
     extend: {
       colors: {
+        menu: {
+          hover: "rgb(16 22 28)",
+        },
         gray: {
           100: "#F2F2F2",
           200: "#D9D9D9",

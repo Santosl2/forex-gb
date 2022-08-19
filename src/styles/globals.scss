@@ -49,3 +49,9 @@ body {
 .box {
   @apply w-full max-w-5xl;
 }
+
+#menuSidebar {
+  img {
+    @apply max-w-[90%];
+  }
+}
