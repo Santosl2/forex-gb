@@ -1,6 +1,5 @@
 import { motion, Variants } from "framer-motion";
 
-import { Logo } from "@/components/atoms";
 import { LoginForm } from "@/components/templates";
 import { SEO } from "@/SEO";
 import { GuestSSR } from "@/shared/utils/auth/GuestSSR";
@@ -40,8 +39,6 @@ export default function Home() {
         variants={loginVariants}
         className="flex flex-col items-center justify-center h-full"
       >
-        <Logo />
-
         <LoginForm />
       </motion.div>
     </>

@@ -14,6 +14,8 @@ const ButtonBase: ForwardRefRenderFunction<HTMLButtonElement, ButtonProps> = (
     return `${classNames({
       btn: true,
       "w-full": true,
+      "h-10": true,
+      "min-h-0": true,
       loading: isLoading,
     })} ${props.className}`;
   }, [isLoading, props.className]);

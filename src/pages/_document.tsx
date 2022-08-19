@@ -14,6 +14,10 @@ export default function Document() {
           rel="stylesheet"
         />
         <link
+          href="https://fonts.googleapis.com/css2?family=Nunito&display=swap"
+          rel="stylesheet"
+        />
+        <link
           rel="icon"
           type="image/png"
           sizes="16x16"

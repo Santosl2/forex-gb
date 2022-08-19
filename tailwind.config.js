@@ -4,6 +4,9 @@
 module.exports = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
+    fontFamily: {
+      sans: ["Nunito", "sans-serif"],
+    },
     extend: {
       colors: {
         gray: {
@@ -14,6 +17,8 @@ module.exports = {
           500: "#262626",
           600: "#1A1A1A",
           700: "#0D0D0D",
+          box: "rgb(22,31,41)",
+          body: "rgb(18,25,32)",
         },
 
         red: {

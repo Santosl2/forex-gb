@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react/no-unescaped-entities */
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -44,62 +47,75 @@ export function RegisterForm() {
   // if (emailSent) return <EmailSent />;
 
   return (
-    <form
-      className="flex flex-col gap-3 w-full max-w-md p-4"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <FormControl>
-        <Input
-          data-testid="username"
-          id="username"
-          type="text"
-          label="Username"
-          className="max-w-md"
-          error={formState.errors.username?.message}
-          {...register("username")}
-        />
-      </FormControl>
+    <div className="w-full max-w-5xl flex justify-center">
+      <form
+        className="flex flex-col gap-3 w-full max-w-md   p-8"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <FormControl>
+          <Input
+            data-testid="username"
+            id="username"
+            type="text"
+            label="Username"
+            className="max-w-md"
+            error={formState.errors.username?.message}
+            {...register("username")}
+          />
+        </FormControl>
+        <FormControl>
+          <Input
+            data-testid="email"
+            id="email"
+            type="email"
+            label="E-mail"
+            className="max-w-md"
+            error={formState.errors.email?.message}
+            {...register("email")}
+          />
+        </FormControl>
+        <FormControl>
+          <Input
+            data-testid="password"
+            id="password"
+            type="password"
+            label="Password"
+            className="max-w-md"
+            error={formState.errors.password?.message}
+            {...register("password")}
+          />
+        </FormControl>
+        <FormControl>
+          <Input
+            data-testid="confirmPassword"
+            id="confirmPassword"
+            type="password"
+            label="Confirm Password"
+            className="max-w-md"
+            error={formState.errors.confirmPassword?.message}
+            {...register("confirmPassword")}
+          />
+        </FormControl>
+        <label className="text-sm my-5">
+          <input type="checkbox" className="checkbox checkbox-sm" /> Agree to
+          the terms and conditions of the service.
+        </label>
 
-      <FormControl>
-        <Input
-          data-testid="email"
-          id="email"
-          type="email"
-          label="E-mail"
-          className="max-w-md"
-          error={formState.errors.email?.message}
-          {...register("email")}
-        />
-      </FormControl>
-
-      <FormControl>
-        <Input
-          data-testid="password"
-          id="password"
-          type="password"
-          label="Password"
-          className="max-w-md"
-          error={formState.errors.password?.message}
-          {...register("password")}
-        />
-      </FormControl>
-
-      <FormControl>
-        <Input
-          data-testid="confirmPassword"
-          id="confirmPassword"
-          type="password"
-          label="Confirm Password"
-          className="max-w-md"
-          error={formState.errors.confirmPassword?.message}
-          {...register("confirmPassword")}
-        />
-      </FormControl>
-
-      <Button isLoading={registerUser.isLoading}>Register</Button>
-      <Link href="/">
-        <Button className="btn-link text-white">Sign in instead</Button>
-      </Link>
-    </form>
+        <Button
+          isLoading={registerUser.isLoading}
+          className="bg-teal-600 hover:bg-teal-700 text-white"
+        >
+          Register
+        </Button>
+        <p className="text-sm">
+          Already have an account?{" "}
+          <Link href="/" passHref>
+            <a className="text-white underline underline-offset-4 font-semibold">
+              Sign in
+            </a>
+          </Link>
+        </p>
+      </form>
+    </div>
   );
 }

@@ -80,7 +80,7 @@ export default function Register() {
         animate="animate"
         exit="exit"
         variants={registerVariants}
-        className="flex flex-col items-center justify-center h-full p-8"
+        className="flex flex-col items-center justify-center h-full"
       >
         <Logo />
 

@@ -21,6 +21,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
       input: true,
       "input-bordered": true,
       "w-full": true,
+      "h-10": true,
       "text-red-error": hasError,
     })} ${props.className}`;
   }, [hasError, props.className]);

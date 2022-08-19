@@ -45,3 +45,7 @@ body {
 ::-webkit-scrollbar-track {
   @apply bg-transparent;
 }
+
+.box {
+  @apply w-full max-w-5xl;
+}
