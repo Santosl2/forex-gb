@@ -1,11 +1,4 @@
-import {
-  CartesianGrid,
-  Line,
-  Tooltip,
-  XAxis,
-  YAxis,
-  LineChart as Chart,
-} from "recharts";
+import { Tooltip, XAxis, YAxis, AreaChart as Chart, Area } from "recharts";
 
 import { CustomTooltip } from "./CustomTooltip";
 
@@ -22,16 +15,17 @@ export function LineChart({ data }: any) {
         bottom: 0,
       }}
     >
-      <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="name" />
       <YAxis />
       <Tooltip content={<CustomTooltip />} />
-      <Line
+      <Area
         connectNulls
-        type="monotone"
+        type="natural"
         dataKey="amount"
         stroke="#8884d8"
         fill="#8884d8"
+        dot
+        activeDot={{ strokeWidth: 2, r: 10 }}
       />
     </Chart>
   );

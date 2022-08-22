@@ -6,9 +6,11 @@ export function Stat({
   color = "success",
   isLoading = false,
   description,
+  icon,
 }: StatProps) {
   return (
-    <div className={`stat bg-base-200 place-items-center w-80 text-${color}`}>
+    <div className={`stat statBox text-${color}`}>
+      <div className="stat-figure text-white bg-red">{icon}</div>
       <div className="stat-title text-white">{title}</div>
       {isLoading ? (
         <div className="animate-pulse w-32 h-6 bg-zinc-700 rounded" />

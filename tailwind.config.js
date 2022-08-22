@@ -9,6 +9,9 @@ module.exports = {
     },
     extend: {
       colors: {
+        alert: {
+          info: "rgba(33,150,243,.15)",
+        },
         menu: {
           hover: "rgb(16 22 28)",
         },
@@ -36,6 +39,7 @@ module.exports = {
         blue: {
           300: "#4EA8D3",
           500: "#1E6F9F",
+          info: "#2196f3",
         },
       },
     },

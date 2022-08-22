@@ -5,8 +5,6 @@
 
 import { Sidebar } from "@/components/molecules/Sidebar";
 
-import { HeaderProps } from "./Header.types";
-
-export function Header({ id }: HeaderProps) {
+export function Header() {
   return <Sidebar />;
 }

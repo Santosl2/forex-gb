@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <main className="w-screen h-screen overflow-hidden bg-gray-body">
+        <main className="w-screen h-screen">
           <AnimatePresence exitBeforeEnter>
             <Component {...pageProps} key={router.route} />
           </AnimatePresence>

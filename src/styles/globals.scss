@@ -12,6 +12,11 @@
   @apply overflow-hidden;
 }
 
+body,
+html {
+  background-color: rgb(18, 25, 32) !important;
+}
+
 header,
 body {
   @apply text-white;
@@ -54,4 +59,8 @@ body {
   img {
     @apply max-w-[90%];
   }
+}
+
+.statBox {
+  @apply bg-base-200 rounded-md w-80 ml-5 h-28;
 }

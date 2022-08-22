@@ -4,4 +4,5 @@ export type StatProps = {
   color?: string;
   isLoading?: boolean;
   description?: string;
+  icon?: React.ReactNode;
 };

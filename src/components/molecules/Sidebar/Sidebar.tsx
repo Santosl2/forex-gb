@@ -7,6 +7,7 @@ import { classNames } from "@/shared/utils/classNames";
 import { SidebarHeader } from "./Header";
 import { Item } from "./Item";
 import { AddMoney } from "./Item/AddMoney";
+import { FloatingButton } from "./Item/FloatingButton";
 import { LogoutButton } from "./Item/LogoutButton";
 import { Wallet } from "./Item/Wallet";
 
@@ -23,14 +24,18 @@ export function Sidebar() {
   const sidebarClasses = useMemo(() => {
     return classNames({
       "h-full": true,
-      "md:w-80": !isClose,
-      "w-[90%]": !isClose,
-      fixed: true,
+      fixed: false,
       "top-0": true,
       "bg-gray-box": true,
       "z-[500]": true,
-      "w-[80px]": isClose,
       "transition-all": true,
+      "duration-500": true,
+      hidden: isClose,
+      "md:block": true,
+      "md:w-80": !isClose,
+      "w-[100%]": !isClose,
+      "w-[80px]": isClose,
+      "touch-none": true,
     });
   }, [isClose]);
 
@@ -43,32 +48,35 @@ export function Sidebar() {
   }, []);
 
   return (
-    <div className={sidebarClasses}>
-      <div className="flex flex-col justify-between h-[100%]">
-        <ul className="p-4">
-          <SidebarHeader
-            showLogo={!isClose}
-            onClickButton={handleOpenOrClose}
-          />
-
-          {formattedItems.map((item) => (
-            <Item
-              onClick={handleClose}
-              key={item.id}
-              title={item.name}
-              icon={<item.icon />}
-              href={item.href}
-              hiddenText={isClose}
+    <>
+      <FloatingButton onClick={handleOpenOrClose} />
+      <nav className={sidebarClasses}>
+        <div className="flex flex-col justify-between h-[100%]">
+          <ul className="p-4">
+            <SidebarHeader
+              showLogo={!isClose}
+              onClickButton={handleOpenOrClose}
             />
-          ))}
-        </ul>
 
-        <ul className="p-4">
-          <Wallet onClick={handleClose} hiddenText={isClose} />
-          <AddMoney onClick={handleClose} hiddenText={isClose} />
-          <LogoutButton hiddenText={isClose} />
-        </ul>
-      </div>
-    </div>
+            {formattedItems.map((item) => (
+              <Item
+                onClick={handleClose}
+                key={item.id}
+                title={item.name}
+                icon={<item.icon />}
+                href={item.href}
+                hiddenText={isClose}
+              />
+            ))}
+          </ul>
+
+          <ul className="p-4">
+            <Wallet onClick={handleClose} hiddenText={isClose} />
+            <AddMoney onClick={handleClose} hiddenText={isClose} />
+            <LogoutButton hiddenText={isClose} />
+          </ul>
+        </div>
+      </nav>
+    </>
   );
 }
