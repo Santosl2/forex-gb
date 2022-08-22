@@ -36,7 +36,7 @@ export const HEADER_ADMIN_ITEMS: ListItemProps[] = [
 
   {
     id: 3,
-    name: "Payment management",
+    name: "Users management",
     icon: Users,
     href: "/admin/users",
   },

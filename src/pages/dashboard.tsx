@@ -5,8 +5,7 @@ import { motion, Variants } from "framer-motion";
 import dynamic from "next/dynamic";
 import { Percent, Plus, Wallet } from "phosphor-react";
 
-import { LineChart } from "@/components/atoms/";
-import { Sidebar } from "@/components/molecules/Sidebar";
+import { LineChart, Container, BackgroundHeader } from "@/components/atoms/";
 import { Stat } from "@/components/molecules/Stat/Stat";
 import { StatContainer } from "@/components/organims";
 import { ModalAlertUserProps } from "@/components/organims/ModalAlertUser/ModalAlertUser.types";
@@ -69,10 +68,8 @@ export default function Dashboard() {
   return (
     <>
       <SEO title="Dashboard" />
-      <div className="flex h-full w-full">
-        <Sidebar />
-
-        <div className="w-full h-52 absolute z-0 bg-[rgb(19,48,80)]" />
+      <Container>
+        <BackgroundHeader />
         <motion.section
           initial="initial"
           animate="animate"
@@ -144,7 +141,7 @@ export default function Dashboard() {
             )}
           </div>
         </motion.section>
-      </div>
+      </Container>
       {!userModalYield && statistics && statistics.data?.length > 0 && (
         <DynamicModalAlert onClose={() => setUserModalYield(true)} />
       )}

@@ -25,9 +25,7 @@ export function ModalAlertUser({ onClose }: ModalAlertUserProps) {
       <div className="modal-box w-full">
         <div className="overflow-x-auto">
           <h4 className="text-4xl mb-5 bold text-red-300">Congratulations!</h4>
-          <p className="text-md">
-            Monthly income successfully achieving! Wait for payment.
-          </p>
+          <p className="text-md">Monthly income successfully achieving!</p>
         </div>
         <div className="modal-action">
           <Button className="w-full" type="button" onClick={onClose}>

@@ -4,10 +4,14 @@ import { toast } from "react-toastify";
 
 import { motion, Variants } from "framer-motion";
 
-import { Button, Spinner } from "@/components/atoms";
+import {
+  BackgroundHeader,
+  Button,
+  Container,
+  Spinner,
+} from "@/components/atoms";
 import { Badge } from "@/components/atoms/Badge/Badge";
 import { Table } from "@/components/organims";
-import { Header } from "@/components/organims/Header";
 import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { SEO } from "@/SEO";
 import { useRequestWithdraw } from "@/shared/hooks/useMutation";
@@ -121,30 +125,32 @@ export default function PaymentVouchers() {
 
   return (
     <>
-      <SEO title="Dashboard" />
-      <Header id="menuDrawer" />
+      <SEO title="My payments" />
+      <Container>
+        <BackgroundHeader bgColor="rgb(92,12,124)" />
 
-      <motion.section
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        variants={dashboardVariants}
-        className="max-w-[1100px] m-auto p-5 mt-5 relative z-10"
-      >
-        <h2 className="text-4xl flex gap-2 items-center">
-          Your payments {isFetching && <Spinner />}
-        </h2>
+        <motion.section
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={dashboardVariants}
+          className="md:ml-5 mt-5 w-full p-5 z-10"
+        >
+          <h2 className="text-4xl flex gap-2 items-center text-white">
+            My payments {isFetching && <Spinner />}
+          </h2>
 
-        <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
-          {isLoading && !registers && <Spinner />}
+          <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
+            {isLoading && !registers && <Spinner />}
 
-          {!isLoading && registers?.data && registers.data.length > 0 && (
-            <Table columns={columns} data={registers.data} />
-          )}
+            {!isLoading && registers?.data && registers.data.length > 0 && (
+              <Table columns={columns} data={registers.data} />
+            )}
 
-          {registers?.data.length === 0 && !isLoading && <NoResults />}
-        </div>
-      </motion.section>
+            {registers?.data.length === 0 && !isLoading && <NoResults />}
+          </div>
+        </motion.section>
+      </Container>
     </>
   );
 }

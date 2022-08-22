@@ -1,7 +1,6 @@
 import { motion, Variants } from "framer-motion";
 
-import { UpdatePercent } from "@/components/atoms";
-import { Header } from "@/components/organims/Header";
+import { Container, UpdatePercent } from "@/components/atoms";
 import { SEO } from "@/SEO";
 import { AuthSSR } from "@/shared/utils/auth/AuthSSR";
 
@@ -28,22 +27,23 @@ export default function Config() {
   return (
     <>
       <SEO title="Configs" />
-      <Header id="menuDrawer" />
-      <motion.section
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        variants={dashboardVariants}
-        className="max-w-[1100px] m-auto p-5 mt-5 relative z-10"
-      >
-        <h2 className="text-4xl flex items-center gap-1">
-          Update project configs
-        </h2>
+      <Container>
+        <motion.section
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={dashboardVariants}
+          className="md:ml-5 mt-5 w-full p-5 z-10"
+        >
+          <h2 className="text-4xl flex items-center gap-1">
+            Update project configs
+          </h2>
 
-        <div className="flex gap-5 w-full mt-5 overflow-y-auto">
-          <UpdatePercent />
-        </div>
-      </motion.section>
+          <div className="flex gap-5 w-full mt-5 overflow-y-auto">
+            <UpdatePercent />
+          </div>
+        </motion.section>
+      </Container>
     </>
   );
 }

@@ -5,9 +5,13 @@ import { motion, Variants } from "framer-motion";
 import dynamic from "next/dynamic";
 import { Cardholder } from "phosphor-react";
 
-import { Button, Spinner } from "@/components/atoms";
+import {
+  BackgroundHeader,
+  Button,
+  Container,
+  Spinner,
+} from "@/components/atoms";
 import { Table } from "@/components/organims";
-import { Header } from "@/components/organims/Header";
 import { ModalViewUserPaymentsProps } from "@/components/organims/ModalViewUserPayments/ModalViewUserPayments.types";
 import { NoResults } from "@/components/templates/NoResults/NoResults";
 import { SEO } from "@/SEO";
@@ -98,42 +102,44 @@ export default function PaymentVouchers() {
 
   return (
     <>
-      <SEO title="Dashboard" />
-      <Header id="menuDrawer" />
+      <SEO title="Users management" />
+      <Container>
+        <BackgroundHeader bgColor="rgb(12, 88, 124)" />
 
-      <motion.section
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        variants={dashboardVariants}
-        className="max-w-[1100px] m-auto p-5 mt-5 relative z-10"
-      >
-        <h2 className="text-4xl flex gap-2 items-center">
-          All users {isFetching && <Spinner />}
-        </h2>
+        <motion.section
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={dashboardVariants}
+          className="md:ml-5 mt-5 w-full p-5 z-10"
+        >
+          <h2 className="text-4xl flex gap-2 items-center text-white">
+            All users {isFetching && <Spinner />}
+          </h2>
 
-        <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
-          {isLoading && !registers && <Spinner />}
+          <div className="flex gap-5 w-full mt-5 overflow-y-auto items-center justify-center">
+            {isLoading && !registers && <Spinner />}
 
-          {!isLoading && registers && (
-            <Table columns={columns} data={registers.data} />
+            {!isLoading && registers && (
+              <Table columns={columns} data={registers.data} />
+            )}
+
+            {registers?.data?.length === 0 && !isLoading && <NoResults />}
+          </div>
+
+          {modal.isOpen && modal.id !== null && (
+            <DynamicModalPayment
+              id={modal.id}
+              onClose={() => {
+                setModalOpen({
+                  isOpen: false,
+                  id: null,
+                });
+              }}
+            />
           )}
-
-          {registers?.data?.length === 0 && !isLoading && <NoResults />}
-        </div>
-
-        {modal.isOpen && modal.id !== null && (
-          <DynamicModalPayment
-            id={modal.id}
-            onClose={() => {
-              setModalOpen({
-                isOpen: false,
-                id: null,
-              });
-            }}
-          />
-        )}
-      </motion.section>
+        </motion.section>
+      </Container>
     </>
   );
 }
